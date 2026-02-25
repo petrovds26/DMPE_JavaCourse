@@ -1,7 +1,7 @@
 package ru.hofftech.service.validation.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.hofftech.model.entity.Parcel;
+import ru.hofftech.model.core.Parcel;
 import ru.hofftech.service.validation.Validator;
 
 import java.util.ArrayList;

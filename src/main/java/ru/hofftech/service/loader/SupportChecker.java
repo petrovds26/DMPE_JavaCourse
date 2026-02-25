@@ -1,7 +1,7 @@
 package ru.hofftech.service.loader;
 
-import ru.hofftech.model.entity.Machine;
-import ru.hofftech.model.entity.Parcel;
+import ru.hofftech.model.core.Machine;
+import ru.hofftech.model.core.Parcel;
 
 /**
  * Проверяет достаточность опоры для посылки
@@ -44,35 +44,5 @@ public class SupportChecker {
         int neededSupport = (totalBottomCells / 2) + 1;
 
         return supportedCells >= neededSupport;
-    }
-
-    /**
-     * Возвращает количество клеток опоры для отладки
-     */
-    public String getSupportInfo(Machine machine, Parcel parcel, int x, int y) {
-        if (y == 0) {
-            return "на полу";
-        }
-
-        int width = parcel.getWidth();
-        boolean[][] parcelGrid = parcel.grid();
-
-        int totalBottomCells = 0;
-        int supportedCells = 0;
-        StringBuilder sb = new StringBuilder();
-
-        for (int i = 0; i < width; i++) {
-            if (parcelGrid[parcel.getHeight() - 1][i]) {
-                totalBottomCells++;
-                boolean hasSupport = machine.grid()[y - 1][x + i] != ' ';
-                if (hasSupport) {
-                    supportedCells++;
-                }
-                sb.append(String.format(" [%d:%s]", i, hasSupport ? "есть" : "нет"));
-            }
-        }
-
-        int needed = (totalBottomCells / 2) + 1;
-        return String.format("опора: %d/%d (нужно %d)%s", supportedCells, totalBottomCells, needed, sb);
     }
 }

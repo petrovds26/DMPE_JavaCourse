@@ -1,9 +1,9 @@
 package ru.hofftech.service.loader.strategy.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.hofftech.model.core.Machine;
+import ru.hofftech.model.core.Parcel;
 import ru.hofftech.model.dto.LoadingResult;
-import ru.hofftech.model.entity.Machine;
-import ru.hofftech.model.entity.Parcel;
 import ru.hofftech.service.loader.strategy.ParcelLoadingStrategy;
 import ru.hofftech.service.loader.strategy.ParcelLoadingStrategyType;
 

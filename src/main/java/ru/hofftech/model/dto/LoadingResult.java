@@ -1,8 +1,8 @@
 package ru.hofftech.model.dto;
 
 import lombok.Builder;
-import ru.hofftech.model.entity.Machine;
-import ru.hofftech.model.entity.Parcel;
+import ru.hofftech.model.core.Machine;
+import ru.hofftech.model.core.Parcel;
 
 import java.util.List;
 

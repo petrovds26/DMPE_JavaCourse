@@ -1,7 +1,7 @@
 package ru.hofftech.service.loader.strategy;
 
+import ru.hofftech.model.core.Parcel;
 import ru.hofftech.model.dto.LoadingResult;
-import ru.hofftech.model.entity.Parcel;
 
 import java.util.List;
 

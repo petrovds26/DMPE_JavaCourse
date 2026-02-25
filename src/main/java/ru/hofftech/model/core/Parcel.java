@@ -1,4 +1,4 @@
-package ru.hofftech.model.entity;
+package ru.hofftech.model.core;
 
 import lombok.Builder;
 import lombok.Getter;

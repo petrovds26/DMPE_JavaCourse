@@ -1,16 +1,14 @@
 package ru.hofftech.service.loader;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import ru.hofftech.model.entity.Machine;
-import ru.hofftech.model.entity.Parcel;
+import ru.hofftech.model.core.Machine;
+import ru.hofftech.model.core.Parcel;
+import ru.hofftech.util.SupportUtil;
 
 /**
  * Ищет наилучшую позицию для размещения посылки
  */
 @Slf4j
-@RequiredArgsConstructor
-@SuppressWarnings("ClassCanBeRecord") // Стратегия содержит логику, не только данные
 public class PositionFinder {
 
     private final SupportChecker supportChecker;
@@ -70,7 +68,7 @@ public class PositionFinder {
                     "Позиция ({},{}) отклонена - недостаточно опоры: {}",
                     x,
                     y,
-                    supportChecker.getSupportInfo(machine, parcel, x, y));
+                    SupportUtil.getSupportInfo(machine, parcel, x, y));
             return false;
         }
 

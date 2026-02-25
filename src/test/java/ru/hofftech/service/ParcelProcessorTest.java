@@ -17,7 +17,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("ParcelProcessor интеграционные тесты")
+@DisplayName("ParcelProcessor компонентные тесты")
 class ParcelProcessorTest {
 
     private ParcelNormalizer normalizer;

@@ -1,5 +1,8 @@
+import com.diffplug.spotless.LineEnding
+
 plugins {
     id 'java'
+    id 'jacoco'
     id("com.diffplug.spotless") version "6.25.0"
 }
 
@@ -25,11 +28,42 @@ dependencies {
 
 test {
     useJUnitPlatform()
+
+    finalizedBy(jacocoTestReport)
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required.set(true)
+        xml.outputLocation.set(layout.buildDirectory.file("reports/jacoco/test/jacocoTestReport.xml"))
+        html.required.set(true)
+        csv.required.set(false)
+    }
+
+    afterEvaluate {
+        classDirectories.setFrom(
+                files(classDirectories.files.collect {
+                    fileTree(dir: it, exclude: [
+                            "**/stub/**",
+                            "**/model/**",
+                            "**/dto/**",
+                            "**/entity/**",
+                            "**/enums/**",
+                            "**/config/**",
+                            "**/annotation/**",
+                            "**/exception/**",
+                            "**/repository/**"
+                    ])
+                })
+        )
+    }
 }
 
 spotless {
     encoding = "UTF-8"
-    lineEndings = com.diffplug.spotless.LineEnding.PLATFORM_NATIVE
+    lineEndings = LineEnding.PLATFORM_NATIVE
 
     format("misc") {
         target("*.gradle", "*.md", ".gitignore")

@@ -1,10 +1,9 @@
 package ru.hofftech.service.loader.strategy.impl;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import ru.hofftech.model.core.Machine;
+import ru.hofftech.model.core.Parcel;
 import ru.hofftech.model.dto.LoadingResult;
-import ru.hofftech.model.entity.Machine;
-import ru.hofftech.model.entity.Parcel;
 import ru.hofftech.service.loader.PositionFinder;
 import ru.hofftech.service.loader.strategy.ParcelLoadingStrategy;
 import ru.hofftech.service.loader.strategy.ParcelLoadingStrategyType;
@@ -20,8 +19,6 @@ import java.util.List;
  * - Сортирует посылки по размеру (широкие сначала)
  */
 @Slf4j
-@RequiredArgsConstructor
-@SuppressWarnings("ClassCanBeRecord") // Стратегия содержит логику, не только данные
 public class DensePackingStrategy implements ParcelLoadingStrategy {
 
     private final PositionFinder positionFinder;

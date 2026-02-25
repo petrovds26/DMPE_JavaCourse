@@ -1,7 +1,7 @@
 package ru.hofftech.service.parser;
 
 import lombok.extern.slf4j.Slf4j;
-import ru.hofftech.model.entity.Parcel;
+import ru.hofftech.model.core.Parcel;
 
 import java.util.List;
 

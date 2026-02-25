@@ -1,10 +1,10 @@
 package ru.hofftech.service.output.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import ru.hofftech.model.core.Machine;
+import ru.hofftech.model.core.Parcel;
+import ru.hofftech.model.core.PlacedParcel;
 import ru.hofftech.model.dto.LoadingResult;
-import ru.hofftech.model.entity.Machine;
-import ru.hofftech.model.entity.Parcel;
-import ru.hofftech.model.entity.PlacedParcel;
 import ru.hofftech.service.output.ParcelOutput;
 
 import java.util.ArrayList;
