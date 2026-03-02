@@ -3,10 +3,11 @@ package ru.hofftech.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
-import ru.hofftech.service.command.ConsoleCommand;
-import ru.hofftech.service.command.impl.EmptyConsoleCommand;
-import ru.hofftech.service.command.impl.ExitConsoleCommand;
-import ru.hofftech.service.command.impl.ImportParcelConsoleCommand;
+import ru.hofftech.importmachine.service.command.impl.ImportMachineConsoleCommand;
+import ru.hofftech.importparcel.service.command.impl.ImportParcelConsoleCommand;
+import ru.hofftech.shared.service.command.ConsoleCommand;
+import ru.hofftech.shared.service.command.impl.EmptyConsoleCommand;
+import ru.hofftech.shared.service.command.impl.ExitConsoleCommand;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +51,7 @@ public class ConsoleController {
         commands = new ArrayList<>();
         commands.add(new EmptyConsoleCommand());
         commands.add(new ImportParcelConsoleCommand());
+        commands.add(new ImportMachineConsoleCommand());
         commands.add(new ExitConsoleCommand());
     }
 
