@@ -1,13 +1,14 @@
 package ru.hofftech.importmachine.service.output;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.service.output.impl.ImportMachineOutputJson;
 import ru.hofftech.importmachine.service.output.impl.ImportMachineOutputLog;
 import ru.hofftech.importmachine.service.output.impl.ImportMachineOutputTxt;
 import ru.hofftech.shared.model.enums.FileType;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -17,14 +18,13 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ImportMachineOutputService {
     private final List<ImportMachineOutput> importMachineOutput;
-    private final ImportMachineOutput importMachineOutputLog;
 
     /**
      * Конструктор, инициализирующий все доступные реализации вывода.
      */
     public ImportMachineOutputService() {
-        this.importMachineOutput = List.of(new ImportMachineOutputJson(), new ImportMachineOutputTxt());
-        this.importMachineOutputLog = new ImportMachineOutputLog();
+        this.importMachineOutput =
+                List.of(new ImportMachineOutputJson(), new ImportMachineOutputTxt(), new ImportMachineOutputLog());
     }
 
     /**
@@ -34,14 +34,17 @@ public class ImportMachineOutputService {
      * @param fileType тип файла (может быть null)
      * @return реализация {@link ImportMachineOutput} или null, если тип не поддерживается
      */
-    public ImportMachineOutput getOutputByFileType(FileType fileType) {
+    public Optional<ImportMachineOutput> getOutputByFileType(@Nullable FileType fileType) {
         if (fileType == null) {
-            return importMachineOutputLog;
+            return importMachineOutput.stream()
+                    .filter(source -> source.getFileTypeOptional().isEmpty())
+                    .findFirst();
         }
         return importMachineOutput.stream()
-                .filter(source -> Objects.equals(source.getFileType(), fileType))
-                .findFirst()
-                .orElse(null);
+                .filter(source -> source.getFileTypeOptional()
+                        .map(type -> type == fileType)
+                        .orElse(false))
+                .findFirst();
     }
 
     /**
@@ -51,10 +54,12 @@ public class ImportMachineOutputService {
      */
     public String getAvailableFileExtensionDescription() {
         return importMachineOutput.stream()
-                .map(fileType -> String.format(
+                .map(output -> String.format(
                         "%s - %s",
-                        fileType.getFileType().getExtension(),
-                        fileType.getFileType().getDescription()))
+                        output.getFileTypeOptional().isEmpty()
+                                ? "[пусто]"
+                                : output.getFileTypeOptional().get().getExtension(),
+                        output.getDescription()))
                 .collect(Collectors.joining("; "));
     }
 }

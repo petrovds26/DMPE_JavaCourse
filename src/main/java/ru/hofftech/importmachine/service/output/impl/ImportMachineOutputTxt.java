@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Вывод результата разгрузки машин в текстовый файл
@@ -48,8 +49,8 @@ public class ImportMachineOutputTxt implements ImportMachineOutput {
     }
 
     @Override
-    public FileType getFileType() {
-        return FileType.TXT;
+    public Optional<FileType> getFileTypeOptional() {
+        return Optional.of(FileType.TXT);
     }
 
     @Override
