@@ -25,6 +25,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.3'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.3'
     implementation 'com.beust:jcommander:1.82'
+    implementation 'org.jspecify:jspecify:1.0.0'
 
     testImplementation 'org.assertj:assertj-core:3.24.2'
     testImplementation 'org.mockito:mockito-core:5.19.0'

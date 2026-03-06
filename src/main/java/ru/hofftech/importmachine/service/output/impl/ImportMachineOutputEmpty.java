@@ -4,6 +4,8 @@ import ru.hofftech.importmachine.model.core.ImportMachineResult;
 import ru.hofftech.importmachine.service.output.ImportMachineOutput;
 import ru.hofftech.shared.model.enums.FileType;
 
+import java.util.Optional;
+
 /**
  * Класс, который позволяет ничего не делать с результатом.
  */
@@ -14,7 +16,7 @@ public class ImportMachineOutputEmpty implements ImportMachineOutput {
     }
 
     @Override
-    public FileType getFileType() {
-        return null;
+    public Optional<FileType> getFileTypeOptional() {
+        return Optional.empty();
     }
 }

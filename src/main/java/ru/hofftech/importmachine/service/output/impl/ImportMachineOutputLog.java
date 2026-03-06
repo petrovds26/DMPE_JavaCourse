@@ -8,13 +8,14 @@ import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.enums.FileType;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 public class ImportMachineOutputLog implements ImportMachineOutput {
 
     @Override
-    public FileType getFileType() {
-        return null;
+    public Optional<FileType> getFileTypeOptional() {
+        return Optional.empty();
     }
 
     @Override

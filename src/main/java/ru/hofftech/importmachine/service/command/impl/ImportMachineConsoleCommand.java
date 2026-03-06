@@ -11,6 +11,7 @@ import ru.hofftech.importmachine.service.output.ImportMachineOutput;
 import ru.hofftech.importmachine.service.output.ImportMachineOutputService;
 import ru.hofftech.importmachine.service.parser.source.ImportMachineFileSource;
 import ru.hofftech.importmachine.service.parser.source.ImportMachineFileSourceService;
+import ru.hofftech.shared.model.enums.FileType;
 import ru.hofftech.shared.service.command.ConsoleCommand;
 import ru.hofftech.shared.service.command.ConsoleCommandType;
 import ru.hofftech.shared.util.FileTypeUtil;
@@ -18,6 +19,7 @@ import ru.hofftech.shared.validation.impl.InputFilePathValidator;
 import ru.hofftech.shared.validation.impl.OutputFilePathValidator;
 
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @AllArgsConstructor
@@ -86,10 +88,22 @@ public class ImportMachineConsoleCommand implements ConsoleCommand {
             }
         }
 
-        ImportMachineOutput output = importMachineOutputService.getOutputByFileType(
+        FileType fileTypeOutput = FileTypeUtil.fromFilename(importMachineParams.outputFilePath());
+
+        if (fileTypeOutput == null
+                && importMachineParams.outputFilePath() != null
+                && !importMachineParams.outputFilePath().isEmpty()) {
+            log.error(
+                    "Не удалось определить тип исходящего файла. Поддерживаются форматы {}. Проверьте исходящий файл: {}",
+                    importMachineOutputService.getAvailableFileExtensionDescription(),
+                    importMachineParams.outputFilePath());
+            return;
+        }
+
+        Optional<ImportMachineOutput> outputOptional = importMachineOutputService.getOutputByFileType(
                 FileTypeUtil.fromFilename(importMachineParams.outputFilePath()));
 
-        if (output == null) {
+        if (outputOptional.isEmpty()) {
             log.error(
                     "Не удалось определить тип исходящего файла. Поддерживаются форматы {}. Проверьте исходящий файл: {}",
                     importMachineOutputService.getAvailableFileExtensionDescription(),
@@ -98,7 +112,8 @@ public class ImportMachineConsoleCommand implements ConsoleCommand {
         }
         log.debug("Импорт файла: {}", importMachineParams.inputFilePath());
 
-        ImportMachineProcessor processor = new ImportMachineProcessor(importMachineParams, fileMachineSource, output);
+        ImportMachineProcessor processor =
+                new ImportMachineProcessor(importMachineParams, fileMachineSource, outputOptional.get());
 
         processor.process();
     }

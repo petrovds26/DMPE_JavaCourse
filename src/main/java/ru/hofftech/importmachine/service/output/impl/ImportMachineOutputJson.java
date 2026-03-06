@@ -12,6 +12,7 @@ import ru.hofftech.shared.util.JsonUtil;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Optional;
 
 /**
  * Вывод результата разгрузки машины в JSON файл
@@ -50,8 +51,8 @@ public class ImportMachineOutputJson implements ImportMachineOutput {
     }
 
     @Override
-    public FileType getFileType() {
-        return FileType.JSON;
+    public Optional<FileType> getFileTypeOptional() {
+        return Optional.of(FileType.JSON);
     }
 
     @Override

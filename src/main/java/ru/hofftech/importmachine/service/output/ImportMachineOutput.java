@@ -3,6 +3,8 @@ package ru.hofftech.importmachine.service.output;
 import ru.hofftech.importmachine.model.core.ImportMachineResult;
 import ru.hofftech.shared.model.enums.FileType;
 
+import java.util.Optional;
+
 public interface ImportMachineOutput {
     /**
      * Выводит результат разгрузки машин
@@ -14,7 +16,7 @@ public interface ImportMachineOutput {
     /**
      * @return тип файла, который поддерживает этот вывод (null для лога)
      */
-    FileType getFileType();
+    Optional<FileType> getFileTypeOptional();
 
     /**
      * @return описание вывода
