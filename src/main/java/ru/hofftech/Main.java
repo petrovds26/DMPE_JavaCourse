@@ -1,11 +1,12 @@
 package ru.hofftech;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.controller.ConsoleController;
 
 @Slf4j
 public class Main {
-    public static void main(String[] args) {
+    public static void main(@NonNull String[] args) {
         log.info("Стартуем приложение...");
         Main.start();
     }

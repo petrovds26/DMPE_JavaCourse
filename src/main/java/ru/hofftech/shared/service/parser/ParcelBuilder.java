@@ -1,0 +1,54 @@
+package ru.hofftech.shared.service.parser;
+
+import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import ru.hofftech.shared.model.core.Parcel;
+
+import java.util.List;
+
+/**
+ * Отвечает за создание Parcel из нормализованных строк
+ */
+@Slf4j
+public class ParcelBuilder {
+
+    /**
+     * Создаёт посылку из нормализованных строк
+     */
+    @NonNull
+    public Parcel buildFromLines(@NonNull List<String> normalizedLines) {
+        int height = normalizedLines.size();
+        int width = normalizedLines.getFirst().length();
+        Character symbol = findSymbol(normalizedLines.getFirst());
+
+        boolean[][] grid = new boolean[height][width];
+
+        for (int i = 0; i < height; i++) {
+            char[] chars = normalizedLines.get(height - 1 - i).toCharArray();
+            for (int j = 0; j < width; j++) {
+                grid[i][j] = chars[j] != ' ';
+            }
+        }
+
+        Parcel parcel = Parcel.builder()
+                .grid(grid)
+                .symbol(symbol)
+                .width(width)
+                .height(height)
+                .build();
+
+        log.debug("Создана посылка {}x{} с символом '{}'", width, height, symbol);
+        return parcel;
+    }
+
+    @NonNull
+    private Character findSymbol(@NonNull String line) {
+        for (int i = 0; i < line.length(); i++) {
+            char c = line.charAt(i);
+            if (!Character.isWhitespace(c)) {
+                return c;
+            }
+        }
+        return 'X';
+    }
+}
