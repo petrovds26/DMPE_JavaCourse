@@ -46,7 +46,7 @@ public class ImportMachineOutputTxt implements ImportMachineOutput {
     }
 
     @Override
-    public @NonNull Optional<FileType> getFileTypeOptional() {
+    public @NonNull Optional<FileType> getFileType() {
         return Optional.of(FileType.TXT);
     }
 

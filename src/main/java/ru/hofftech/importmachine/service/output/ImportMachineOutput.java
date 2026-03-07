@@ -19,7 +19,7 @@ public interface ImportMachineOutput {
      * @return тип файла, который поддерживает этот вывод (null для лога)
      */
     @NonNull
-    Optional<FileType> getFileTypeOptional();
+    Optional<FileType> getFileType();
 
     /**
      * @return описание вывода

@@ -41,13 +41,12 @@ public class ImportMachineOutputService {
     public Optional<ImportMachineOutput> getOutputByFileType(@Nullable FileType fileType) {
         if (fileType == null) {
             return importMachineOutput.stream()
-                    .filter(source -> source.getFileTypeOptional().isEmpty())
+                    .filter(source -> source.getFileType().isEmpty())
                     .findFirst();
         }
         return importMachineOutput.stream()
-                .filter(source -> source.getFileTypeOptional()
-                        .map(type -> type == fileType)
-                        .orElse(false))
+                .filter(source ->
+                        source.getFileType().map(type -> type == fileType).orElse(false))
                 .findFirst();
     }
 
@@ -61,9 +60,9 @@ public class ImportMachineOutputService {
         return importMachineOutput.stream()
                 .map(output -> String.format(
                         "%s - %s",
-                        output.getFileTypeOptional().isEmpty()
+                        output.getFileType().isEmpty()
                                 ? "[пусто]"
-                                : output.getFileTypeOptional().get().getExtension(),
+                                : output.getFileType().get().getExtension(),
                         output.getDescription()))
                 .collect(Collectors.joining("; "));
     }

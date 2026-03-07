@@ -16,7 +16,7 @@ import java.util.Optional;
 public class ImportMachineOutputLog implements ImportMachineOutput {
 
     @Override
-    public @NonNull Optional<FileType> getFileTypeOptional() {
+    public @NonNull Optional<FileType> getFileType() {
         return Optional.empty();
     }
 
