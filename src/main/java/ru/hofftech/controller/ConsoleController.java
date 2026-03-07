@@ -1,6 +1,6 @@
 package ru.hofftech.controller;
 
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.MDC;
@@ -16,17 +16,20 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 @Slf4j
-@RequiredArgsConstructor
+@NoArgsConstructor
 public class ConsoleController {
 
     private static final String MDC_INPUT_KEY = "input";
     private static final String MDC_COMMAND_NAME_KEY = "commandName";
 
     @NonNull
-    private List<ConsoleCommand> commands;
+    private final List<ConsoleCommand> commands = new ArrayList<>(List.of(
+            new EmptyConsoleCommand(),
+            new ImportParcelConsoleCommand(),
+            new ImportMachineConsoleCommand(),
+            new ExitConsoleCommand()));
 
     public void listen() {
-        initCommands();
         var scanner = new Scanner(System.in);
 
         String commandsInfo = commands.stream()
@@ -44,17 +47,6 @@ public class ConsoleController {
                 log.debug("Неизвестная команда: {}", input);
             }
         }
-    }
-
-    /**
-     * Инициализация списка доступных команд
-     */
-    private void initCommands() {
-        commands = new ArrayList<>();
-        commands.add(new EmptyConsoleCommand());
-        commands.add(new ImportParcelConsoleCommand());
-        commands.add(new ImportMachineConsoleCommand());
-        commands.add(new ExitConsoleCommand());
     }
 
     /**
