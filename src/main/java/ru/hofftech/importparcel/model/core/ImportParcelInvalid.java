@@ -1,7 +1,7 @@
 package ru.hofftech.importparcel.model.core;
 
 import lombok.Builder;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importparcel.model.enums.ImportParcelInvalidCauseType;
 import ru.hofftech.shared.model.core.Parcel;
 

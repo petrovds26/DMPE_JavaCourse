@@ -2,6 +2,7 @@ package ru.hofftech.importparcel.service.parser.parcel.source.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importparcel.service.parser.parcel.source.ImportParcelFileSource;
 import ru.hofftech.shared.model.enums.FileType;
 
@@ -19,7 +20,8 @@ import java.util.List;
 public class ImportParcelTxtFileSource implements ImportParcelFileSource<String> {
 
     @Override
-    public List<List<String>> getParcelBlocks(String filePath) throws IOException {
+    @NonNull
+    public List<List<String>> getParcelBlocks(@NonNull String filePath) throws IOException {
         log.debug("Чтение файла: {}", filePath);
 
         Path path = Path.of(filePath);
@@ -52,7 +54,7 @@ public class ImportParcelTxtFileSource implements ImportParcelFileSource<String>
     }
 
     @Override
-    public FileType getFileType() {
+    public @NonNull FileType getFileType() {
         return FileType.TXT;
     }
 }

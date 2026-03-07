@@ -1,6 +1,8 @@
 package ru.hofftech.importparcel.service.loader.strategy.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importparcel.model.core.ImportParcelInvalid;
 import ru.hofftech.importparcel.model.core.ImportParcelResult;
 import ru.hofftech.importparcel.model.enums.ImportParcelInvalidCauseType;
@@ -20,7 +22,7 @@ import java.util.List;
 public class OneParcelPerMachineStrategy implements ParcelLoadingStrategy {
 
     @Override
-    public ImportParcelResult loadParcels(List<Parcel> parcels, List<Machine> machines) {
+    public @NonNull ImportParcelResult loadParcels(@NonNull List<Parcel> parcels, @NonNull List<Machine> machines) {
         List<ImportParcelInvalid> importParcelInvalids = new ArrayList<>();
         List<Machine> resultMachines = new ArrayList<>(machines);
 
@@ -75,7 +77,8 @@ public class OneParcelPerMachineStrategy implements ParcelLoadingStrategy {
         return result;
     }
 
-    private Machine findSuitableMachine(List<Machine> machines, Parcel parcel) {
+    @Nullable
+    private Machine findSuitableMachine(@NonNull List<Machine> machines, @NonNull Parcel parcel) {
         return machines.stream()
                 .filter(m -> m.parcels().isEmpty() && m.fitsInMachine(parcel))
                 .findFirst()
@@ -83,6 +86,7 @@ public class OneParcelPerMachineStrategy implements ParcelLoadingStrategy {
     }
 
     @Override
+    @NonNull
     public ParcelLoadingStrategyType getAlgorithmType() {
         return ParcelLoadingStrategyType.ONE_PARCEL_PER_MACHINE;
     }
@@ -96,7 +100,9 @@ public class OneParcelPerMachineStrategy implements ParcelLoadingStrategy {
      * @param cause     текстовое описание причины
      * @return объект {@link ImportParcelInvalid} с информацией об ошибке
      */
-    private ImportParcelInvalid invalidParcel(Parcel parcel, ImportParcelInvalidCauseType causeType, String cause) {
+    @NonNull
+    private ImportParcelInvalid invalidParcel(
+            @NonNull Parcel parcel, @NonNull ImportParcelInvalidCauseType causeType, @NonNull String cause) {
         ImportParcelInvalid importParcelInvalid = ImportParcelInvalid.builder()
                 .parcel(parcel)
                 .causeType(causeType)

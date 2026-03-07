@@ -1,6 +1,7 @@
 package ru.hofftech.importparcel.service.loader.strategy.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importparcel.model.core.ImportParcelInvalid;
 import ru.hofftech.importparcel.model.core.ImportParcelResult;
 import ru.hofftech.importparcel.model.enums.ImportParcelInvalidCauseType;
@@ -24,6 +25,7 @@ import java.util.List;
 @Slf4j
 public class BalancedPackingStrategy implements ParcelLoadingStrategy {
 
+    @NonNull
     private final PositionFinder positionFinder;
 
     public BalancedPackingStrategy() {
@@ -31,12 +33,13 @@ public class BalancedPackingStrategy implements ParcelLoadingStrategy {
     }
 
     @Override
+    @NonNull
     public ParcelLoadingStrategyType getAlgorithmType() {
         return ParcelLoadingStrategyType.BALANCED_PACKING;
     }
 
     @Override
-    public ImportParcelResult loadParcels(List<Parcel> parcels, List<Machine> machines) {
+    public @NonNull ImportParcelResult loadParcels(@NonNull List<Parcel> parcels, @NonNull List<Machine> machines) {
         List<ImportParcelInvalid> importParcelInvalids = new ArrayList<>();
         List<Machine> resultMachines = new ArrayList<>(machines);
 
@@ -93,6 +96,7 @@ public class BalancedPackingStrategy implements ParcelLoadingStrategy {
     }
 
     @Override
+    @NonNull
     public String getAlgorithmName() {
         return "Равномерная погрузка";
     }
@@ -106,7 +110,9 @@ public class BalancedPackingStrategy implements ParcelLoadingStrategy {
      * @param cause     текстовое описание причины
      * @return объект {@link ImportParcelInvalid} с информацией об ошибке
      */
-    private ImportParcelInvalid invalidParcel(Parcel parcel, ImportParcelInvalidCauseType causeType, String cause) {
+    @NonNull
+    private ImportParcelInvalid invalidParcel(
+            @NonNull Parcel parcel, @NonNull ImportParcelInvalidCauseType causeType, @NonNull String cause) {
         ImportParcelInvalid importParcelInvalid = ImportParcelInvalid.builder()
                 .parcel(parcel)
                 .causeType(causeType)
@@ -122,7 +128,8 @@ public class BalancedPackingStrategy implements ParcelLoadingStrategy {
      * Пытается разместить посылку в машинах по кругу, начиная с указанного индекса
      * @return true если посылка размещена
      */
-    private boolean tryPlaceInMachinesRoundRobin(List<Machine> machines, Parcel parcel, int startIndex) {
+    private boolean tryPlaceInMachinesRoundRobin(
+            @NonNull List<Machine> machines, @NonNull Parcel parcel, int startIndex) {
         if (machines.isEmpty()) {
             return false;
         }
@@ -157,7 +164,8 @@ public class BalancedPackingStrategy implements ParcelLoadingStrategy {
     /**
      * Сортирует посылки по убыванию ширины (самые широкие сначала)
      */
-    private List<Parcel> sortParcelsByWidth(List<Parcel> parcels) {
+    @NonNull
+    private List<Parcel> sortParcelsByWidth(@NonNull List<Parcel> parcels) {
         return parcels.stream()
                 .sorted(Comparator.comparingInt(Parcel::getWidth).reversed())
                 .toList();

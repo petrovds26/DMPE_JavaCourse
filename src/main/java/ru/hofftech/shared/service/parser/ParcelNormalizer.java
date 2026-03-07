@@ -1,6 +1,7 @@
 package ru.hofftech.shared.service.parser;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 
 import java.util.List;
 
@@ -15,7 +16,8 @@ public class ParcelNormalizer {
      * 1. Обрезает пробелы справа
      * 2. Выравнивает все строки до одинаковой длины
      */
-    public List<String> normalize(List<String> lines) {
+    @NonNull
+    public List<String> normalize(@NonNull List<String> lines) {
         log.debug("Нормализация посылки из {} строк", lines.size());
 
         // Шаг 1: обрезаем пробелы справа
@@ -28,7 +30,8 @@ public class ParcelNormalizer {
         return trimmedLines.stream().map(line -> padRight(line, maxLength)).toList();
     }
 
-    private String padRight(String text, int length) {
+    @NonNull
+    private String padRight(@NonNull String text, int length) {
         if (text.length() >= length) {
             return text;
         }

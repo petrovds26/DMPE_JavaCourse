@@ -1,11 +1,12 @@
 package ru.hofftech.importparcel.model.params;
 
 import lombok.Builder;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 @Builder
 public record ImportParcelParams(
         @NonNull String inputFilePath,
-        String outputFilePath,
+        @Nullable String outputFilePath,
         @NonNull Integer strategyId,
         @NonNull Integer truckCount) {}

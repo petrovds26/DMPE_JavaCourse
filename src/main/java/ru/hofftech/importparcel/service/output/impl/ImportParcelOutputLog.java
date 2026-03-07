@@ -1,6 +1,8 @@
 package ru.hofftech.importparcel.service.output.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importparcel.model.core.ImportParcelInvalid;
 import ru.hofftech.importparcel.model.core.ImportParcelResult;
 import ru.hofftech.importparcel.model.enums.ImportParcelInvalidCauseType;
@@ -11,6 +13,7 @@ import ru.hofftech.shared.model.core.PlacedParcel;
 import ru.hofftech.shared.model.enums.FileType;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -22,17 +25,18 @@ import java.util.stream.Collectors;
 public class ImportParcelOutputLog implements ImportParcelOutput {
 
     @Override
+    @Nullable
     public FileType getFileType() {
         return null;
     }
 
     @Override
-    public String getDescription() {
+    public @NonNull String getDescription() {
         return "Вывод в лог";
     }
 
     @Override
-    public void output(ImportParcelResult result, String filePath) {
+    public void output(@NonNull ImportParcelResult result, @Nullable String filePath) {
         StringBuilder output = new StringBuilder();
         // Ошибки обработки
         printErrors(output, result);
@@ -61,28 +65,38 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
      * @param output StringBuilder для накопления вывода
      * @param result результат обработки посылок
      */
-    private void printStatistics(StringBuilder output, ImportParcelResult result) {
+    private void printStatistics(@NonNull StringBuilder output, @NonNull ImportParcelResult result) {
+        List<ImportParcelInvalid> importParcelInvalids = result.importParcelInvalids();
+        List<Parcel> inputParcels = result.inputParcels();
+        List<Machine> machines = result.machines();
+
         output.append("\nСТАТИСТИКА:\n");
 
-        Long invalidCount = result.importParcelInvalids().stream()
-                .filter(p -> p.causeType() == ImportParcelInvalidCauseType.PARCEL_INVALID)
-                .count();
-        Long oversizedCount = result.importParcelInvalids().stream()
-                .filter(p -> p.causeType() == ImportParcelInvalidCauseType.PARCEL_OVERSIZED)
-                .count();
-        Long noMachineCount = result.importParcelInvalids().stream()
-                .filter(p -> p.causeType() == ImportParcelInvalidCauseType.NO_MACHINE_SPACE)
-                .count();
+        Long invalidCount = Optional.ofNullable(importParcelInvalids)
+                .map(invalids -> invalids.stream()
+                        .filter(p -> p.causeType() == ImportParcelInvalidCauseType.PARCEL_INVALID)
+                        .count())
+                .orElse(0L);
+        Long oversizedCount = Optional.ofNullable(importParcelInvalids)
+                .map(invalids -> invalids.stream()
+                        .filter(p -> p.causeType() == ImportParcelInvalidCauseType.PARCEL_OVERSIZED)
+                        .count())
+                .orElse(0L);
+        Long noMachineCount = Optional.ofNullable(importParcelInvalids)
+                .map(invalids -> invalids.stream()
+                        .filter(p -> p.causeType() == ImportParcelInvalidCauseType.NO_MACHINE_SPACE)
+                        .count())
+                .orElse(0L);
+        int inputParcelsCount =
+                Optional.ofNullable(inputParcels).map(List::size).orElse(0);
+        int inputMachinesCount = Optional.ofNullable(machines).map(List::size).orElse(0);
 
-        output.append(String.format(
-                "Всего обработано посылок: %d. Из них: %n",
-                result.inputParcels().size()));
+        output.append(String.format("Всего обработано посылок: %d. Из них: %n", inputParcelsCount));
         output.append(String.format("Не прошли валидацию: %d%n", invalidCount));
         output.append(String.format("Не поместились в машину: %d%n", oversizedCount));
         output.append(String.format("Не хватило машин: %d%n", noMachineCount));
         output.append(String.format("Успешно упаковано: %d%n", result.getTotalParcelsProcessed()));
-        output.append(
-                String.format("Использовано машин: %d%n", result.machines().size()));
+        output.append(String.format("Использовано машин: %d%n", inputMachinesCount));
     }
 
     /**
@@ -91,16 +105,18 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
      * @param output StringBuilder для накопления вывода
      * @param result результат обработки посылок
      */
-    private void printMachines(StringBuilder output, ImportParcelResult result) {
-        if (result.machines().isEmpty()) {
+    private void printMachines(@NonNull StringBuilder output, @NonNull ImportParcelResult result) {
+        List<Machine> machines = result.machines();
+
+        if (machines == null || machines.isEmpty()) {
             return;
         }
 
         output.append("\n").append("=".repeat(40)).append("\n");
         output.append("СХЕМЫ МАШИН:\n");
 
-        for (int i = 0; i < result.machines().size(); i++) {
-            Machine machine = result.machines().get(i);
+        for (int i = 0; i < machines.size(); i++) {
+            Machine machine = machines.get(i);
 
             output.append("\n").append("-".repeat(30)).append("\n");
             output.append("Машина #").append(i + 1).append("\n");
@@ -120,8 +136,9 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
      * @param output StringBuilder для накопления вывода
      * @param result результат обработки посылок
      */
-    private void printErrors(StringBuilder output, ImportParcelResult result) {
-        if (result.errors().isEmpty()) {
+    private void printErrors(@NonNull StringBuilder output, @NonNull ImportParcelResult result) {
+        List<String> errors = result.errors();
+        if (errors == null || errors.isEmpty()) {
             return;
         }
 
@@ -129,7 +146,7 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
         output.append("ОШИБКИ ПРИ ОБРАБОТКЕ:\n");
 
         // Группируем по причинам
-        result.errors().forEach(error -> output.append(error).append("\n"));
+        errors.forEach(error -> output.append(error).append("\n"));
     }
 
     /**
@@ -138,8 +155,9 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
      * @param output StringBuilder для накопления вывода
      * @param result результат обработки посылок
      */
-    private void printInvalidParcels(StringBuilder output, ImportParcelResult result) {
-        if (result.importParcelInvalids().isEmpty()) {
+    private void printInvalidParcels(@NonNull StringBuilder output, @NonNull ImportParcelResult result) {
+        List<ImportParcelInvalid> importParcelInvalids = result.importParcelInvalids();
+        if (importParcelInvalids == null || importParcelInvalids.isEmpty()) {
             return;
         }
 
@@ -147,7 +165,7 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
         output.append("ПРОБЛЕМНЫЕ ПОСЫЛКИ:\n");
 
         // Группируем по причинам
-        result.importParcelInvalids().stream()
+        importParcelInvalids.stream()
                 .collect(Collectors.groupingBy(ImportParcelInvalid::causeType))
                 .forEach((cause, parcels) -> {
                     output.append("\n").append(cause.getDescription()).append(":\n");
@@ -167,7 +185,8 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
      * @param machine машина для отображения
      * @return строковое представление машины
      */
-    private String renderMachine(Machine machine) {
+    @NonNull
+    private String renderMachine(@NonNull Machine machine) {
         StringBuilder sb = new StringBuilder();
         List<String> lines = machine.getLines();
         int width = machine.width();
@@ -192,7 +211,8 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
      * @param machine машина с посылками
      * @return строковое представление информации о посылках
      */
-    private String getParcelsInfo(Machine machine) {
+    @NonNull
+    private String getParcelsInfo(@NonNull Machine machine) {
         StringBuilder sb = new StringBuilder();
         List<PlacedParcel> parcels = machine.parcels();
 
@@ -212,7 +232,8 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
      * @param placed информация о размещении (может быть null)
      * @return отформатированная строка
      */
-    private String formatParcelInfo(Parcel parcel, PlacedParcel placed) {
+    @NonNull
+    private String formatParcelInfo(@NonNull Parcel parcel, @Nullable PlacedParcel placed) {
         StringBuilder sb = new StringBuilder();
 
         // Заголовок с символом и габаритами
@@ -240,7 +261,8 @@ public class ImportParcelOutputLog implements ImportParcelOutput {
      * @param parcel посылка
      * @return отформатированная строка
      */
-    private String formatParcelInfo(Parcel parcel) {
+    @NonNull
+    private String formatParcelInfo(@NonNull Parcel parcel) {
         return formatParcelInfo(parcel, null);
     }
 }

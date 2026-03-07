@@ -1,6 +1,8 @@
 package ru.hofftech.importparcel.validation.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.validation.Validator;
 
@@ -18,7 +20,8 @@ import java.util.List;
 public class ParcelGridValidator implements Validator<Parcel> {
 
     @Override
-    public List<String> validate(Parcel parcel) {
+    @NonNull
+    public List<String> validate(@Nullable Parcel parcel) {
         List<String> errors = new ArrayList<>();
 
         if (parcel == null) {
@@ -26,20 +29,13 @@ public class ParcelGridValidator implements Validator<Parcel> {
             return errors;
         }
 
-        validateSymbol(errors, parcel);
         validateSameWidth(errors, parcel);
         validateConnected(errors, parcel);
 
         return errors;
     }
 
-    private void validateSymbol(List<String> errors, Parcel parcel) {
-        if (parcel.symbol() == null) {
-            errors.add("Посылка не содержит символа");
-        }
-    }
-
-    private void validateSameWidth(List<String> errors, Parcel parcel) {
+    private void validateSameWidth(@NonNull List<String> errors, @NonNull Parcel parcel) {
         boolean[][] grid = parcel.grid();
         if (grid == null || grid.length == 0) {
             errors.add("Посылка не содержит grid");
@@ -56,7 +52,7 @@ public class ParcelGridValidator implements Validator<Parcel> {
         }
     }
 
-    private void validateConnected(List<String> errors, Parcel parcel) {
+    private void validateConnected(@NonNull List<String> errors, @NonNull Parcel parcel) {
         boolean[][] grid = parcel.grid();
         int height = parcel.height();
         int width = parcel.width();
@@ -97,7 +93,7 @@ public class ParcelGridValidator implements Validator<Parcel> {
         }
     }
 
-    private int countFilledCells(boolean[][] grid) {
+    private int countFilledCells(boolean @NonNull [] @NonNull [] grid) {
         int count = 0;
         for (boolean[] row : grid) {
             for (boolean cell : row) {
@@ -107,7 +103,7 @@ public class ParcelGridValidator implements Validator<Parcel> {
         return count;
     }
 
-    private int countConnectedCells(boolean[][] grid, int startY, int startX) {
+    private int countConnectedCells(boolean @NonNull [] @NonNull [] grid, int startY, int startX) {
         int height = grid.length;
         int width = grid[0].length;
         boolean[][] visited = new boolean[height][width];
@@ -115,7 +111,7 @@ public class ParcelGridValidator implements Validator<Parcel> {
         return dfs(grid, visited, startY, startX);
     }
 
-    private int dfs(boolean[][] grid, boolean[][] visited, int y, int x) {
+    private int dfs(boolean @NonNull [] @NonNull [] grid, boolean @NonNull [] @NonNull [] visited, int y, int x) {
         if (y < 0 || y >= grid.length || x < 0 || x >= grid[0].length) {
             return 0;
         }

@@ -1,6 +1,7 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 
@@ -13,7 +14,8 @@ public class SupportUtil {
     /**
      * Возвращает информацию об опоре для отладки
      */
-    public String getSupportInfo(Machine machine, Parcel parcel, int x, int y) {
+    @NonNull
+    public String getSupportInfo(@NonNull Machine machine, @NonNull Parcel parcel, int x, int y) {
         if (y == 0) {
             return "на полу";
         }

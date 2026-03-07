@@ -1,7 +1,7 @@
 package ru.hofftech.shared.model.dto;
 
 import lombok.Builder;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * DTO для передачи данных о размещённой в машине посылке.

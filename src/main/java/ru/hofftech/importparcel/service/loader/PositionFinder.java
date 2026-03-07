@@ -1,6 +1,8 @@
 package ru.hofftech.importparcel.service.loader;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.util.SupportUtil;
@@ -12,6 +14,7 @@ import ru.hofftech.shared.util.SupportUtil;
 @Slf4j
 public class PositionFinder {
 
+    @NonNull
     private final SupportChecker supportChecker;
 
     /**
@@ -30,7 +33,7 @@ public class PositionFinder {
      * @param parcel  посылка для размещения
      * @return массив [x, y] с координатами или null, если место не найдено
      */
-    public int[] findBestPosition(Machine machine, Parcel parcel) {
+    public int @Nullable [] findBestPosition(@NonNull Machine machine, @NonNull Parcel parcel) {
         int[] bestPosition = null;
 
         int maxY = Machine.DEFAULT_HEIGHT - parcel.getHeight();
@@ -70,7 +73,7 @@ public class PositionFinder {
      * @param y       координата Y
      * @return true если размещение возможно
      */
-    private boolean canPlaceAt(Machine machine, Parcel parcel, int x, int y) {
+    private boolean canPlaceAt(@NonNull Machine machine, @NonNull Parcel parcel, int x, int y) {
         // Проверяем, не пересекается ли с другими посылками
         if (machine.isPlaceOccupied(parcel, x, y)) {
             return false;

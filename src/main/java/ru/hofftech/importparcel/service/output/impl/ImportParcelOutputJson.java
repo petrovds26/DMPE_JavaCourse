@@ -2,6 +2,8 @@ package ru.hofftech.importparcel.service.output.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importparcel.model.core.ImportParcelResult;
 import ru.hofftech.importparcel.model.dto.ImportParcelOutputResultDto;
 import ru.hofftech.importparcel.service.output.ImportParcelOutput;
@@ -21,12 +23,7 @@ import java.nio.file.Path;
 public class ImportParcelOutputJson implements ImportParcelOutput {
 
     @Override
-    public void output(ImportParcelResult result, String outputFilePath) {
-        if (result == null) {
-            log.error("Нельзя сохранить null результат");
-            return;
-        }
-
+    public void output(@NonNull ImportParcelResult result, @Nullable String outputFilePath) {
         if (outputFilePath == null || outputFilePath.isBlank()) {
             log.error("Не указан путь для сохранения JSON файла");
             return;
@@ -50,11 +47,13 @@ public class ImportParcelOutputJson implements ImportParcelOutput {
     }
 
     @Override
+    @Nullable
     public FileType getFileType() {
         return FileType.JSON;
     }
 
     @Override
+    @NonNull
     public String getDescription() {
         return FileType.JSON.getDescription();
     }

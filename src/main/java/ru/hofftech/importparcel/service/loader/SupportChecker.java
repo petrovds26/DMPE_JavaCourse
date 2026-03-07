@@ -1,5 +1,6 @@
 package ru.hofftech.importparcel.service.loader;
 
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 
@@ -19,7 +20,7 @@ public class SupportChecker {
      * @param y       координата Y левого нижнего угла посылки
      * @return true если опоры достаточно (>50% клеток нижнего ряда имеют опору)
      */
-    public boolean hasEnoughSupport(Machine machine, Parcel parcel, int x, int y) {
+    public boolean hasEnoughSupport(@NonNull Machine machine, @NonNull Parcel parcel, int x, int y) {
         // Если посылка на полу - всегда достаточно опоры
         if (y == 0) {
             return true;

@@ -1,6 +1,8 @@
 package ru.hofftech.shared.model.core;
 
 import lombok.Builder;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +17,7 @@ import java.util.Objects;
 @Builder
 public record Machine(
         char[][] grid, // Текущее состояние для быстрой проверки
-        List<PlacedParcel> parcels, // Список размещённых посылок с координатами
+        @NonNull List<PlacedParcel> parcels, // Список размещённых посылок с координатами
         int width,
         int height) {
     public static final int DEFAULT_WIDTH = 6;
@@ -44,6 +46,7 @@ public record Machine(
      *
      * @return список строк, представляющих сетку машины
      */
+    @NonNull
     public List<String> getLines() {
         List<String> lines = new ArrayList<>();
         for (int i = height - 1; i >= 0; i--) {
@@ -65,7 +68,7 @@ public record Machine(
      * @param startY координата Y левого нижнего угла
      * @return true если место занято или выходит за границы
      */
-    public boolean isPlaceOccupied(Parcel parcel, int startX, int startY) {
+    public boolean isPlaceOccupied(@NonNull Parcel parcel, int startX, int startY) {
         int parcelHeight = parcel.getHeight();
         int parcelWidth = parcel.getWidth();
 
@@ -88,7 +91,7 @@ public record Machine(
 
     /**
      * Размещает посылку в указанной позиции.
-     * Создаёт новую машину с размещённой посылкой (иммутабельная операция).
+     * Создаёт новую машину с размещённой посылкой
      *
      * @param parcel посылка для размещения
      * @param startX координата X левого нижнего угла
@@ -96,7 +99,8 @@ public record Machine(
      * @return новая машина с размещённой посылкой
      * @throws IllegalArgumentException если место занято или выходит за границы
      */
-    public Machine placeParcel(Parcel parcel, int startX, int startY) {
+    @NonNull
+    public Machine placeParcel(@NonNull Parcel parcel, int startX, int startY) {
         if (isPlaceOccupied(parcel, startX, startY)) {
             throw new IllegalArgumentException("Невозможно разместить посылку в указанной позиции");
         }
@@ -138,18 +142,19 @@ public record Machine(
      * @param parcel посылка для проверки
      * @return true если посылка по размерам помещается в машину
      */
-    public boolean fitsInMachine(Parcel parcel) {
+    public boolean fitsInMachine(@NonNull Parcel parcel) {
         return parcel.getWidth() <= width() && parcel.getHeight() <= height();
     }
 
     @Override
+    @NonNull
     public String toString() {
         return String.format("Machine{parcels=%d, size=%dx%d}", parcels.size(), width, height);
     }
 
     // Переопределяем equals для корректного сравнения содержимого массивов
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Machine machine = (Machine) o;
@@ -172,7 +177,7 @@ public record Machine(
         return result;
     }
 
-    private static char[][] createEmptyGrid() {
+    private static char @NonNull [] @NonNull [] createEmptyGrid() {
         char[][] grid = new char[DEFAULT_HEIGHT][DEFAULT_WIDTH];
         for (int i = 0; i < DEFAULT_HEIGHT; i++) {
             for (int j = 0; j < DEFAULT_WIDTH; j++) {
@@ -182,7 +187,7 @@ public record Machine(
         return grid;
     }
 
-    private char[][] copyGrid() {
+    private char @NonNull [] @NonNull [] copyGrid() {
         char[][] copy = new char[height][width];
         for (int i = 0; i < height; i++) {
             System.arraycopy(grid[i], 0, copy[i], 0, width);

@@ -1,6 +1,8 @@
 package ru.hofftech.importparcel.model.core;
 
 import lombok.Builder;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 
@@ -13,10 +15,12 @@ import java.util.List;
  */
 @Builder
 public record ImportParcelResult(
-        List<Parcel> inputParcels, // Посылки, поступившие на вход для обработки
-        List<ImportParcelInvalid> importParcelInvalids, // Посылки, которые не удалось обработать (с указанием причины)
-        List<Machine> machines, // Машины с успешно упакованными посылками
-        List<String> errors // Общие ошибки обработки, не привязанные к конкретным посылкам
+        @Nullable List<Parcel> inputParcels, // Посылки, поступившие на вход для обработки
+        @Nullable
+                List<ImportParcelInvalid>
+                        importParcelInvalids, // Посылки, которые не удалось обработать (с указанием причины)
+        @Nullable List<Machine> machines, // Машины с успешно упакованными посылками
+        @Nullable List<String> errors // Общие ошибки обработки, не привязанные к конкретным посылкам
         ) {
     /**
      * Подсчитывает общее количество успешно упакованных посылок.
@@ -24,10 +28,13 @@ public record ImportParcelResult(
      * @return количество посылок во всех машинах
      */
     public int getTotalParcelsProcessed() {
+        if (machines == null) {
+            return 0;
+        }
         return machines.stream().mapToInt(this::countParcelsInMachine).sum();
     }
 
-    private int countParcelsInMachine(Machine machine) {
+    private int countParcelsInMachine(@NonNull Machine machine) {
         return machine.parcels().size();
     }
 }

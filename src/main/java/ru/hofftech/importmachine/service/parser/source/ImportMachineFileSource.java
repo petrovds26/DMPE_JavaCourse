@@ -1,5 +1,6 @@
 package ru.hofftech.importmachine.service.parser.source;
 
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.shared.model.dto.MachineDto;
 import ru.hofftech.shared.model.enums.FileType;
 
@@ -16,16 +17,19 @@ public interface ImportMachineFileSource<T> {
      * @return список машин
      * @throws IOException если возникла ошибка при получении данных
      */
-    List<MachineDto> getMachines(T source) throws IOException;
+    @NonNull
+    List<MachineDto> getMachines(@NonNull T source) throws IOException;
 
     /**
      * @return тип источника из enum
      */
+    @NonNull
     FileType getFileType();
 
     /**
      * @return описание источника (для логирования)
      */
+    @NonNull
     default String getDescription() {
         return getFileType().getDescription();
     }

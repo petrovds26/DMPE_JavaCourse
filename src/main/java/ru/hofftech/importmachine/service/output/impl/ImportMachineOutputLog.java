@@ -1,6 +1,8 @@
 package ru.hofftech.importmachine.service.output.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.model.core.ImportMachineResult;
 import ru.hofftech.importmachine.service.output.ImportMachineOutput;
 import ru.hofftech.shared.model.core.Machine;
@@ -14,17 +16,17 @@ import java.util.Optional;
 public class ImportMachineOutputLog implements ImportMachineOutput {
 
     @Override
-    public Optional<FileType> getFileTypeOptional() {
+    public @NonNull Optional<FileType> getFileTypeOptional() {
         return Optional.empty();
     }
 
     @Override
-    public String getDescription() {
+    public @NonNull String getDescription() {
         return "Вывод в лог";
     }
 
     @Override
-    public void output(ImportMachineResult result, String filePath) {
+    public void output(@NonNull ImportMachineResult result, @Nullable String filePath) {
         StringBuilder output = new StringBuilder();
 
         output.append("\n").append("=".repeat(60)).append("\n");
@@ -45,7 +47,7 @@ public class ImportMachineOutputLog implements ImportMachineOutput {
         log.info(output.toString());
     }
 
-    private void printStatistics(StringBuilder output, ImportMachineResult result) {
+    private void printStatistics(@NonNull StringBuilder output, @NonNull ImportMachineResult result) {
         output.append("\nСТАТИСТИКА:\n");
         output.append(String.format(
                 "Всего машин на входе: %d%n", result.inputMachines().size()));
@@ -53,7 +55,7 @@ public class ImportMachineOutputLog implements ImportMachineOutput {
                 "Успешно загружено посылок: %d%n", result.parcels().size()));
     }
 
-    private void printMachines(StringBuilder output, ImportMachineResult result) {
+    private void printMachines(@NonNull StringBuilder output, @NonNull ImportMachineResult result) {
         if (result.inputMachines().isEmpty()) {
             return;
         }
@@ -76,7 +78,7 @@ public class ImportMachineOutputLog implements ImportMachineOutput {
         }
     }
 
-    private void printLoadedParcels(StringBuilder output, ImportMachineResult result) {
+    private void printLoadedParcels(@NonNull StringBuilder output, @NonNull ImportMachineResult result) {
         if (result.parcels().isEmpty()) {
             return;
         }
@@ -93,7 +95,7 @@ public class ImportMachineOutputLog implements ImportMachineOutput {
         }
     }
 
-    private String renderMachine(Machine machine) {
+    private @NonNull String renderMachine(@NonNull Machine machine) {
         StringBuilder sb = new StringBuilder();
         List<String> lines = machine.getLines();
         int width = machine.width();
@@ -112,7 +114,7 @@ public class ImportMachineOutputLog implements ImportMachineOutput {
         return sb.toString();
     }
 
-    private String getMachineInfo(Machine machine) {
+    private @NonNull String getMachineInfo(@NonNull Machine machine) {
         StringBuilder sb = new StringBuilder();
 
         // Считаем свободное место
@@ -137,9 +139,12 @@ public class ImportMachineOutputLog implements ImportMachineOutput {
     }
 
     /**
-     * Форматирует информацию о посылке
+     * Перегрузка метода formatParcelInfo для случаев без координат.
+     *
+     * @param parcel посылка
+     * @return отформатированная строка (не может быть null)
      */
-    private String formatParcelInfo(Parcel parcel) {
+    private @NonNull String formatParcelInfo(@NonNull Parcel parcel) {
 
         // Заголовок с символом и габаритами
 

@@ -1,10 +1,13 @@
 package ru.hofftech.importparcel.util;
 
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importparcel.model.core.ImportParcelInvalid;
 import ru.hofftech.importparcel.model.core.ImportParcelResult;
 import ru.hofftech.importparcel.model.dto.ImportParcelInvalidDto;
 import ru.hofftech.importparcel.model.dto.ImportParcelOutputResultDto;
+import ru.hofftech.shared.model.dto.ParcelDto;
 import ru.hofftech.shared.util.MapperUtil;
 
 import java.util.List;
@@ -15,13 +18,20 @@ public class ImportParcelMapperUtil {
     /**
      * Преобразует ImportParcelInvalid в ImportParcelInvalidDto
      */
-    public ImportParcelInvalidDto invalidParcelToDto(ImportParcelInvalid importParcelInvalid) {
+    @Nullable
+    public ImportParcelInvalidDto invalidParcelToDto(@Nullable ImportParcelInvalid importParcelInvalid) {
         if (importParcelInvalid == null) {
             return null;
         }
 
+        ParcelDto parcelDto = MapperUtil.parcelToDto(importParcelInvalid.parcel());
+
+        if (parcelDto == null) {
+            return null;
+        }
+
         return ImportParcelInvalidDto.builder()
-                .parcel(MapperUtil.parcelToDto(importParcelInvalid.parcel()))
+                .parcel(parcelDto)
                 .cause(importParcelInvalid.cause())
                 .build();
     }
@@ -29,7 +39,8 @@ public class ImportParcelMapperUtil {
     /**
      * Преобразует список ImportParcelInvalid в список DTO
      */
-    public List<ImportParcelInvalidDto> invalidParcelsToDto(List<ImportParcelInvalid> importParcelInvalids) {
+    @NonNull
+    public List<ImportParcelInvalidDto> invalidParcelsToDto(@Nullable List<ImportParcelInvalid> importParcelInvalids) {
         if (importParcelInvalids == null) {
             return List.of();
         }
@@ -41,7 +52,8 @@ public class ImportParcelMapperUtil {
     /**
      * Преобразует ImportParcelResult в ImportParcelOutputResultDto
      */
-    public ImportParcelOutputResultDto loadingResultToOutputDto(ImportParcelResult result) {
+    @Nullable
+    public ImportParcelOutputResultDto loadingResultToOutputDto(@Nullable ImportParcelResult result) {
         if (result == null) {
             return null;
         }

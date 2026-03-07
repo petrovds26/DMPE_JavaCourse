@@ -3,6 +3,7 @@ package ru.hofftech.importmachine.model.params;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -11,6 +12,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @Parameters(commandDescription = "Импорт машин из файла")
+@RequiredArgsConstructor
 public class ImportMachineConsoleCommandParams {
 
     @Parameter(

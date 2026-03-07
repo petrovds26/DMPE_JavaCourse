@@ -1,6 +1,8 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.core.PlacedParcel;
@@ -24,10 +26,11 @@ public class MapperUtil {
     /**
      * Преобразует Parcel в ParcelDto.
      *
-     * @param parcel сущность посылки
+     * @param parcel сущность посылки (может быть null)
      * @return DTO посылки или null, если входной параметр null
      */
-    public ParcelDto parcelToDto(Parcel parcel) {
+    @Nullable
+    public ParcelDto parcelToDto(@Nullable Parcel parcel) {
         if (parcel == null) {
             return null;
         }
@@ -38,9 +41,13 @@ public class MapperUtil {
     }
 
     /**
-     * Преобразует Machine в MachineDto
+     * Преобразует Machine в MachineDto.
+     *
+     * @param machine сущность машины (может быть null)
+     * @return DTO машины или null, если входной параметр null
      */
-    public MachineDto machineToDto(Machine machine) {
+    @Nullable
+    public MachineDto machineToDto(@Nullable Machine machine) {
         if (machine == null) {
             return null;
         }
@@ -55,7 +62,8 @@ public class MapperUtil {
     /**
      * Преобразует список машин в список DTO
      */
-    public List<MachineDto> machinesToDto(List<Machine> machines) {
+    @NonNull
+    public List<MachineDto> machinesToDto(@Nullable List<Machine> machines) {
         if (machines == null) {
             return List.of();
         }
@@ -63,24 +71,38 @@ public class MapperUtil {
     }
 
     /**
-     * Преобразует PlacedParcel в PlacedParcelDto
+     * Преобразует PlacedParcel в PlacedParcelDto.
+     *
+     * @param placedParcel размещённая посылка (может быть null)
+     * @return DTO размещённой посылки или null, если входной параметр null
      */
-    public PlacedParcelDto placedParcelToDto(PlacedParcel placedParcel) {
+    @Nullable
+    public PlacedParcelDto placedParcelToDto(@Nullable PlacedParcel placedParcel) {
         if (placedParcel == null) {
             return null;
         }
 
+        ParcelDto parcelDto = MapperUtil.parcelToDto(placedParcel.parcel());
+
+        if (parcelDto == null) {
+            return null;
+        }
+
         return PlacedParcelDto.builder()
-                .parcel(MapperUtil.parcelToDto(placedParcel.parcel()))
+                .parcel(parcelDto)
                 .x(placedParcel.x())
                 .y(placedParcel.y())
                 .build();
     }
 
     /**
-     * Преобразует MachineDto в Machine
+     * Преобразует MachineDto в Machine.
+     *
+     * @param dto DTO машины (может быть null)
+     * @return сущность машины или null, если входной параметр null
      */
-    public Machine dtoToMachine(MachineDto dto) {
+    @Nullable
+    public Machine dtoToMachine(@Nullable MachineDto dto) {
         if (dto == null) {
             return null;
         }
@@ -99,7 +121,8 @@ public class MapperUtil {
     /**
      * Преобразует список PlacedParcelDto в список PlacedParcel
      */
-    public List<PlacedParcel> dtoToPlacedParcels(List<PlacedParcelDto> dtos) {
+    @NonNull
+    public List<PlacedParcel> dtoToPlacedParcels(@Nullable List<PlacedParcelDto> dtos) {
         if (dtos == null) {
             return List.of();
         }
@@ -107,18 +130,24 @@ public class MapperUtil {
     }
 
     /**
-     * Преобразует PlacedParcelDto в PlacedParcel
+     * Преобразует PlacedParcelDto в PlacedParcel.
+     *
+     * @param dto DTO размещённой посылки (может быть null)
+     * @return сущность размещённой посылки или null, если входной параметр null
      */
-    public PlacedParcel dtoToPlacedParcel(PlacedParcelDto dto) {
+    @Nullable
+    public PlacedParcel dtoToPlacedParcel(@Nullable PlacedParcelDto dto) {
         if (dto == null) {
             return null;
         }
 
-        return PlacedParcel.builder()
-                .parcel(dtoToParcel(dto.parcel()))
-                .x(dto.x())
-                .y(dto.y())
-                .build();
+        Parcel parcel = dtoToParcel(dto.parcel());
+
+        if (parcel == null) {
+            return null;
+        }
+
+        return PlacedParcel.builder().parcel(parcel).x(dto.x()).y(dto.y()).build();
     }
 
     /**
@@ -128,7 +157,8 @@ public class MapperUtil {
      * @param dto DTO посылки
      * @return сущность посылки или null, если входной параметр null
      */
-    public Parcel dtoToParcel(ParcelDto dto) {
+    @Nullable
+    public Parcel dtoToParcel(@Nullable ParcelDto dto) {
         if (dto == null) {
             return null;
         }
@@ -141,7 +171,8 @@ public class MapperUtil {
     /**
      * Преобразует список ParcelDto в список Parcel
      */
-    public List<Parcel> dtoToParcels(List<ParcelDto> dtos) {
+    @NonNull
+    public List<Parcel> dtoToParcels(@Nullable List<ParcelDto> dtos) {
         if (dtos == null) {
             return List.of();
         }
@@ -151,7 +182,8 @@ public class MapperUtil {
     /**
      * Создаёт grid машины из списка размещённых посылок
      */
-    private char[][] createGridFromPlacedParcels(int width, int height, List<PlacedParcel> placedParcels) {
+    private char @NonNull [] @NonNull [] createGridFromPlacedParcels(
+            int width, int height, @NonNull List<PlacedParcel> placedParcels) {
         char[][] grid = new char[height][width];
 
         // Заполняем пустотой
@@ -182,7 +214,8 @@ public class MapperUtil {
     /**
      * Преобразует список MachineDto в список Machine
      */
-    public List<Machine> dtoToMachines(List<MachineDto> dtos) {
+    @NonNull
+    public List<Machine> dtoToMachines(@Nullable List<MachineDto> dtos) {
         if (dtos == null) {
             return List.of();
         }
@@ -192,7 +225,8 @@ public class MapperUtil {
     /**
      * Преобразует размещённые посылки в DTO
      */
-    private List<PlacedParcelDto> convertPlacedParcels(Machine machine) {
+    @NonNull
+    private List<PlacedParcelDto> convertPlacedParcels(@NonNull Machine machine) {
         return machine.parcels().stream().map(MapperUtil::placedParcelToDto).toList();
     }
 }

@@ -4,6 +4,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.Parameters;
 import com.beust.jcommander.validators.PositiveInteger;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 /**
@@ -11,6 +12,7 @@ import lombok.ToString;
  */
 @Getter
 @ToString
+@RequiredArgsConstructor
 @Parameters(commandDescription = "Импорт посылок из файла")
 public class ImportParcelConsoleCommandParams {
 

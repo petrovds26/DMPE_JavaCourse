@@ -1,6 +1,7 @@
 package ru.hofftech.importmachine.util;
 
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.model.core.ImportMachineResult;
 import ru.hofftech.importmachine.model.dto.ImportMachineOutputResultDto;
 import ru.hofftech.shared.util.MapperUtil;
@@ -11,6 +12,7 @@ public class ImportMachineMapperUtil {
     /**
      * Преобразует ImportMachineResult в ImportMachineOutputResultDto
      */
+    @Nullable
     public ImportMachineOutputResultDto loadingResultToOutputDto(ImportMachineResult result) {
         if (result == null) {
             return null;

@@ -1,6 +1,7 @@
 package ru.hofftech.importparcel.service.parser.machine.source.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importparcel.service.parser.machine.source.ImportParcelMachineSource;
 import ru.hofftech.shared.model.core.Machine;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class ImportParcelMachineIntegerDefaultSource implements ImportParcelMachineSource<Integer> {
 
     @Override
-    public List<Machine> getMachines(Integer numberOfMachines) {
+    public @NonNull List<Machine> getMachines(@NonNull Integer numberOfMachines) {
         List<Machine> machines = new ArrayList<>();
         for (int i = 0; i < numberOfMachines; i++) {
             Machine newMachine = new Machine();

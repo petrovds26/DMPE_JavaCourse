@@ -1,6 +1,7 @@
 package ru.hofftech.importparcel.service.loader.strategy.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importparcel.model.core.ImportParcelInvalid;
 import ru.hofftech.importparcel.model.core.ImportParcelResult;
 import ru.hofftech.importparcel.model.enums.ImportParcelInvalidCauseType;
@@ -23,6 +24,7 @@ import java.util.List;
 @Slf4j
 public class DensePackingStrategy implements ParcelLoadingStrategy {
 
+    @NonNull
     private final PositionFinder positionFinder;
 
     public DensePackingStrategy() {
@@ -30,12 +32,13 @@ public class DensePackingStrategy implements ParcelLoadingStrategy {
     }
 
     @Override
+    @NonNull
     public ParcelLoadingStrategyType getAlgorithmType() {
         return ParcelLoadingStrategyType.DENSE_PACKING;
     }
 
     @Override
-    public ImportParcelResult loadParcels(List<Parcel> parcels, List<Machine> machines) {
+    public @NonNull ImportParcelResult loadParcels(@NonNull List<Parcel> parcels, @NonNull List<Machine> machines) {
         List<ImportParcelInvalid> importParcelInvalids = new ArrayList<>();
         List<Machine> resultMachines = new ArrayList<>(machines);
 
@@ -86,6 +89,7 @@ public class DensePackingStrategy implements ParcelLoadingStrategy {
     }
 
     @Override
+    @NonNull
     public String getAlgorithmName() {
         return "Плотная упаковка";
     }
@@ -99,7 +103,9 @@ public class DensePackingStrategy implements ParcelLoadingStrategy {
      * @param cause     текстовое описание причины
      * @return объект {@link ImportParcelInvalid} с информацией об ошибке
      */
-    private ImportParcelInvalid invalidParcel(Parcel parcel, ImportParcelInvalidCauseType causeType, String cause) {
+    @NonNull
+    private ImportParcelInvalid invalidParcel(
+            @NonNull Parcel parcel, @NonNull ImportParcelInvalidCauseType causeType, @NonNull String cause) {
         ImportParcelInvalid importParcelInvalid = ImportParcelInvalid.builder()
                 .parcel(parcel)
                 .causeType(causeType)
@@ -115,7 +121,7 @@ public class DensePackingStrategy implements ParcelLoadingStrategy {
      * Пытается разместить посылку в одной из существующих машин
      * @return true если посылка размещена
      */
-    private boolean tryPlaceInExistingMachines(List<Machine> machines, Parcel parcel) {
+    private boolean tryPlaceInExistingMachines(@NonNull List<Machine> machines, @NonNull Parcel parcel) {
         for (int i = 0; i < machines.size(); i++) {
             Machine machine = machines.get(i);
 
@@ -146,7 +152,8 @@ public class DensePackingStrategy implements ParcelLoadingStrategy {
     /**
      * Сортирует посылки по убыванию ширины (самые широкие сначала)
      */
-    private List<Parcel> sortParcelsByWidth(List<Parcel> parcels) {
+    @NonNull
+    private List<Parcel> sortParcelsByWidth(@NonNull List<Parcel> parcels) {
         return parcels.stream()
                 .sorted(Comparator.comparingInt(Parcel::getWidth).reversed())
                 .toList();

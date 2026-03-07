@@ -1,6 +1,7 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.enums.FileType;
 
 import java.util.Arrays;
@@ -17,7 +18,8 @@ public class FileTypeUtil {
      * @param extension расширение файла (без точки, например "json", "txt")
      * @return соответствующий {@link FileType} или null, если расширение не поддерживается
      */
-    public static FileType fromExtension(String extension) {
+    @Nullable
+    public static FileType fromExtension(@Nullable String extension) {
         if (extension == null || extension.isBlank()) {
             return null;
         }
@@ -35,7 +37,8 @@ public class FileTypeUtil {
      * @param filename имя файла (например, "data.json", "documents/parcels.txt")
      * @return соответствующий {@link FileType} или null, если расширение не поддерживается
      */
-    public static FileType fromFilename(String filename) {
+    @Nullable
+    public static FileType fromFilename(@Nullable String filename) {
         if (filename == null || filename.isBlank()) {
             return null;
         }

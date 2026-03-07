@@ -1,6 +1,7 @@
 package ru.hofftech.shared.service.parser;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.shared.model.core.Parcel;
 
 import java.util.List;
@@ -14,7 +15,8 @@ public class ParcelBuilder {
     /**
      * Создаёт посылку из нормализованных строк
      */
-    public Parcel buildFromLines(List<String> normalizedLines) {
+    @NonNull
+    public Parcel buildFromLines(@NonNull List<String> normalizedLines) {
         int height = normalizedLines.size();
         int width = normalizedLines.getFirst().length();
         Character symbol = findSymbol(normalizedLines.getFirst());
@@ -39,13 +41,14 @@ public class ParcelBuilder {
         return parcel;
     }
 
-    private Character findSymbol(String line) {
+    @NonNull
+    private Character findSymbol(@NonNull String line) {
         for (int i = 0; i < line.length(); i++) {
             char c = line.charAt(i);
             if (!Character.isWhitespace(c)) {
                 return c;
             }
         }
-        return null;
+        return 'X';
     }
 }

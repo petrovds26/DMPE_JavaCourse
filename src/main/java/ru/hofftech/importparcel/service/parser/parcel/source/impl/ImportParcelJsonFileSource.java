@@ -2,6 +2,7 @@ package ru.hofftech.importparcel.service.parser.parcel.source.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importparcel.model.dto.ImportParcelDto;
 import ru.hofftech.importparcel.service.parser.parcel.source.ImportParcelFileSource;
 import ru.hofftech.shared.model.dto.ParcelDto;
@@ -22,7 +23,7 @@ import java.util.List;
 public class ImportParcelJsonFileSource implements ImportParcelFileSource<String> {
 
     @Override
-    public List<List<String>> getParcelBlocks(String filePath) throws IOException {
+    public @NonNull List<List<String>> getParcelBlocks(@NonNull String filePath) throws IOException {
         log.debug("Чтение JSON файла: {}", filePath);
 
         Path path = Path.of(filePath);
@@ -44,18 +45,20 @@ public class ImportParcelJsonFileSource implements ImportParcelFileSource<String
     }
 
     @Override
-    public FileType getFileType() {
+    public @NonNull FileType getFileType() {
         return FileType.JSON;
     }
 
     /**
      * Преобразует строку с \n в список строк
      */
-    private List<String> splitDisplay(String display) {
+    @NonNull
+    private List<String> splitDisplay(@NonNull String display) {
         return Arrays.asList(display.split("\n"));
     }
 
-    private List<List<String>> convertToParcelBlocks(ImportParcelDto importParcelDto) {
+    @NonNull
+    private List<List<String>> convertToParcelBlocks(@NonNull ImportParcelDto importParcelDto) {
         return importParcelDto.parcels().stream()
                 .map(ParcelDto::form)
                 .map(this::splitDisplay)

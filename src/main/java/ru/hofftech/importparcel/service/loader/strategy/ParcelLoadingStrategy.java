@@ -1,6 +1,6 @@
 package ru.hofftech.importparcel.service.loader.strategy;
 
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importparcel.model.core.ImportParcelResult;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
@@ -17,16 +17,19 @@ public interface ParcelLoadingStrategy {
      * @param parcels список посылок для упаковки
      * @return результат упаковки с разделением на успешные и проблемные
      */
+    @NonNull
     ImportParcelResult loadParcels(@NonNull List<Parcel> parcels, @NonNull List<Machine> machines);
 
     /**
      * @return название алгоритма
      */
+    @NonNull
     ParcelLoadingStrategyType getAlgorithmType();
 
     /**
      * @return название алгоритма
      */
+    @NonNull
     default String getAlgorithmName() {
         return this.getAlgorithmType().getDescription();
     }

@@ -1,7 +1,7 @@
 package ru.hofftech.importparcel.model.dto;
 
 import lombok.Builder;
-import lombok.NonNull;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.shared.model.dto.ParcelDto;
 
 @Builder

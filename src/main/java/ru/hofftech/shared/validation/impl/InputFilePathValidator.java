@@ -1,5 +1,7 @@
 package ru.hofftech.shared.validation.impl;
 
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.validation.Validator;
 
 import java.nio.file.Files;
@@ -27,7 +29,7 @@ public class InputFilePathValidator implements Validator<String> {
      * @return список ошибок (пустой список, если ошибок нет)
      */
     @Override
-    public List<String> validate(String filePath) {
+    public @NonNull List<String> validate(@Nullable String filePath) {
         List<String> errors = new ArrayList<>();
 
         if (filePath == null || filePath.isBlank()) {

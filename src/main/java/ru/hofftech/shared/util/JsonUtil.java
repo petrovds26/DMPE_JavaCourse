@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.exception.JsonUtilException;
 
 /**
@@ -16,6 +18,7 @@ import ru.hofftech.shared.exception.JsonUtilException;
  */
 @UtilityClass
 public class JsonUtil {
+    @NonNull
     private static final ObjectMapper objectMapper;
 
     static {
@@ -38,7 +41,8 @@ public class JsonUtil {
      * @return целевой объект
      * @throws JsonUtilException если произошла ошибка десериализации
      */
-    public static <T> T fromJson(String json, Class<T> classOfT) {
+    @NonNull
+    public static <T> T fromJson(@NonNull String json, @NonNull Class<T> classOfT) {
         try {
             return objectMapper.readValue(json, classOfT);
         } catch (JsonProcessingException e) {
@@ -49,11 +53,12 @@ public class JsonUtil {
     /**
      * Сериализует объект в JSON-строку с форматированием.
      *
-     * @param src объект для сериализации
-     * @return JSON-строка
+     * @param src объект для сериализации (может быть null)
+     * @return JSON-строка (не может быть null)
      * @throws JsonUtilException если произошла ошибка сериализации
      */
-    public static String toJson(Object src) {
+    @NonNull
+    public static String toJson(@Nullable Object src) {
         try {
             return objectMapper.writeValueAsString(src);
         } catch (JsonProcessingException e) {
@@ -64,11 +69,11 @@ public class JsonUtil {
     /**
      * Сериализует объект в массив байтов (JSON в UTF-8).
      *
-     * @param src объект для сериализации
-     * @return массив байтов
+     * @param src объект для сериализации (может быть null)
+     * @return массив байтов (не может быть null)
      * @throws JsonUtilException если произошла ошибка сериализации
      */
-    public static byte[] writeValueAsBytes(Object src) {
+    public static byte @NonNull [] writeValueAsBytes(@Nullable Object src) {
         try {
             return objectMapper.writeValueAsBytes(src);
         } catch (JsonProcessingException e) {

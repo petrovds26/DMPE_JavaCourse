@@ -1,6 +1,7 @@
 package ru.hofftech.shared.model.core;
 
 import lombok.Builder;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Информация о размещённой в машине посылке.
@@ -8,7 +9,7 @@ import lombok.Builder;
  */
 @Builder
 public record PlacedParcel(
-        Parcel parcel, // Сама посылка
+        @NonNull Parcel parcel, // Сама посылка
         int x, // Координата X (от 0)
         int y // Координата Y (от 0)
         ) {

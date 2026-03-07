@@ -4,6 +4,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importparcel.model.params.ImportParcelConsoleCommandParams;
 import ru.hofftech.importparcel.model.params.ImportParcelParams;
 import ru.hofftech.importparcel.service.ImportParcelProcessor;
@@ -17,6 +19,7 @@ import ru.hofftech.importparcel.service.parser.parcel.source.ImportParcelFileSou
 import ru.hofftech.importparcel.service.parser.parcel.source.ImportParcelFileSourceService;
 import ru.hofftech.importparcel.validation.impl.ParcelGridValidator;
 import ru.hofftech.importparcel.validation.impl.ParcelListStringValidator;
+import ru.hofftech.shared.model.enums.FileType;
 import ru.hofftech.shared.service.command.ConsoleCommand;
 import ru.hofftech.shared.service.command.ConsoleCommandType;
 import ru.hofftech.shared.service.parser.ParcelBuilder;
@@ -37,16 +40,34 @@ import java.util.List;
 */
 @SuppressWarnings("ClassCanBeRecord")
 public class ImportParcelConsoleCommand implements ConsoleCommand {
-
+    @NonNull
     private final ParcelLoadingStrategyService strategyService;
+
+    @NonNull
     private final ImportParcelFileSourceService importParcelFileSourceService;
+
+    @NonNull
     private final ImportParcelMachineSource<Integer> importParcelMachineSource;
+
+    @NonNull
     private final ImportParcelOutputService importParcelOutputService;
+
+    @NonNull
     private final InputFilePathValidator inputFilePathValidator;
+
+    @NonNull
     private final OutputFilePathValidator outputFilePathValidator;
+
+    @NonNull
     private final ParcelNormalizer normalizer;
+
+    @NonNull
     private final ParcelBuilder parcelBuilder;
+
+    @NonNull
     private final ParcelListStringValidator stringValidator;
+
+    @NonNull
     private final ParcelGridValidator gridValidator;
 
     /**
@@ -66,22 +87,24 @@ public class ImportParcelConsoleCommand implements ConsoleCommand {
     }
 
     @Override
+    @NonNull
     public String getName() {
         return ConsoleCommandType.IMPORT_PARCEL.toString();
     }
 
     @Override
+    @NonNull
     public String getDescription() {
         return "Импорт посылок из файла. Поддерживаются форматы .txt и .json. " + "Используйте --help для справки.";
     }
 
     @Override
-    public boolean matches(String input) {
+    public boolean matches(@NonNull String input) {
         return input.trim().startsWith(ConsoleCommandType.IMPORT_PARCEL + " ");
     }
 
     @Override
-    public void execute(String input) {
+    public void execute(@NonNull String input) {
 
         ImportParcelParams importParcelParams = parseParams(input);
 
@@ -96,8 +119,14 @@ public class ImportParcelConsoleCommand implements ConsoleCommand {
             return;
         }
 
-        ImportParcelFileSource<String> fileParcelSource = importParcelFileSourceService.getSourceByFileType(
-                FileTypeUtil.fromFilename(importParcelParams.inputFilePath()));
+        FileType inputFileType = FileTypeUtil.fromFilename(importParcelParams.inputFilePath());
+        if (inputFileType == null) {
+            log.error("Ошибки валидации параметра Входной файл: Тип файла не определен");
+            return;
+        }
+
+        ImportParcelFileSource<String> fileParcelSource =
+                importParcelFileSourceService.getSourceByFileType(inputFileType);
 
         if (fileParcelSource == null) {
             log.error(
@@ -115,8 +144,19 @@ public class ImportParcelConsoleCommand implements ConsoleCommand {
             }
         }
 
-        ImportParcelOutput output = importParcelOutputService.getOutputByFileType(
-                FileTypeUtil.fromFilename(importParcelParams.outputFilePath()));
+        FileType fileTypeOutput = FileTypeUtil.fromFilename(importParcelParams.outputFilePath());
+
+        if (fileTypeOutput == null
+                && importParcelParams.outputFilePath() != null
+                && !importParcelParams.outputFilePath().isEmpty()) {
+            log.error(
+                    "Не удалось определить тип исходящего файла. Поддерживаются форматы {}. Проверьте исходящий файл: {}",
+                    importParcelOutputService.getAvailableFileExtensionDescription(),
+                    importParcelParams.outputFilePath());
+            return;
+        }
+
+        ImportParcelOutput output = importParcelOutputService.getOutputByFileType(fileTypeOutput);
 
         if (output == null) {
             log.error(
@@ -161,7 +201,8 @@ public class ImportParcelConsoleCommand implements ConsoleCommand {
      * @param input строка ввода от пользователя
      * @return объект с параметрами или null в случае ошибки
      */
-    private ImportParcelParams parseParams(String input) {
+    @Nullable
+    private ImportParcelParams parseParams(@NonNull String input) {
         ImportParcelConsoleCommandParams params = new ImportParcelConsoleCommandParams();
         JCommander jCommander = JCommander.newBuilder().addObject(params).build();
         jCommander.setProgramName(ConsoleCommandType.IMPORT_PARCEL.toString());
@@ -194,7 +235,7 @@ public class ImportParcelConsoleCommand implements ConsoleCommand {
      *
      * @param jCommander объект JCommander для получения форматированной справки
      */
-    private void printHelp(JCommander jCommander) {
+    private void printHelp(@NonNull JCommander jCommander) {
         StringBuilder sb = new StringBuilder();
         jCommander.getUsageFormatter().usage(sb);
         log.info(sb.toString());

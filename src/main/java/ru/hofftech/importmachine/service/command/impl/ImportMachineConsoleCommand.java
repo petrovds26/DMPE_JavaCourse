@@ -4,6 +4,8 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.model.params.ImportMachineConsoleCommandParams;
 import ru.hofftech.importmachine.model.params.ImportMachineParams;
 import ru.hofftech.importmachine.service.ImportMachineProcessor;
@@ -25,10 +27,16 @@ import java.util.Optional;
 @AllArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
 public class ImportMachineConsoleCommand implements ConsoleCommand {
-
+    @NonNull
     private final ImportMachineFileSourceService importMachineFileSourceService;
+
+    @NonNull
     private final ImportMachineOutputService importMachineOutputService;
+
+    @NonNull
     private final InputFilePathValidator inputFilePathValidator;
+
+    @NonNull
     private final OutputFilePathValidator outputFilePathValidator;
 
     public ImportMachineConsoleCommand() {
@@ -39,22 +47,24 @@ public class ImportMachineConsoleCommand implements ConsoleCommand {
     }
 
     @Override
+    @NonNull
     public String getName() {
         return ConsoleCommandType.IMPORT_MACHINE.toString();
     }
 
     @Override
+    @NonNull
     public String getDescription() {
         return "Импорт посылок из файла. Поддерживаются форматы .json. " + "Используйте --help для справки.";
     }
 
     @Override
-    public boolean matches(String input) {
+    public boolean matches(@NonNull String input) {
         return input.trim().startsWith(ConsoleCommandType.IMPORT_MACHINE + " ");
     }
 
     @Override
-    public void execute(String input) {
+    public void execute(@NonNull String input) {
 
         ImportMachineParams importMachineParams = parseParams(input);
 
@@ -68,9 +78,14 @@ public class ImportMachineConsoleCommand implements ConsoleCommand {
             log.error("Ошибки валидации параметра Входной файл: {}", String.join("; ", inputErrors));
             return;
         }
+        FileType inputFileType = FileTypeUtil.fromFilename(importMachineParams.inputFilePath());
+        if (inputFileType == null) {
+            log.error("Ошибки валидации параметра Входной файл: Тип файла не определен");
+            return;
+        }
 
-        ImportMachineFileSource<String> fileMachineSource = importMachineFileSourceService.getSourceByFileType(
-                FileTypeUtil.fromFilename(importMachineParams.inputFilePath()));
+        ImportMachineFileSource<String> fileMachineSource =
+                importMachineFileSourceService.getSourceByFileType(inputFileType);
 
         if (fileMachineSource == null) {
             log.error(
@@ -100,8 +115,7 @@ public class ImportMachineConsoleCommand implements ConsoleCommand {
             return;
         }
 
-        Optional<ImportMachineOutput> outputOptional = importMachineOutputService.getOutputByFileType(
-                FileTypeUtil.fromFilename(importMachineParams.outputFilePath()));
+        Optional<ImportMachineOutput> outputOptional = importMachineOutputService.getOutputByFileType(fileTypeOutput);
 
         if (outputOptional.isEmpty()) {
             log.error(
@@ -118,7 +132,8 @@ public class ImportMachineConsoleCommand implements ConsoleCommand {
         processor.process();
     }
 
-    private ImportMachineParams parseParams(String input) {
+    @Nullable
+    private ImportMachineParams parseParams(@NonNull String input) {
         ImportMachineConsoleCommandParams params = new ImportMachineConsoleCommandParams();
         JCommander jCommander = JCommander.newBuilder().addObject(params).build();
         jCommander.setProgramName(ConsoleCommandType.IMPORT_MACHINE.toString());
@@ -145,7 +160,7 @@ public class ImportMachineConsoleCommand implements ConsoleCommand {
         }
     }
 
-    private void printHelp(JCommander jCommander) {
+    private void printHelp(@NonNull JCommander jCommander) {
         StringBuilder sb = new StringBuilder();
         jCommander.getUsageFormatter().usage(sb);
         log.info(sb.toString());

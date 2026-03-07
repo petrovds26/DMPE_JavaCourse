@@ -2,6 +2,8 @@ package ru.hofftech.importmachine.service.output.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.model.core.ImportMachineResult;
 import ru.hofftech.importmachine.service.output.ImportMachineOutput;
 import ru.hofftech.shared.model.core.Parcel;
@@ -22,12 +24,7 @@ import java.util.Optional;
 public class ImportMachineOutputTxt implements ImportMachineOutput {
 
     @Override
-    public void output(ImportMachineResult result, String outputFilePath) {
-        if (result == null) {
-            log.error("Нельзя сохранить null результат");
-            return;
-        }
-
+    public void output(@NonNull ImportMachineResult result, @Nullable String outputFilePath) {
         if (outputFilePath == null || outputFilePath.isBlank()) {
             log.error("Не указан путь для сохранения текстового файла");
             return;
@@ -49,12 +46,12 @@ public class ImportMachineOutputTxt implements ImportMachineOutput {
     }
 
     @Override
-    public Optional<FileType> getFileTypeOptional() {
+    public @NonNull Optional<FileType> getFileTypeOptional() {
         return Optional.of(FileType.TXT);
     }
 
     @Override
-    public String getDescription() {
+    public @NonNull String getDescription() {
         return FileType.TXT.getDescription();
     }
 
@@ -62,8 +59,9 @@ public class ImportMachineOutputTxt implements ImportMachineOutput {
      * Форматирует список посылок в текстовый формат
      * Посылки разделяются пустыми строками
      */
-    private String formatParcelsToText(List<Parcel> parcels) {
-        if (parcels == null || parcels.isEmpty()) {
+    @NonNull
+    private String formatParcelsToText(@NonNull List<Parcel> parcels) {
+        if (parcels.isEmpty()) {
             return "";
         }
 

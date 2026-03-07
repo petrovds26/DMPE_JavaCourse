@@ -2,6 +2,8 @@ package ru.hofftech.importmachine.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.model.core.ImportMachineResult;
 import ru.hofftech.importmachine.model.params.ImportMachineParams;
 import ru.hofftech.importmachine.service.output.ImportMachineOutput;
@@ -29,8 +31,13 @@ import java.util.List;
 @SuppressWarnings("ClassCanBeRecord")
 public class ImportMachineProcessor {
 
+    @NonNull
     private final ImportMachineParams importMachineParams;
+
+    @NonNull
     private final ImportMachineFileSource<String> fileMachineSource;
+
+    @NonNull
     private final ImportMachineOutput importMachineOutput;
 
     /**
@@ -47,6 +54,7 @@ public class ImportMachineProcessor {
      *
      * @return результат обработки или null в случае ошибки
      */
+    @Nullable
     public ImportMachineResult process() {
         try {
             // Шаг 1: получаем блоки строк из источника

@@ -2,6 +2,8 @@ package ru.hofftech.importmachine.service.output.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.model.core.ImportMachineResult;
 import ru.hofftech.importmachine.model.dto.ImportMachineOutputResultDto;
 import ru.hofftech.importmachine.service.output.ImportMachineOutput;
@@ -22,12 +24,7 @@ import java.util.Optional;
 public class ImportMachineOutputJson implements ImportMachineOutput {
 
     @Override
-    public void output(ImportMachineResult result, String outputFilePath) {
-        if (result == null) {
-            log.error("Нельзя сохранить null результат");
-            return;
-        }
-
+    public void output(@NonNull ImportMachineResult result, @Nullable String outputFilePath) {
         if (outputFilePath == null || outputFilePath.isBlank()) {
             log.error("Не указан путь для сохранения JSON файла");
             return;
@@ -51,12 +48,12 @@ public class ImportMachineOutputJson implements ImportMachineOutput {
     }
 
     @Override
-    public Optional<FileType> getFileTypeOptional() {
+    public @NonNull Optional<FileType> getFileTypeOptional() {
         return Optional.of(FileType.JSON);
     }
 
     @Override
-    public String getDescription() {
+    public @NonNull String getDescription() {
         return FileType.JSON.getDescription();
     }
 }

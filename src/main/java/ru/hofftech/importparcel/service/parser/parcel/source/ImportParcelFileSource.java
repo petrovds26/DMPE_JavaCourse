@@ -1,5 +1,6 @@
 package ru.hofftech.importparcel.service.parser.parcel.source;
 
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.shared.model.enums.FileType;
 
 /**
@@ -15,12 +16,14 @@ public interface ImportParcelFileSource<T> extends ImportParcelSource<T> {
      *
      * @return тип файла из перечисления {@link FileType}
      */
+    @NonNull
     FileType getFileType();
 
     /**
      * {@inheritDoc}
      */
     @Override
+    @NonNull
     default String getDescription() {
         return getFileType().getDescription();
     }

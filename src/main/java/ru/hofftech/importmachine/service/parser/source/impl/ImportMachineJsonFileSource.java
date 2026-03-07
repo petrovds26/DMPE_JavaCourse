@@ -2,6 +2,7 @@ package ru.hofftech.importmachine.service.parser.source.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importmachine.model.dto.ImportMachineDto;
 import ru.hofftech.importmachine.service.parser.source.ImportMachineFileSource;
 import ru.hofftech.shared.model.dto.MachineDto;
@@ -21,7 +22,7 @@ import java.util.List;
 public class ImportMachineJsonFileSource implements ImportMachineFileSource<String> {
 
     @Override
-    public List<MachineDto> getMachines(String filePath) throws IOException {
+    public @NonNull List<MachineDto> getMachines(@NonNull String filePath) throws IOException {
         log.debug("Чтение JSON файла: {}", filePath);
 
         Path path = Path.of(filePath);
@@ -43,11 +44,12 @@ public class ImportMachineJsonFileSource implements ImportMachineFileSource<Stri
     }
 
     @Override
-    public FileType getFileType() {
+    public @NonNull FileType getFileType() {
         return FileType.JSON;
     }
 
-    private List<MachineDto> convertToMachines(ImportMachineDto importMachineDto) {
+    @NonNull
+    private List<MachineDto> convertToMachines(@NonNull ImportMachineDto importMachineDto) {
         return importMachineDto.machines().stream().toList();
     }
 }

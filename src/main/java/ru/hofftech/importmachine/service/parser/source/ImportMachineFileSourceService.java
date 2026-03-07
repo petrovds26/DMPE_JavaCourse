@@ -1,6 +1,8 @@
 package ru.hofftech.importmachine.service.parser.source;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.service.parser.source.impl.ImportMachineJsonFileSource;
 import ru.hofftech.shared.model.enums.FileType;
 
@@ -29,7 +31,8 @@ public class ImportMachineFileSourceService {
      * @param fileType тип файла (например, FileType.JSON)
      * @return реализация {@link ImportMachineFileSource} или null, если тип не поддерживается
      */
-    public ImportMachineFileSource<String> getSourceByFileType(FileType fileType) {
+    @Nullable
+    public ImportMachineFileSource<String> getSourceByFileType(@NonNull FileType fileType) {
         return fileMachineSources.stream()
                 .filter(source -> Objects.equals(source.getFileType(), fileType))
                 .findFirst()
@@ -41,6 +44,7 @@ public class ImportMachineFileSourceService {
      *
      * @return строка с описанием форматов (например, "json - JSON файл")
      */
+    @NonNull
     public String getAvailableFileExtensionDescription() {
         return fileMachineSources.stream()
                 .map(fileType -> String.format(

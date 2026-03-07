@@ -1,5 +1,6 @@
 package ru.hofftech.importmachine.service.output.impl;
 
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importmachine.model.core.ImportMachineResult;
 import ru.hofftech.importmachine.service.output.ImportMachineOutput;
 import ru.hofftech.shared.model.enums.FileType;
@@ -11,12 +12,12 @@ import java.util.Optional;
  */
 public class ImportMachineOutputEmpty implements ImportMachineOutput {
     @Override
-    public void output(ImportMachineResult result, String fileName) {
+    public void output(@NonNull ImportMachineResult result, String fileName) {
         // do nothing
     }
 
     @Override
-    public Optional<FileType> getFileTypeOptional() {
+    public @NonNull Optional<FileType> getFileTypeOptional() {
         return Optional.empty();
     }
 }

@@ -1,6 +1,8 @@
 package ru.hofftech.importparcel.service.output;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importparcel.service.output.impl.ImportParcelOutputJson;
 import ru.hofftech.importparcel.service.output.impl.ImportParcelOutputLog;
 import ru.hofftech.shared.model.enums.FileType;
@@ -15,7 +17,10 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class ImportParcelOutputService {
+    @NonNull
     private final List<ImportParcelOutput> importParcelOutput;
+
+    @NonNull
     private final ImportParcelOutput importParcelOutputLog;
 
     /**
@@ -33,7 +38,8 @@ public class ImportParcelOutputService {
      * @param fileType тип файла (может быть null)
      * @return реализация {@link ImportParcelOutput} или null, если тип не поддерживается
      */
-    public ImportParcelOutput getOutputByFileType(FileType fileType) {
+    @Nullable
+    public ImportParcelOutput getOutputByFileType(@Nullable FileType fileType) {
         if (fileType == null) {
             return importParcelOutputLog;
         }
@@ -48,12 +54,14 @@ public class ImportParcelOutputService {
      *
      * @return строка с описанием форматов (например, "json - JSON файл")
      */
+    @NonNull
     public String getAvailableFileExtensionDescription() {
         return importParcelOutput.stream()
-                .map(fileType -> String.format(
+                .filter(output -> output.getFileType() != null)
+                .map(output -> String.format(
                         "%s - %s",
-                        fileType.getFileType().getExtension(),
-                        fileType.getFileType().getDescription()))
+                        output.getFileType().getExtension(),
+                        output.getFileType().getDescription()))
                 .collect(Collectors.joining("; "));
     }
 }

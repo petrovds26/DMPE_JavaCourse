@@ -1,6 +1,7 @@
 package ru.hofftech.importmachine.service.output;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.importmachine.service.output.impl.ImportMachineOutputJson;
 import ru.hofftech.importmachine.service.output.impl.ImportMachineOutputLog;
@@ -17,6 +18,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class ImportMachineOutputService {
+    @NonNull
     private final List<ImportMachineOutput> importMachineOutput;
 
     /**
@@ -32,8 +34,10 @@ public class ImportMachineOutputService {
      * Если тип файла не указан, возвращает вывод в лог.
      *
      * @param fileType тип файла (может быть null)
-     * @return реализация {@link ImportMachineOutput} или null, если тип не поддерживается
+     * @return {@link Optional} с реализацией {@link ImportMachineOutput},
+     *         пустой Optional, если тип не поддерживается
      */
+    @NonNull
     public Optional<ImportMachineOutput> getOutputByFileType(@Nullable FileType fileType) {
         if (fileType == null) {
             return importMachineOutput.stream()
@@ -52,6 +56,7 @@ public class ImportMachineOutputService {
      *
      * @return строка с описанием форматов (например, "json - JSON файл; txt - Текстовый файл")
      */
+    @NonNull
     public String getAvailableFileExtensionDescription() {
         return importMachineOutput.stream()
                 .map(output -> String.format(

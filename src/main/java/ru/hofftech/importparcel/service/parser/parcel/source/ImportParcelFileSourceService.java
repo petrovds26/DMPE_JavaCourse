@@ -1,6 +1,8 @@
 package ru.hofftech.importparcel.service.parser.parcel.source;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importparcel.service.parser.parcel.source.impl.ImportParcelJsonFileSource;
 import ru.hofftech.importparcel.service.parser.parcel.source.impl.ImportParcelTxtFileSource;
 import ru.hofftech.shared.model.enums.FileType;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 public class ImportParcelFileSourceService {
+    @NonNull
     private final List<ImportParcelFileSource<String>> fileParcelSources;
 
     /**
@@ -30,7 +33,8 @@ public class ImportParcelFileSourceService {
      * @param fileType тип файла (например, FileType.TXT или FileType.JSON)
      * @return реализация {@link ImportParcelFileSource} или null, если тип не поддерживается
      */
-    public ImportParcelFileSource<String> getSourceByFileType(FileType fileType) {
+    @Nullable
+    public ImportParcelFileSource<String> getSourceByFileType(@NonNull FileType fileType) {
         return fileParcelSources.stream()
                 .filter(source -> Objects.equals(source.getFileType(), fileType))
                 .findFirst()
@@ -42,6 +46,7 @@ public class ImportParcelFileSourceService {
      *
      * @return строка с описанием форматов (например, "txt - Текстовый файл; json - JSON файл")
      */
+    @NonNull
     public String getAvailableFileExtensionDescription() {
         return fileParcelSources.stream()
                 .map(fileType -> String.format(

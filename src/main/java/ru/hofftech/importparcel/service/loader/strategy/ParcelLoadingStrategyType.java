@@ -2,6 +2,7 @@ package ru.hofftech.importparcel.service.loader.strategy;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 
 @Getter
 @RequiredArgsConstructor
@@ -11,5 +12,7 @@ public enum ParcelLoadingStrategyType {
     BALANCED_PACKING(3, "Равномерная погрузка");
 
     private final int id;
+
+    @NonNull
     private final String description;
 }

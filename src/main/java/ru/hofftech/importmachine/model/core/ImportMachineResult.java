@@ -1,6 +1,7 @@
 package ru.hofftech.importmachine.model.core;
 
 import lombok.Builder;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 
@@ -11,6 +12,6 @@ import java.util.List;
  */
 @Builder
 public record ImportMachineResult(
-        List<Machine> inputMachines, // Машины, поступившие на вход
-        List<Parcel> parcels // Успешно загруженные посылки
+        @NonNull List<Machine> inputMachines, // Машины, поступившие на вход
+        @NonNull List<Parcel> parcels // Успешно загруженные посылки
         ) {}

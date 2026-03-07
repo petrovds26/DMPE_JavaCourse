@@ -1,6 +1,8 @@
 package ru.hofftech.importparcel.validation.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.validation.Validator;
 
 import java.util.ArrayList;
@@ -18,7 +20,8 @@ import java.util.stream.Collectors;
 public class ParcelListStringValidator implements Validator<List<String>> {
 
     @Override
-    public List<String> validate(List<String> lines) {
+    @NonNull
+    public List<String> validate(@Nullable List<String> lines) {
         List<String> errors = new ArrayList<>();
 
         if (lines == null || lines.isEmpty()) {
@@ -35,7 +38,7 @@ public class ParcelListStringValidator implements Validator<List<String>> {
     /**
      * Проверяет, что строки не пустые и содержат символы
      */
-    private void validateNotEmptyLines(List<String> errors, List<String> lines) {
+    private void validateNotEmptyLines(@NonNull List<String> errors, @NonNull List<String> lines) {
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
             if (line == null || line.trim().isEmpty()) {
@@ -47,7 +50,7 @@ public class ParcelListStringValidator implements Validator<List<String>> {
     /**
      * Проверяет, что все символы "не пробел" в посылке одинаковы
      */
-    private void validateConsistentSymbol(List<String> errors, List<String> lines) {
+    private void validateConsistentSymbol(@NonNull List<String> errors, @NonNull List<String> lines) {
         // Находим первый символ в посылке
         Character firstSymbol = findFirstSymbol(lines);
 
@@ -74,9 +77,13 @@ public class ParcelListStringValidator implements Validator<List<String>> {
     }
 
     /**
-     * Находит первый символ "не пробел" в посылке
+     * Находит первый символ "не пробел" в посылке.
+     *
+     * @param lines список строк посылки
+     * @return первый найденный символ или null, если символов нет
      */
-    private Character findFirstSymbol(List<String> lines) {
+    @Nullable
+    private Character findFirstSymbol(@NonNull List<String> lines) {
         for (String line : lines) {
             for (int i = 0; i < line.length(); i++) {
                 char c = line.charAt(i);

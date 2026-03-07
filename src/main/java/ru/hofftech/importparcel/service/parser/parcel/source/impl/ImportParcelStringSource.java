@@ -1,6 +1,7 @@
 package ru.hofftech.importparcel.service.parser.parcel.source.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.jspecify.annotations.NonNull;
 import ru.hofftech.importparcel.service.parser.parcel.source.ImportParcelSource;
 
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 public class ImportParcelStringSource implements ImportParcelSource<List<List<String>>> {
 
     @Override
-    public List<List<String>> getParcelBlocks(List<List<String>> blockSource) {
+    public @NonNull List<List<String>> getParcelBlocks(@NonNull List<List<String>> blockSource) {
 
         return blockSource;
     }

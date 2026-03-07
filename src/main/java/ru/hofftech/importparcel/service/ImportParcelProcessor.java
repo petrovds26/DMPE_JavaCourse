@@ -2,6 +2,8 @@ package ru.hofftech.importparcel.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import ru.hofftech.importparcel.model.core.ImportParcelInvalid;
 import ru.hofftech.importparcel.model.core.ImportParcelResult;
 import ru.hofftech.importparcel.model.enums.ImportParcelInvalidCauseType;
@@ -36,14 +38,31 @@ import java.util.List;
 @SuppressWarnings("ClassCanBeRecord")
 public class ImportParcelProcessor {
 
+    @NonNull
     private final ImportParcelParams importParcelParams;
+
+    @NonNull
     private final ImportParcelMachineSource<Integer> importParcelMachineSource;
+
+    @NonNull
     private final ImportParcelFileSource<String> fileParcelSource;
+
+    @NonNull
     private final ParcelNormalizer normalizer;
+
+    @NonNull
     private final ParcelBuilder parcelBuilder;
+
+    @NonNull
     private final ParcelListStringValidator stringValidator;
+
+    @NonNull
     private final ParcelGridValidator gridValidator;
+
+    @NonNull
     private final ParcelLoadingStrategy loadingStrategy;
+
+    @NonNull
     private final ImportParcelOutput importParcelOutput;
 
     /**
@@ -61,6 +80,7 @@ public class ImportParcelProcessor {
      *
      * @return результат упаковки или null в случае критической ошибки
      */
+    @Nullable
     public ImportParcelResult process() {
         try {
             List<Parcel> validParcels = new ArrayList<>();
@@ -131,9 +151,6 @@ public class ImportParcelProcessor {
 
             ImportParcelResult packingResult = loadingStrategy.loadParcels(validParcels, inputMachines);
 
-            if (packingResult == null) {
-                packingResult = ImportParcelResult.builder().build();
-            }
             if (packingResult.importParcelInvalids() != null) {
                 importParcelInvalids.addAll(packingResult.importParcelInvalids());
             }

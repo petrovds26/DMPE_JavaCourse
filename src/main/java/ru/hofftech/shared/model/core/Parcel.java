@@ -2,6 +2,8 @@ package ru.hofftech.shared.model.core;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,7 +17,7 @@ import java.util.Objects;
  * заполненных определённым символом.
  */
 @Builder
-public record Parcel(boolean[][] grid, @Getter Character symbol, @Getter int height, @Getter int width) {
+public record Parcel(boolean[][] grid, @Getter @NonNull Character symbol, @Getter int height, @Getter int width) {
 
     /**
      * Возвращает строковое представление посылки в виде списка строк.
@@ -23,6 +25,7 @@ public record Parcel(boolean[][] grid, @Getter Character symbol, @Getter int hei
      *
      * @return список строк посылки
      */
+    @NonNull
     public List<String> getLines() {
         List<String> lines = new ArrayList<>();
         for (int i = 0; i < height; i++) {
@@ -47,6 +50,7 @@ public record Parcel(boolean[][] grid, @Getter Character symbol, @Getter int hei
      *
      * @return строковое представление посылки
      */
+    @NonNull
     public String getForm() {
         List<String> lines = new ArrayList<>(getLines());
         Collections.reverse(lines);
@@ -57,13 +61,14 @@ public record Parcel(boolean[][] grid, @Getter Character symbol, @Getter int hei
      * Строковое представление посылки
      */
     @Override
+    @NonNull
     public String toString() {
         return String.join("\n", getForm());
     }
 
     // Переопределяем equals для корректного сравнения содержимого массивов
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Parcel that = (Parcel) o;
