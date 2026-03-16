@@ -211,38 +211,5 @@ public class Main {
         } catch (TelegramApiException e) {
             log.error("Ошибка при запуске Telegram бота", e);
         }
-
-        prepareData(createParcelConsoleCommand);
-    }
-
-    private static void prepareData(CreateParcelConsoleCommand cr) {
-        // Стандартные посылки
-        cr.execute("create_parcel --name \"Посылка Тип 1\" --form \"1\" --symbol \"1\"");
-        cr.execute("create_parcel --name \"Посылка Тип 2\" --form \"22\" --symbol \"2\"");
-        cr.execute("create_parcel --name \"Посылка Тип 3\" --form \"333\" --symbol \"3\"");
-        cr.execute("create_parcel --name \"Посылка Тип 4\" --form \"4444\" --symbol \"4\"");
-        cr.execute("create_parcel --name \"Посылка Тип 5\" --form \"55555\" --symbol \"5\"");
-        cr.execute("create_parcel --name \"Посылка Тип 6\" --form \"666\\n666\" --symbol \"6\"");
-        cr.execute("create_parcel --name \"Посылка Тип 7\" --form \"777\\n7777\" --symbol \"7\"");
-        cr.execute("create_parcel --name \"Посылка Тип 8\" --form \"8888\\n8888\" --symbol \"8\"");
-        cr.execute("create_parcel --name \"Посылка Тип 9\" --form \"999\\n999\\n999\" --symbol \"9\"");
-
-        // Штанга
-        cr.execute("create_parcel --name \"Штанга\" --form \"#      #\\n########\\n#      #\" --symbol \"#\"");
-
-        // Крест
-        cr.execute("create_parcel --name \"Крест\" --form \"  #  \\n ### \\n#####\\n ### \\n  #  \" --symbol \"#\"");
-
-        // Змейка
-        cr.execute("create_parcel --name \"Змейка\" --form \"###\\n  #\\n###\\n#  \\n###\" --symbol \"#\"");
-
-        // Пирамида
-        cr.execute("create_parcel --name \"Пирамида\" --form \"  #  \\n ### \\n#####\" --symbol \"#\"");
-
-        // Ромб
-        cr.execute("create_parcel --name \"Ромб\" --form \"  #  \\n ### \\n#####\\n ### \\n  #  \" --symbol \"#\"");
-
-        // Лабиринт
-        cr.execute("create_parcel --name \"Лабиринт\" --form \"#####\\n#   #\\n#   #\\n#   #\\n#####\" --symbol \"#\"");
     }
 }
