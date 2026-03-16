@@ -11,14 +11,16 @@ import java.util.List;
 
 /**
  * Утилита для создания клавиатур Telegram.
+ * Предоставляет методы для создания различных типов клавиатур.
  */
 @UtilityClass
 public class TelegramKeyboardUtil {
 
     /**
-     * Создаёт клавиатуру с командами.
+     * Создаёт клавиатуру с основными командами.
+     * Клавиатура содержит кнопки для всех основных операций.
      *
-     * @return клавиатура с основными командами
+     * @return клавиатура с командами (не может быть null)
      */
     @NonNull
     public static ReplyKeyboardMarkup createCommandsKeyboard() {
@@ -43,9 +45,14 @@ public class TelegramKeyboardUtil {
         row3.add(TelegramCommandType.LIST_PARCELS.getCommand());
         row3.add(TelegramCommandType.CANCEL.getCommand());
 
+        // Четвертая строка
+        KeyboardRow row4 = new KeyboardRow();
+        row4.add(TelegramCommandType.LOAD.getCommand());
+
         keyboard.add(row1);
         keyboard.add(row2);
         keyboard.add(row3);
+        keyboard.add(row4);
 
         keyboardMarkup.setKeyboard(keyboard);
         return keyboardMarkup;

@@ -110,8 +110,8 @@ public class ReadParcelTelegramCommand implements TelegramCommand {
 
         if (session.getStep() == ReadParcelTelegramStep.ENTER_NAME) { // Ожидание названия
 
-            ReadParcelProcessorCommand processorCommand = new ReadParcelProcessorCommand(parcelRepository, text);
-            ProcessorCommandResult processorCommandResult = processorCommand.execute();
+            ReadParcelProcessorCommand processorCommand = new ReadParcelProcessorCommand(parcelRepository);
+            ProcessorCommandResult processorCommandResult = processorCommand.execute(text);
 
             return TelegramCommandResponse.endSessionWithKeyboard(
                     processorCommandResult.message(), TelegramKeyboardUtil.createCommandsKeyboard());

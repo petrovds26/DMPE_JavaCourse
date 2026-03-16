@@ -10,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Сервис для управления сессиями пользователей Telegram.
+ * Хранит сессии в памяти и предоставляет методы для их получения, обновления и очистки.
  */
 @Slf4j
 public class TelegramUserSessionService {
@@ -29,8 +30,8 @@ public class TelegramUserSessionService {
     /**
      * Создать или обновить сессию пользователя.
      *
-     * @param chatId идентификатор чата
-     * @param session новая сессия
+     * @param chatId  идентификатор чата
+     * @param session новая сессия (не может быть null)
      */
     public void createOrUpdateSession(long chatId, @NonNull TelegramUserSession session) {
         sessions.put(chatId, session);

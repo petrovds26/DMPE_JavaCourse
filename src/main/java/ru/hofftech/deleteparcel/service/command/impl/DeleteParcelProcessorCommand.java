@@ -13,18 +13,15 @@ import ru.hofftech.shared.service.command.ProcessorCommand;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
-public class DeleteParcelProcessorCommand implements ProcessorCommand {
+public class DeleteParcelProcessorCommand implements ProcessorCommand<String> {
     @NonNull
     private final ParcelRepository parcelRepository;
-
-    @NonNull
-    private final String name;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ProcessorCommandResult execute() {
+    public @NonNull ProcessorCommandResult execute(@NonNull String name) {
 
         if (name.isEmpty()) {
             return ProcessorCommandResult.builder()

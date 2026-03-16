@@ -5,6 +5,7 @@ import ru.hofftech.shared.model.enums.TelegramCommandType;
 
 /**
  * Интерфейс для сессий пользователей Telegram.
+ * Определяет общие методы для всех типов сессий.
  */
 public interface TelegramUserSession {
 

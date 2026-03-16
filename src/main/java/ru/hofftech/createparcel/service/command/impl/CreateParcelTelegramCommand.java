@@ -7,16 +7,18 @@ import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.hofftech.createparcel.enums.CreateParcelTelegramStep;
 import ru.hofftech.createparcel.model.params.CreateParcelTelegramUserSession;
+import ru.hofftech.shared.model.core.ParserParcelProcessorResult;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
-import ru.hofftech.shared.model.core.TransformParcelResult;
 import ru.hofftech.shared.model.core.telegram.TelegramCommandResponse;
 import ru.hofftech.shared.model.dto.ParcelFormDto;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
 import ru.hofftech.shared.model.params.TelegramUserSession;
 import ru.hofftech.shared.repository.ParcelRepository;
 import ru.hofftech.shared.service.command.telegram.TelegramCommand;
-import ru.hofftech.shared.service.parser.ParserParcelProcessor;
+import ru.hofftech.shared.service.parser.impl.ParserParcelFromFormDto;
 import ru.hofftech.shared.util.TelegramKeyboardUtil;
+
+import java.util.List;
 
 /**
  * Telegram команда для создания новой посылки.
@@ -31,7 +33,7 @@ public class CreateParcelTelegramCommand implements TelegramCommand {
     private final ParcelRepository parcelRepository;
 
     @NonNull
-    private final ParserParcelProcessor parserParcelProcessor;
+    private final ParserParcelFromFormDto parserParcelProcessor;
 
     /**
      * {@inheritDoc}
@@ -133,10 +135,9 @@ public class CreateParcelTelegramCommand implements TelegramCommand {
     @NonNull
     private TelegramCommandResponse handleNameInput(
             @NonNull CreateParcelTelegramUserSession session, @NonNull String text) {
-        String errorValidateNameResult =
-                parserParcelProcessor.validateName(text).error();
-        if (errorValidateNameResult != null) {
-            return TelegramCommandResponse.text(errorValidateNameResult);
+        ParserParcelProcessorResult nameResult = parserParcelProcessor.validateName(text);
+        if (nameResult.hasErrors()) {
+            return TelegramCommandResponse.text(nameResult.getErrorsAsString());
         }
 
         CreateParcelTelegramUserSession nameSession =
@@ -154,10 +155,9 @@ public class CreateParcelTelegramCommand implements TelegramCommand {
     @NonNull
     private TelegramCommandResponse handleSymbolInput(
             @NonNull CreateParcelTelegramUserSession session, @NonNull String text) {
-        String errorValidateSymbolResult =
-                parserParcelProcessor.validateSymbol(text).error();
-        if (errorValidateSymbolResult != null) {
-            return TelegramCommandResponse.text(errorValidateSymbolResult);
+        ParserParcelProcessorResult symbolResult = parserParcelProcessor.validateSymbol(text);
+        if (symbolResult.hasErrors()) {
+            return TelegramCommandResponse.text(symbolResult.getErrorsAsString());
         }
         CreateParcelTelegramUserSession formSession =
                 session.withSymbol(text).withStep(CreateParcelTelegramStep.ENTER_FORM);
@@ -184,20 +184,19 @@ public class CreateParcelTelegramCommand implements TelegramCommand {
                 .symbol(session.getSymbol())
                 .build();
 
-        TransformParcelResult transformResult = parserParcelProcessor.transform(parcelFormDto);
+        ParserParcelProcessorResult processorResult = parserParcelProcessor.transform(List.of(parcelFormDto));
 
-        if (transformResult.parcel() == null) {
-            String errorTransformResult = transformResult.error();
-            if (errorTransformResult == null) {
-                errorTransformResult = "Не удалось распознать посылку";
-            }
-            return TelegramCommandResponse.text(errorTransformResult);
+        if (processorResult.parcels().isEmpty()) {
+            return TelegramCommandResponse.text(
+                    processorResult.getErrorsAsString().isBlank()
+                            ? "Не удалось распознать посылку"
+                            : processorResult.getErrorsAsString());
         }
 
-        CreateParcelProcessorCommand command =
-                new CreateParcelProcessorCommand(parcelRepository, transformResult.parcel());
+        CreateParcelProcessorCommand command = new CreateParcelProcessorCommand(parcelRepository);
 
-        ProcessorCommandResult result = command.execute();
+        ProcessorCommandResult result =
+                command.execute(processorResult.parcels().getFirst());
 
         return TelegramCommandResponse.endSessionWithKeyboard(
                 result.message(), TelegramKeyboardUtil.createCommandsKeyboard());

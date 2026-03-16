@@ -3,18 +3,21 @@ package ru.hofftech.updateparcel.service.command.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
+import ru.hofftech.shared.model.core.ParserParcelProcessorResult;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
-import ru.hofftech.shared.model.core.TransformParcelResult;
 import ru.hofftech.shared.model.dto.ParcelFormDto;
 import ru.hofftech.shared.model.enums.ConsoleCommandType;
 import ru.hofftech.shared.repository.ParcelRepository;
 import ru.hofftech.shared.service.command.console.ConsoleCommand;
 import ru.hofftech.shared.service.parser.ParserParams;
-import ru.hofftech.shared.service.parser.ParserParcelProcessor;
+import ru.hofftech.shared.service.parser.impl.ParserParcelFromFormDto;
 import ru.hofftech.updateparcel.model.params.UpdateParcelConsoleCommandParams;
+
+import java.util.List;
 
 /**
  * Консольная команда для обновления посылки.
+ * Формат команды: update_parcel --name <название> --form <форма> --symbol <символ>
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -24,7 +27,7 @@ public class UpdateParcelConsoleCommand implements ConsoleCommand {
     private final ParserParams parserParams;
 
     @NonNull
-    private final ParserParcelProcessor parserParcelProcessor;
+    private final ParserParcelFromFormDto parserParcelProcessor;
 
     @NonNull
     private final ParcelRepository parcelRepository;
@@ -82,19 +85,19 @@ public class UpdateParcelConsoleCommand implements ConsoleCommand {
 
         log.debug("Обновление посылки: {} {} {}", parcelFormDto.name(), parcelFormDto.form(), parcelFormDto.symbol());
 
-        TransformParcelResult transformParcelResult = parserParcelProcessor.transform(parcelFormDto);
+        ParserParcelProcessorResult processorResult = parserParcelProcessor.transform(List.of(parcelFormDto));
 
-        if (transformParcelResult.parcel() == null) {
+        if (processorResult.parcels().isEmpty()) {
             log.warn(
-                    transformParcelResult.error() != null
-                            ? transformParcelResult.error()
-                            : "Не удалось распознать посылку");
+                    processorResult.getErrorsAsString().isBlank()
+                            ? "Не удалось распознать посылку"
+                            : processorResult.getErrorsAsString());
             return;
         }
 
-        UpdateParcelProcessorCommand processorCommand =
-                new UpdateParcelProcessorCommand(parcelRepository, transformParcelResult.parcel());
-        ProcessorCommandResult processorCommandResult = processorCommand.execute();
+        UpdateParcelProcessorCommand processorCommand = new UpdateParcelProcessorCommand(parcelRepository);
+        ProcessorCommandResult processorCommandResult =
+                processorCommand.execute(processorResult.parcels().getFirst());
 
         if (processorCommandResult.success()) {
             log.info(processorCommandResult.message());

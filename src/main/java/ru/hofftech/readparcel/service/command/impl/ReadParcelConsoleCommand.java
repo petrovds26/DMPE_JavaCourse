@@ -62,9 +62,8 @@ public class ReadParcelConsoleCommand implements ConsoleCommand {
 
         log.debug("Чтение посылок: {}", params.getName());
 
-        ReadParcelProcessorCommand processorCommand =
-                new ReadParcelProcessorCommand(parcelRepository, params.getName());
-        ProcessorCommandResult processorCommandResult = processorCommand.execute();
+        ReadParcelProcessorCommand processorCommand = new ReadParcelProcessorCommand(parcelRepository);
+        ProcessorCommandResult processorCommandResult = processorCommand.execute(params.getName());
 
         if (processorCommandResult.success()) {
             log.info(processorCommandResult.message());

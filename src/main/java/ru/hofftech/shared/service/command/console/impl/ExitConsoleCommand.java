@@ -7,6 +7,7 @@ import ru.hofftech.shared.service.command.console.ConsoleCommand;
 
 /**
  * Консольная команда для выхода из приложения.
+ * Завершает работу программы с кодом 0.
  */
 @Slf4j
 public class ExitConsoleCommand implements ConsoleCommand {

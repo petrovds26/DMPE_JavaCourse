@@ -7,7 +7,7 @@ import ru.hofftech.shared.model.core.Parcel;
 import java.util.List;
 
 /**
- * Отвечает за создание Parcel из нормализованных строк
+ * Отвечает за создание Parcel из нормализованных строк.
  */
 @Slf4j
 public class ParserParcelBuilder {
@@ -15,9 +15,9 @@ public class ParserParcelBuilder {
     /**
      * Создаёт посылку из нормализованных строк с автоматическим определением символа.
      *
-     * @param name название посылки
-     * @param normalizedLines нормализованные строки формы
-     * @return созданная посылка
+     * @param name            название посылки (не может быть null)
+     * @param normalizedLines нормализованные строки формы (не может быть null)
+     * @return созданная посылка (не может быть null)
      */
     @NonNull
     public Parcel buildFromLines(@NonNull String name, @NonNull List<String> normalizedLines) {
@@ -29,10 +29,10 @@ public class ParserParcelBuilder {
     /**
      * Создаёт посылку из нормализованных строк с указанным символом.
      *
-     * @param name название посылки
-     * @param normalizedLines нормализованные строки формы
-     * @param symbol символ посылки
-     * @return созданная посылка
+     * @param name            название посылки (не может быть null)
+     * @param normalizedLines нормализованные строки формы (не может быть null)
+     * @param symbol          символ посылки (не может быть null)
+     * @return созданная посылка (не может быть null)
      */
     @NonNull
     public Parcel buildFromLines(@NonNull String name, @NonNull List<String> normalizedLines, @NonNull String symbol) {
@@ -42,10 +42,10 @@ public class ParserParcelBuilder {
     /**
      * Создаёт посылку из нормализованных строк.
      *
-     * @param name название посылки
-     * @param normalizedLines нормализованные строки формы
-     * @param symbol символ посылки
-     * @return созданная посылка
+     * @param name            название посылки (не может быть null)
+     * @param normalizedLines нормализованные строки формы (не может быть null)
+     * @param symbol          символ посылки
+     * @return созданная посылка (не может быть null)
      */
     @NonNull
     private Parcel buildFromLines(@NonNull String name, @NonNull List<String> normalizedLines, char symbol) {
@@ -76,7 +76,7 @@ public class ParserParcelBuilder {
     /**
      * Находит первый непробельный символ в строке.
      *
-     * @param line строка для анализа
+     * @param line строка для анализа (не может быть null)
      * @return первый непробельный символ или 'X' по умолчанию
      */
     private char findSymbol(@NonNull String line) {

@@ -6,7 +6,7 @@ import ru.hofftech.shared.model.core.ProcessorCommandResult;
 /**
  * Интерфейс для процессорных команд (бизнес-логика).
  */
-public interface ProcessorCommand {
+public interface ProcessorCommand<T> {
 
     /**
      * Выполняет бизнес-логику команды.
@@ -14,5 +14,5 @@ public interface ProcessorCommand {
      * @return результат выполнения
      */
     @NonNull
-    ProcessorCommandResult execute();
+    ProcessorCommandResult execute(T source);
 }

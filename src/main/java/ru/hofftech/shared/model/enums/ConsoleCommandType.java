@@ -4,10 +4,11 @@ import org.jspecify.annotations.NonNull;
 
 /**
  * Типы консольных команд.
+ * Определяет все доступные команды в консольном интерфейсе.
  */
 public enum ConsoleCommandType {
     EMPTY,
-    IMPORT_PARCEL,
+    LOAD,
     IMPORT_MACHINE,
     CREATE_PARCEL,
     READ_PARCEL,
@@ -18,7 +19,7 @@ public enum ConsoleCommandType {
     /**
      * Возвращает строковое представление команды в нижнем регистре.
      *
-     * @return название команды
+     * @return название команды (не может быть null)
      */
     @Override
     @NonNull

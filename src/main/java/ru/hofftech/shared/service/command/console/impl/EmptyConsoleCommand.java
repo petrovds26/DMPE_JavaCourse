@@ -8,6 +8,7 @@ import ru.hofftech.shared.service.command.console.ConsoleCommand;
 
 /**
  * Консольная команда для обработки пустого ввода.
+ * Используется для игнорирования пустых строк в консоли.
  */
 @Slf4j
 @RequiredArgsConstructor

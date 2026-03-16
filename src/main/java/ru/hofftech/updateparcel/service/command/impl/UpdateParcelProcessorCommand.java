@@ -10,23 +10,21 @@ import ru.hofftech.shared.service.command.ProcessorCommand;
 
 /**
  * Процессорная команда для обновления посылки.
+ * Выполняет бизнес-логику обновления посылки в репозитории.
  */
 @Slf4j
 @RequiredArgsConstructor
 // Рекорд не может быть создан с интерфейсом
 @SuppressWarnings("ClassCanBeRecord")
-public class UpdateParcelProcessorCommand implements ProcessorCommand {
+public class UpdateParcelProcessorCommand implements ProcessorCommand<Parcel> {
     @NonNull
     private final ParcelRepository parcelRepository;
-
-    @NonNull
-    private final Parcel parcel;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ProcessorCommandResult execute() {
+    public @NonNull ProcessorCommandResult execute(@NonNull Parcel parcel) {
 
         if (parcelRepository.find(parcel.name()).isPresent()) {
             parcelRepository.update(parcel);

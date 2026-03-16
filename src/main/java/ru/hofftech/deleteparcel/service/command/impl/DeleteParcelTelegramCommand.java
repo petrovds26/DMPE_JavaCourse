@@ -110,8 +110,8 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
 
         if (session.getStep() == DeleteParcelTelegramStep.ENTER_NAME) { // Ожидание названия
 
-            DeleteParcelProcessorCommand processorCommand = new DeleteParcelProcessorCommand(parcelRepository, text);
-            ProcessorCommandResult processorCommandResult = processorCommand.execute();
+            DeleteParcelProcessorCommand processorCommand = new DeleteParcelProcessorCommand(parcelRepository);
+            ProcessorCommandResult processorCommandResult = processorCommand.execute(text);
 
             return TelegramCommandResponse.endSessionWithKeyboard(
                     processorCommandResult.message(), TelegramKeyboardUtil.createCommandsKeyboard());

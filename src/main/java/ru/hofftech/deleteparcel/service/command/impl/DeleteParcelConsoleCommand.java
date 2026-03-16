@@ -69,8 +69,8 @@ public class DeleteParcelConsoleCommand implements ConsoleCommand {
 
         log.debug("Удаление посылки: {}", name);
 
-        DeleteParcelProcessorCommand processorCommand = new DeleteParcelProcessorCommand(parcelRepository, name);
-        ProcessorCommandResult processorCommandResult = processorCommand.execute();
+        DeleteParcelProcessorCommand processorCommand = new DeleteParcelProcessorCommand(parcelRepository);
+        ProcessorCommandResult processorCommandResult = processorCommand.execute(name);
 
         if (processorCommandResult.success()) {
             log.info(processorCommandResult.message());

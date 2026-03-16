@@ -10,6 +10,10 @@ import ru.hofftech.shared.model.params.TelegramUserSession;
 import ru.hofftech.shared.service.command.telegram.TelegramCommand;
 import ru.hofftech.shared.util.TelegramKeyboardUtil;
 
+/**
+ * Telegram команда для отмены текущей операции.
+ * Очищает сессию пользователя и возвращает главное меню.
+ */
 @Slf4j
 public class CancelTelegramCommand implements TelegramCommand {
 
@@ -52,8 +56,8 @@ public class CancelTelegramCommand implements TelegramCommand {
     /**
      * Извлекает текст сообщения из обновления.
      *
-     * @param update обновление от Telegram
-     * @return текст сообщения или null
+     * @param update обновление от Telegram (не может быть null)
+     * @return текст сообщения или null, если его нет
      */
     @Nullable
     private String getMessageText(@NonNull Update update) {

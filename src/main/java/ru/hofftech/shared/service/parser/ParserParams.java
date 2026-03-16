@@ -9,6 +9,7 @@ import ru.hofftech.shared.util.StringUtil;
 
 /**
  * Парсер параметров командной строки для консольных команд.
+ * Использует JCommander для разбора аргументов.
  */
 @Slf4j
 public class ParserParams {
@@ -16,9 +17,9 @@ public class ParserParams {
     /**
      * Парсит командную строку и заполняет параметры.
      *
-     * @param params объект с параметрами команды
-     * @param commandLine полная командная строка
-     * @return true если парсинг успешен, false при ошибке
+     * @param params      объект с параметрами команды (не может быть null)
+     * @param commandLine полная командная строка (не может быть null)
+     * @return true если парсинг успешен, false при ошибке или запросе help
      */
     public boolean parserCommandLine(@NonNull ConsoleCommandParams params, @NonNull String commandLine) {
         JCommander jCommander = JCommander.newBuilder().addObject(params).build();
@@ -50,7 +51,7 @@ public class ParserParams {
     /**
      * Выводит справку по использованию команды.
      *
-     * @param jCommander объект JCommander
+     * @param jCommander объект JCommander (не может быть null)
      */
     private void printHelp(@NonNull JCommander jCommander) {
         StringBuilder sb = new StringBuilder();

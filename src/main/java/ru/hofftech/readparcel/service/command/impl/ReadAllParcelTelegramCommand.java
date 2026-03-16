@@ -62,8 +62,8 @@ public class ReadAllParcelTelegramCommand implements TelegramCommand {
     public TelegramCommandResponse execute(@NonNull Update update, @Nullable TelegramUserSession session) {
         // Начало создания посылки
         if (session == null) {
-            ReadParcelProcessorCommand processorCommand = new ReadParcelProcessorCommand(parcelRepository, null);
-            ProcessorCommandResult processorCommandResult = processorCommand.execute();
+            ReadParcelProcessorCommand processorCommand = new ReadParcelProcessorCommand(parcelRepository);
+            ProcessorCommandResult processorCommandResult = processorCommand.execute(null);
 
             return TelegramCommandResponse.endSessionWithKeyboard(
                     processorCommandResult.message(), TelegramKeyboardUtil.createCommandsKeyboard());

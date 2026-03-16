@@ -7,10 +7,12 @@ import org.jspecify.annotations.Nullable;
 
 /**
  * Типы Telegram команд.
+ * Определяет все доступные команды в Telegram интерфейсе.
  */
 @Getter
 @RequiredArgsConstructor
 public enum TelegramCommandType {
+    LOAD("/load", "Загрузка посылки в машины"),
     CREATE_PARCEL("/create_parcel", "Создать новую посылку"),
     READ_PARCEL("/read_parcel", "Просмотреть посылку"),
     UPDATE_PARCEL("/update_parcel", "Обновить посылку"),
@@ -27,7 +29,7 @@ public enum TelegramCommandType {
     /**
      * Получает тип команды по её текстовому представлению.
      *
-     * @param text текст команды
+     * @param text текст команды (не может быть null)
      * @return тип команды или null, если не найдена
      */
     public static @Nullable TelegramCommandType fromString(@NonNull String text) {

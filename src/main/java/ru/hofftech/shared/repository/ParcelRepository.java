@@ -10,6 +10,7 @@ import java.util.Optional;
 
 /**
  * Репозиторий для хранения посылок в памяти.
+ * Реализован на основе HashMap, обеспечивает потокобезопасность через копирование коллекций.
  */
 public class ParcelRepository {
     @NonNull
@@ -25,7 +26,7 @@ public class ParcelRepository {
     /**
      * Добавляет новую посылку в репозиторий.
      *
-     * @param parcel посылка для добавления
+     * @param parcel посылка для добавления (не может быть null)
      */
     public void insert(@NonNull Parcel parcel) {
         if (!parcels.containsKey(parcel.name())) {
@@ -36,7 +37,7 @@ public class ParcelRepository {
     /**
      * Обновляет существующую посылку в репозитории.
      *
-     * @param parcel посылка с обновлёнными данными
+     * @param parcel посылка с обновлёнными данными (не может быть null)
      */
     public void update(@NonNull Parcel parcel) {
         if (parcels.containsKey(parcel.name())) {
@@ -47,7 +48,7 @@ public class ParcelRepository {
     /**
      * Удаляет посылку по названию.
      *
-     * @param name название посылки
+     * @param name название посылки (не может быть null)
      */
     public void delete(@NonNull String name) {
         parcels.remove(name);
@@ -56,10 +57,11 @@ public class ParcelRepository {
     /**
      * Находит посылку по названию.
      *
-     * @param name название посылки
-     * @return Optional с найденной посылкой
+     * @param name название посылки (не может быть null)
+     * @return Optional с найденной посылкой (не может быть null)
      */
-    public @NonNull Optional<Parcel> find(@NonNull String name) {
+    @NonNull
+    public Optional<Parcel> find(@NonNull String name) {
         if (parcels.containsKey(name)) {
             return Optional.of(parcels.get(name));
         }
@@ -69,9 +71,10 @@ public class ParcelRepository {
     /**
      * Возвращает список всех посылок.
      *
-     * @return список посылок
+     * @return список посылок (не может быть null)
      */
-    public @NonNull List<Parcel> findAll() {
+    @NonNull
+    public List<Parcel> findAll() {
         return List.copyOf(parcels.values());
     }
 }

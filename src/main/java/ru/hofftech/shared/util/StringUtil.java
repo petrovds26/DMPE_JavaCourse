@@ -8,6 +8,7 @@ import java.util.List;
 
 /**
  * Утилита для работы со строками.
+ *
  */
 @UtilityClass
 public class StringUtil {
@@ -15,8 +16,8 @@ public class StringUtil {
     /**
      * Разбивает командную строку на аргументы с учётом кавычек.
      *
-     * @param commandLine командная строка
-     * @return массив аргументов
+     * @param commandLine командная строка (не может быть null)
+     * @return массив аргументов (не может быть null)
      */
     @NonNull
     public static String[] splitCommandLine(@NonNull String commandLine) {

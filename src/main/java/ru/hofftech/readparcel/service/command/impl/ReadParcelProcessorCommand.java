@@ -19,18 +19,15 @@ import java.util.Optional;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
-public class ReadParcelProcessorCommand implements ProcessorCommand {
+public class ReadParcelProcessorCommand implements ProcessorCommand<String> {
     @NonNull
     private final ParcelRepository parcelRepository;
-
-    @Nullable
-    private final String name;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ProcessorCommandResult execute() {
+    public @NonNull ProcessorCommandResult execute(@Nullable String name) {
 
         if (name == null) {
             List<Parcel> parcels = parcelRepository.findAll();

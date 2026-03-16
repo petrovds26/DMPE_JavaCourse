@@ -15,8 +15,8 @@ public interface Validator<T> {
     /**
      * Валидирует объект и возвращает список ошибок.
      *
-     * @param object объект для валидации
-     * @return список ошибок (пустой список, если ошибок нет)
+     * @param object объект для валидации (может быть null)
+     * @return список ошибок (пустой список, если ошибок нет) (не может быть null)
      */
     @NonNull
     List<String> validate(@Nullable T object);

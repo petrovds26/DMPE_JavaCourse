@@ -16,18 +16,15 @@ import ru.hofftech.shared.service.command.ProcessorCommand;
 @RequiredArgsConstructor
 // Рекорд не может быть создан с интерфейсом
 @SuppressWarnings("ClassCanBeRecord")
-public class CreateParcelProcessorCommand implements ProcessorCommand {
+public class CreateParcelProcessorCommand implements ProcessorCommand<Parcel> {
     @NonNull
     private final ParcelRepository parcelRepository;
-
-    @NonNull
-    private final Parcel parcel;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ProcessorCommandResult execute() {
+    public @NonNull ProcessorCommandResult execute(@NonNull Parcel parcel) {
 
         if (parcelRepository.find(parcel.name()).isEmpty()) {
             parcelRepository.insert(parcel);

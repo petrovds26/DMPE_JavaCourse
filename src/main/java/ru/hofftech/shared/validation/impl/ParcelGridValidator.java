@@ -37,6 +37,12 @@ public class ParcelGridValidator implements Validator<Parcel> {
         return errors;
     }
 
+    /**
+     * Проверяет, что все строки посылки имеют одинаковую ширину.
+     *
+     * @param errors список ошибок для пополнения (не может быть null)
+     * @param parcel посылка для проверки (не может быть null)
+     */
     private void validateSameWidth(@NonNull List<String> errors, @NonNull Parcel parcel) {
         boolean[][] grid = parcel.grid();
         if (grid == null || grid.length == 0) {
@@ -54,6 +60,12 @@ public class ParcelGridValidator implements Validator<Parcel> {
         }
     }
 
+    /**
+     * Проверяет связность посылки (все заполненные клетки должны быть соединены).
+     *
+     * @param errors список ошибок для пополнения (не может быть null)
+     * @param parcel посылка для проверки (не может быть null)
+     */
     private void validateConnected(@NonNull List<String> errors, @NonNull Parcel parcel) {
         boolean[][] grid = parcel.grid();
         int height = parcel.height();
@@ -95,6 +107,12 @@ public class ParcelGridValidator implements Validator<Parcel> {
         }
     }
 
+    /**
+     * Подсчитывает количество заполненных клеток в посылке.
+     *
+     * @param grid сетка посылки (не может быть null)
+     * @return количество заполненных клеток
+     */
     private int countFilledCells(boolean @NonNull [] @NonNull [] grid) {
         int count = 0;
         for (boolean[] row : grid) {
@@ -105,6 +123,14 @@ public class ParcelGridValidator implements Validator<Parcel> {
         return count;
     }
 
+    /**
+     * Подсчитывает количество клеток в компоненте связности.
+     *
+     * @param grid   сетка посылки (не может быть null)
+     * @param startY начальная координата Y
+     * @param startX начальная координата X
+     * @return количество клеток в компоненте
+     */
     private int countConnectedCells(boolean @NonNull [] @NonNull [] grid, int startY, int startX) {
         int height = grid.length;
         int width = grid[0].length;
@@ -113,6 +139,15 @@ public class ParcelGridValidator implements Validator<Parcel> {
         return dfs(grid, visited, startY, startX);
     }
 
+    /**
+     * Рекурсивный обход графа для поиска связных клеток.
+     *
+     * @param grid    сетка посылки (не может быть null)
+     * @param visited массив посещённых клеток (не может быть null)
+     * @param y       текущая координата Y
+     * @param x       текущая координата X
+     * @return количество посещённых клеток
+     */
     private int dfs(boolean @NonNull [] @NonNull [] grid, boolean @NonNull [] @NonNull [] visited, int y, int x) {
         if (y < 0 || y >= grid.length || x < 0 || x >= grid[0].length) {
             return 0;

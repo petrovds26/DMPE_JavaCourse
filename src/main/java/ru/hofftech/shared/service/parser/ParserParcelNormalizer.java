@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * Отвечает за нормализацию строк посылки.
+ * Выполняет обрезку пробелов справа и выравнивание до одинаковой длины.
  */
 @Slf4j
 public class ParserParcelNormalizer {
@@ -16,8 +17,8 @@ public class ParserParcelNormalizer {
      * 1. Обрезает пробелы справа
      * 2. Выравнивает все строки до одинаковой длины
      *
-     * @param lines исходные строки
-     * @return нормализованные строки
+     * @param lines исходные строки (не может быть null)
+     * @return нормализованные строки (не может быть null)
      */
     @NonNull
     public List<String> normalize(@NonNull List<String> lines) {
@@ -36,9 +37,9 @@ public class ParserParcelNormalizer {
     /**
      * Дополняет строку пробелами справа до указанной длины.
      *
-     * @param text исходная строка
+     * @param text   исходная строка (не может быть null)
      * @param length требуемая длина
-     * @return дополненная строка
+     * @return дополненная строка (не может быть null)
      */
     @NonNull
     private String padRight(@NonNull String text, int length) {

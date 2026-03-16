@@ -5,21 +5,24 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.hofftech.shared.model.core.ParserParcelProcessorResult;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
-import ru.hofftech.shared.model.core.TransformParcelResult;
 import ru.hofftech.shared.model.core.telegram.TelegramCommandResponse;
 import ru.hofftech.shared.model.dto.ParcelFormDto;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
 import ru.hofftech.shared.model.params.TelegramUserSession;
 import ru.hofftech.shared.repository.ParcelRepository;
 import ru.hofftech.shared.service.command.telegram.TelegramCommand;
-import ru.hofftech.shared.service.parser.ParserParcelProcessor;
+import ru.hofftech.shared.service.parser.impl.ParserParcelFromFormDto;
 import ru.hofftech.shared.util.TelegramKeyboardUtil;
 import ru.hofftech.updateparcel.enums.UpdateParcelTelegramStep;
 import ru.hofftech.updateparcel.model.params.UpdateParcelTelegramUserSession;
 
+import java.util.List;
+
 /**
  * Telegram команда для обновления посылки.
+ * Реализует пошаговый диалог с пользователем для обновления существующей посылки.
  */
 @Slf4j
 @RequiredArgsConstructor
@@ -30,7 +33,7 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
     private final ParcelRepository parcelRepository;
 
     @NonNull
-    private final ParserParcelProcessor parserParcelProcessor;
+    private final ParserParcelFromFormDto parserParcelProcessor;
 
     /**
      * {@inheritDoc}
@@ -95,7 +98,7 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
      * Начинает процесс обновления посылки.
      *
      * @param chatId идентификатор чата
-     * @return ответ с запросом названия
+     * @return ответ с запросом названия (не может быть null)
      */
     @NonNull
     private TelegramCommandResponse startUpd(long chatId) {
@@ -106,9 +109,9 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
     /**
      * Продолжает процесс обновления посылки.
      *
-     * @param session текущая сессия
-     * @param text введённый текст
-     * @return ответ со следующим шагом или результат обновления
+     * @param session текущая сессия (не может быть null)
+     * @param text    введённый текст (не может быть null)
+     * @return ответ со следующим шагом или результат обновления (не может быть null)
      */
     @NonNull
     private TelegramCommandResponse continueUpd(
@@ -125,17 +128,16 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
     /**
      * Обрабатывает ввод названия посылки.
      *
-     * @param session текущая сессия
-     * @param text введённое название
-     * @return ответ с запросом символа
+     * @param session текущая сессия (не может быть null)
+     * @param text    введённое название (не может быть null)
+     * @return ответ с запросом символа (не может быть null)
      */
     @NonNull
     private TelegramCommandResponse handleNameInput(
             @NonNull UpdateParcelTelegramUserSession session, @NonNull String text) {
-        String errorValidateNameResult =
-                parserParcelProcessor.validateName(text).error();
-        if (errorValidateNameResult != null) {
-            return TelegramCommandResponse.text(errorValidateNameResult);
+        ParserParcelProcessorResult nameResult = parserParcelProcessor.validateName(text);
+        if (nameResult.hasErrors()) {
+            return TelegramCommandResponse.text(nameResult.getErrorsAsString());
         }
 
         UpdateParcelTelegramUserSession nameSession =
@@ -146,17 +148,16 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
     /**
      * Обрабатывает ввод символа посылки.
      *
-     * @param session текущая сессия
-     * @param text введённый символ
-     * @return ответ с запросом формы
+     * @param session текущая сессия (не может быть null)
+     * @param text    введённый символ (не может быть null)
+     * @return ответ с запросом формы (не может быть null)
      */
     @NonNull
     private TelegramCommandResponse handleSymbolInput(
             @NonNull UpdateParcelTelegramUserSession session, @NonNull String text) {
-        String errorValidateSymbolResult =
-                parserParcelProcessor.validateSymbol(text).error();
-        if (errorValidateSymbolResult != null) {
-            return TelegramCommandResponse.text(errorValidateSymbolResult);
+        ParserParcelProcessorResult symbolResult = parserParcelProcessor.validateSymbol(text);
+        if (symbolResult.hasErrors()) {
+            return TelegramCommandResponse.text(symbolResult.getErrorsAsString());
         }
         UpdateParcelTelegramUserSession formSession =
                 session.withSymbol(text).withStep(UpdateParcelTelegramStep.ENTER_FORM);
@@ -166,9 +167,9 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
     /**
      * Обрабатывает ввод формы и обновляет посылку.
      *
-     * @param session текущая сессия
-     * @param text введённая форма
-     * @return ответ с результатом обновления
+     * @param session текущая сессия (не может быть null)
+     * @param text    введённая форма (не может быть null)
+     * @return ответ с результатом обновления (не может быть null)
      */
     @NonNull
     private TelegramCommandResponse handleFormInput(
@@ -183,20 +184,19 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
                 .symbol(session.getSymbol())
                 .build();
 
-        TransformParcelResult transformResult = parserParcelProcessor.transform(parcelFormDto);
+        ParserParcelProcessorResult processorResult = parserParcelProcessor.transform(List.of(parcelFormDto));
 
-        if (transformResult.parcel() == null) {
-            String errorTransformResult = transformResult.error();
-            if (errorTransformResult == null) {
-                errorTransformResult = "Не удалось распознать посылку";
-            }
-            return TelegramCommandResponse.text(errorTransformResult);
+        if (processorResult.parcels().isEmpty()) {
+            return TelegramCommandResponse.text(
+                    processorResult.getErrorsAsString().isBlank()
+                            ? "Не удалось распознать посылку"
+                            : processorResult.getErrorsAsString());
         }
 
-        UpdateParcelProcessorCommand command =
-                new UpdateParcelProcessorCommand(parcelRepository, transformResult.parcel());
+        UpdateParcelProcessorCommand command = new UpdateParcelProcessorCommand(parcelRepository);
 
-        ProcessorCommandResult result = command.execute();
+        ProcessorCommandResult result =
+                command.execute(processorResult.parcels().getFirst());
 
         return TelegramCommandResponse.endSessionWithKeyboard(
                 result.message(), TelegramKeyboardUtil.createCommandsKeyboard());
@@ -205,7 +205,7 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
     /**
      * Извлекает идентификатор чата из обновления.
      *
-     * @param update обновление от Telegram
+     * @param update обновление от Telegram (не может быть null)
      * @return идентификатор чата или 0
      */
     private long getChatId(@NonNull Update update) {
@@ -220,7 +220,7 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
     /**
      * Извлекает текст сообщения из обновления.
      *
-     * @param update обновление от Telegram
+     * @param update обновление от Telegram (не может быть null)
      * @return текст сообщения или null
      */
     @Nullable

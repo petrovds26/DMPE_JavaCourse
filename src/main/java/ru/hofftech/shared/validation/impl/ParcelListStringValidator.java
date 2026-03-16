@@ -41,8 +41,8 @@ public class ParcelListStringValidator implements Validator<List<String>> {
     /**
      * Проверяет, что строки не пустые и содержат символы.
      *
-     * @param errors список ошибок для пополнения
-     * @param lines строки для проверки
+     * @param errors список ошибок для пополнения (не может быть null)
+     * @param lines  строки для проверки (не может быть null)
      */
     private void validateNotEmptyLines(@NonNull List<String> errors, @NonNull List<String> lines) {
         for (int i = 0; i < lines.size(); i++) {
@@ -56,8 +56,8 @@ public class ParcelListStringValidator implements Validator<List<String>> {
     /**
      * Проверяет, что все символы "не пробел" в посылке одинаковы.
      *
-     * @param errors список ошибок для пополнения
-     * @param lines строки для проверки
+     * @param errors список ошибок для пополнения (не может быть null)
+     * @param lines  строки для проверки (не может быть null)
      */
     private void validateConsistentSymbol(@NonNull List<String> errors, @NonNull List<String> lines) {
         // Находим первый символ в посылке
@@ -88,7 +88,7 @@ public class ParcelListStringValidator implements Validator<List<String>> {
     /**
      * Находит первый символ "не пробел" в посылке.
      *
-     * @param lines список строк посылки
+     * @param lines список строк посылки (не может быть null)
      * @return первый найденный символ или null, если символов нет
      */
     @Nullable

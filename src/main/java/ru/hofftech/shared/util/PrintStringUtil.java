@@ -15,9 +15,9 @@ public class PrintStringUtil {
     /**
      * Форматирует информацию о посылке по единому шаблону.
      *
-     * @param parcel посылка
+     * @param parcel посылка (не может быть null)
      * @param placed информация о размещении (может быть null)
-     * @return отформатированная строка
+     * @return отформатированная строка (не может быть null)
      */
     @NonNull
     public static String parcelRender(@NonNull Parcel parcel, @Nullable PlacedParcel placed) {
@@ -45,10 +45,10 @@ public class PrintStringUtil {
     }
 
     /**
-     * Перегрузка метода parcelRender для случаев без координат.
+     * Форматирует информацию о посылке без координат.
      *
-     * @param parcel посылка
-     * @return отформатированная строка
+     * @param parcel посылка (не может быть null)
+     * @return отформатированная строка (не может быть null)
      */
     @NonNull
     public static String parcelRender(@NonNull Parcel parcel) {
