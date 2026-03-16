@@ -37,6 +37,7 @@ import ru.hofftech.shared.service.parser.ParserParams;
 import ru.hofftech.shared.service.parser.ParserParcelBuilder;
 import ru.hofftech.shared.service.parser.ParserParcelNormalizer;
 import ru.hofftech.shared.service.parser.impl.ParserMachineFromFormString;
+import ru.hofftech.shared.service.parser.impl.ParserMachineJsonFile;
 import ru.hofftech.shared.service.parser.impl.ParserParcelFromFormDto;
 import ru.hofftech.shared.service.parser.impl.ParserParcelFromNameJsonFile;
 import ru.hofftech.shared.service.parser.impl.ParserParcelFromNameString;
@@ -46,6 +47,14 @@ import ru.hofftech.shared.validation.impl.InputFilePathValidator;
 import ru.hofftech.shared.validation.impl.OutputFilePathValidator;
 import ru.hofftech.shared.validation.impl.ParcelGridValidator;
 import ru.hofftech.shared.validation.impl.ParcelListStringValidator;
+import ru.hofftech.unload.model.enums.UnloadInputMachineType;
+import ru.hofftech.unload.model.enums.UnloadOutputType;
+import ru.hofftech.unload.service.command.impl.UnloadConsoleCommand;
+import ru.hofftech.unload.service.output.UnloadOutputPrepareService;
+import ru.hofftech.unload.service.output.impl.UnloadPrepareOutputResultJson;
+import ru.hofftech.unload.service.output.impl.UnloadPrepareOutputResultTxtFull;
+import ru.hofftech.unload.service.output.impl.UnloadPrepareOutputResultTxtSimple;
+import ru.hofftech.unload.service.parser.source.UnloadParserMachineService;
 import ru.hofftech.updateparcel.service.command.impl.UpdateParcelConsoleCommand;
 import ru.hofftech.updateparcel.service.command.impl.UpdateParcelTelegramCommand;
 
@@ -88,6 +97,7 @@ public class Main {
         ParserParcelFromNameTxtFile parserParcelFromNameTxtFile = new ParserParcelFromNameTxtFile(parcelRepository);
         ParserParcelFromNameJsonFile parserParcelFromNameJsonFile = new ParserParcelFromNameJsonFile(parcelRepository);
         ParserMachineFromFormString parserMachineFromFormString = new ParserMachineFromFormString();
+        ParserMachineJsonFile parserMachineJsonFile = new ParserMachineJsonFile();
 
         // Сохранение в файл
         FileSaveService fileSaveService = new FileSaveService();
@@ -95,6 +105,12 @@ public class Main {
         // Подготовка выводов результатов
         LoadPrepareOutputResultText loadPrepareOutputResultText = new LoadPrepareOutputResultText();
         LoadPrepareOutputResultJson loadPrepareOutputResultJson = new LoadPrepareOutputResultJson();
+
+        UnloadPrepareOutputResultTxtFull unloadPrepareOutputResultTxtFull = new UnloadPrepareOutputResultTxtFull();
+        UnloadPrepareOutputResultTxtSimple unloadPrepareOutputResultTxtSimple =
+                new UnloadPrepareOutputResultTxtSimple();
+        UnloadPrepareOutputResultJson unloadPrepareOutputResultJson = new UnloadPrepareOutputResultJson();
+
         // Сервисы для фич
         LoadStrategyService loadStrategyService = new LoadStrategyService(List.of(
                 new LoadStrategyOneParcelPerMachine(),
@@ -104,14 +120,19 @@ public class Main {
                 LoadInputParcelType.TEXT, parserParcelFromNameString,
                 LoadInputParcelType.TEXT_FILE, parserParcelFromNameTxtFile,
                 LoadInputParcelType.JSON_FILE, parserParcelFromNameJsonFile));
-
         LoadOutputPrepareService loadOutputPrepareService = new LoadOutputPrepareService(Map.of(
                 LoadOutputType.TEXT, loadPrepareOutputResultText,
                 LoadOutputType.TEXT_FILE, loadPrepareOutputResultText,
                 LoadOutputType.JSON_FILE, loadPrepareOutputResultJson));
 
-        // Консольные команды
+        UnloadParserMachineService parserMachineService =
+                new UnloadParserMachineService(Map.of(UnloadInputMachineType.JSON_FILE, parserMachineJsonFile));
+        UnloadOutputPrepareService unloadOutputPrepareService = new UnloadOutputPrepareService(Map.of(
+                UnloadOutputType.TEXT, unloadPrepareOutputResultTxtFull,
+                UnloadOutputType.TEXT_FILE, unloadPrepareOutputResultTxtSimple,
+                UnloadOutputType.JSON_FILE, unloadPrepareOutputResultJson));
 
+        // Консольные команды
         EmptyConsoleCommand emptyConsoleCommand = new EmptyConsoleCommand();
         CreateParcelConsoleCommand createParcelConsoleCommand =
                 new CreateParcelConsoleCommand(parserParams, parserParcelFromFormDto, parcelRepository);
@@ -130,6 +151,14 @@ public class Main {
                 parserMachineFromFormString,
                 loadOutputPrepareService,
                 fileSaveService);
+        UnloadConsoleCommand unloadConsoleCommand = new UnloadConsoleCommand(
+                parserParams,
+                inputFilePathValidator,
+                outputFilePathValidator,
+                parserMachineService,
+                unloadOutputPrepareService,
+                fileSaveService);
+
         ExitConsoleCommand exitConsoleCommand = new ExitConsoleCommand();
 
         // Телеграм команды
@@ -155,6 +184,7 @@ public class Main {
                 updateParcelConsoleCommand,
                 deleteParcelConsoleCommand,
                 loadParcelConsoleCommand,
+                unloadConsoleCommand,
                 exitConsoleCommand));
 
         List<TelegramCommand> telegramCommands = new ArrayList<>(List.of(

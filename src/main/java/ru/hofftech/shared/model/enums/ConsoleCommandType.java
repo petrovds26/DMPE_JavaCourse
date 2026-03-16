@@ -9,7 +9,7 @@ import org.jspecify.annotations.NonNull;
 public enum ConsoleCommandType {
     EMPTY,
     LOAD,
-    IMPORT_MACHINE,
+    UNLOAD,
     CREATE_PARCEL,
     READ_PARCEL,
     UPDATE_PARCEL,
