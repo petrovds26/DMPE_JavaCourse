@@ -1,7 +1,7 @@
 package ru.hofftech.load.service.loader.strategy.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.load.model.core.LoadResult;
 import ru.hofftech.load.model.core.LoadStrategyParcelInvalid;
 import ru.hofftech.load.model.enums.LoadStrategyParcelInvalidCauseType;
@@ -22,9 +22,9 @@ import java.util.List;
  * Сортирует посылки по размеру (широкие сначала).
  */
 @Slf4j
+@NullMarked
 public class LoadStrategyDensePacking implements LoadStrategy {
 
-    @NonNull
     private final LoadStrategyPositionFinder loadStrategyPositionFinder;
 
     /**
@@ -38,7 +38,6 @@ public class LoadStrategyDensePacking implements LoadStrategy {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public LoadStrategyType getAlgorithmType() {
         return LoadStrategyType.DENSE_PACKING;
     }
@@ -47,7 +46,7 @@ public class LoadStrategyDensePacking implements LoadStrategy {
      * {@inheritDoc}
      */
     @Override
-    public @NonNull LoadResult loadParcels(@NonNull List<Parcel> parcels, @NonNull List<Machine> machines) {
+    public LoadResult loadParcels(List<Parcel> parcels, List<Machine> machines) {
         List<LoadStrategyParcelInvalid> loadStrategyParcelInvalids = new ArrayList<>();
         List<Machine> resultMachines = new ArrayList<>(machines);
 
@@ -101,7 +100,6 @@ public class LoadStrategyDensePacking implements LoadStrategy {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getAlgorithmName() {
         return "Плотная упаковка";
     }
@@ -115,9 +113,8 @@ public class LoadStrategyDensePacking implements LoadStrategy {
      * @param cause     текстовое описание причины (не может быть null)
      * @return объект с информацией об ошибке (не может быть null)
      */
-    @NonNull
     private LoadStrategyParcelInvalid invalidParcel(
-            @NonNull Parcel parcel, @NonNull LoadStrategyParcelInvalidCauseType causeType, @NonNull String cause) {
+            Parcel parcel, LoadStrategyParcelInvalidCauseType causeType, String cause) {
         LoadStrategyParcelInvalid loadStrategyParcelInvalid = LoadStrategyParcelInvalid.builder()
                 .parcel(parcel)
                 .causeType(causeType)
@@ -136,7 +133,7 @@ public class LoadStrategyDensePacking implements LoadStrategy {
      * @param parcel   посылка для размещения (не может быть null)
      * @return true если посылка размещена
      */
-    private boolean tryPlaceInExistingMachines(@NonNull List<Machine> machines, @NonNull Parcel parcel) {
+    private boolean tryPlaceInExistingMachines(List<Machine> machines, Parcel parcel) {
         for (int i = 0; i < machines.size(); i++) {
             Machine machine = machines.get(i);
 
@@ -170,8 +167,7 @@ public class LoadStrategyDensePacking implements LoadStrategy {
      * @param parcels список посылок (не может быть null)
      * @return отсортированный список (не может быть null)
      */
-    @NonNull
-    private List<Parcel> sortParcelsByWidth(@NonNull List<Parcel> parcels) {
+    private List<Parcel> sortParcelsByWidth(List<Parcel> parcels) {
         return parcels.stream()
                 .sorted(Comparator.comparingInt(Parcel::getWidth).reversed())
                 .toList();

@@ -1,6 +1,6 @@
 package ru.hofftech.load.service.loader.strategy;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.load.model.core.LoadResult;
 import ru.hofftech.load.model.enums.LoadStrategyType;
 import ru.hofftech.shared.model.core.Machine;
@@ -11,6 +11,7 @@ import java.util.List;
 /**
  * Интерфейс для алгоритмов упаковки посылок в машины
  */
+@NullMarked
 public interface LoadStrategy {
 
     /**
@@ -18,19 +19,16 @@ public interface LoadStrategy {
      * @param parcels список посылок для упаковки
      * @return результат упаковки с разделением на успешные и проблемные
      */
-    @NonNull
-    LoadResult loadParcels(@NonNull List<Parcel> parcels, @NonNull List<Machine> machines);
+    LoadResult loadParcels(List<Parcel> parcels, List<Machine> machines);
 
     /**
      * @return название алгоритма
      */
-    @NonNull
     LoadStrategyType getAlgorithmType();
 
     /**
      * @return название алгоритма
      */
-    @NonNull
     default String getAlgorithmName() {
         return this.getAlgorithmType().getDescription();
     }

@@ -2,7 +2,7 @@ package ru.hofftech.load.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Перечисление шагов создания посылки в Telegram.
@@ -10,6 +10,7 @@ import org.jspecify.annotations.NonNull;
  */
 @Getter
 @RequiredArgsConstructor
+@NullMarked
 public enum LoadTelegramStep {
     ENTER_PARCEL(1, "Введите список посылок к погрузке. Каждая посылка с новой строки"),
     ENTER_TRUCK(2, "Введите список машин. Каждая машина с новой строки"),
@@ -18,6 +19,5 @@ public enum LoadTelegramStep {
 
     private final int id;
 
-    @NonNull
     private final String description;
 }

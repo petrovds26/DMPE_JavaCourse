@@ -1,6 +1,6 @@
 package ru.hofftech.shared.service.command.telegram;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.hofftech.shared.model.core.telegram.TelegramCommandResponse;
@@ -10,6 +10,7 @@ import ru.hofftech.shared.model.params.TelegramUserSession;
 /**
  * Интерфейс для всех Telegram команд
  */
+@NullMarked
 public interface TelegramCommand {
 
     /**
@@ -17,7 +18,6 @@ public interface TelegramCommand {
      *
      * @return тип команды
      */
-    @NonNull
     TelegramCommandType getType();
 
     /**
@@ -27,7 +27,7 @@ public interface TelegramCommand {
      * @param session текущая сессия пользователя
      * @return true если команда может обработать
      */
-    boolean canHandle(@NonNull Update update, @Nullable TelegramUserSession session);
+    boolean canHandle(Update update, @Nullable TelegramUserSession session);
 
     /**
      * Выполняет команду.
@@ -36,8 +36,7 @@ public interface TelegramCommand {
      * @param session текущая сессия пользователя
      * @return ответ для отправки пользователю
      */
-    @NonNull
-    TelegramCommandResponse execute(@NonNull Update update, @Nullable TelegramUserSession session);
+    TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session);
 
     /**
      * Проверяет, является ли текст началом команды.
@@ -45,5 +44,5 @@ public interface TelegramCommand {
      * @param text текст сообщения
      * @return true если это начало команды
      */
-    boolean isCommandStart(@NonNull String text);
+    boolean isCommandStart(String text);
 }

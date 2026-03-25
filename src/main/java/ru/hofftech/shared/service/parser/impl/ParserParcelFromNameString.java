@@ -1,7 +1,7 @@
 package ru.hofftech.shared.service.parser.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.core.ParserParcelProcessorResult;
 import ru.hofftech.shared.repository.ParcelRepository;
@@ -14,18 +14,18 @@ import java.util.List;
  * Парсер для получения посылок из строки с названиями.
  * Строка может содержать несколько названий, разделённых переносом строки.
  */
+@NullMarked
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
 public class ParserParcelFromNameString implements ParserParcelProcessor<String> {
 
-    @NonNull
     public final ParcelRepository parcelRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ParserParcelProcessorResult transform(@NonNull String inputNameString) {
+    public ParserParcelProcessorResult transform(String inputNameString) {
 
         List<Parcel> parcels = new ArrayList<>();
         List<String> errors = new ArrayList<>();

@@ -1,7 +1,7 @@
 package ru.hofftech.shared.model.core;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
@@ -11,12 +11,13 @@ import java.util.List;
  * @param machines распознанные мышины
  * @param errors описание ошибок (пустой, если ошибок нет)
  */
+@NullMarked
 @Builder
 public record ParserMachineProcessorResult(
         // Посылки, которые удалось распарсить
-        @NonNull List<Machine> machines,
+        List<Machine> machines,
         // Описание ошибки при трансформации посылки
-        @NonNull List<String> errors) {
+        List<String> errors) {
 
     /**
      * Есть ли ошибки при распознавании посылок
@@ -27,7 +28,6 @@ public record ParserMachineProcessorResult(
         return !errors.isEmpty();
     }
 
-    @NonNull
     public String getErrorsAsString() {
         return String.join("\n", errors);
     }

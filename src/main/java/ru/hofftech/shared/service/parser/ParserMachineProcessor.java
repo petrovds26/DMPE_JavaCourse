@@ -1,6 +1,7 @@
 package ru.hofftech.shared.service.parser;
 
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.ParserMachineProcessorResult;
 
 /**
@@ -8,6 +9,7 @@ import ru.hofftech.shared.model.core.ParserMachineProcessorResult;
  *
  * @param <T> тип источника данных (String для строки, File для файла и т.д.)
  */
+@NullMarked
 public interface ParserMachineProcessor<T> {
 
     /**
@@ -16,6 +18,5 @@ public interface ParserMachineProcessor<T> {
      * @param source источник данных (не может быть null)
      * @return результат парсинга в виде ParserMachineProcessorResult - списка машин и ошибок (не может быть null)
      */
-    @NonNull
     ParserMachineProcessorResult transform(@NonNull T source);
 }

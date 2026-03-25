@@ -1,7 +1,7 @@
 package ru.hofftech.shared.service.telegram;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.params.TelegramUserSession;
 
@@ -13,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * Хранит сессии в памяти и предоставляет методы для их получения, обновления и очистки.
  */
 @Slf4j
+@NullMarked
 public class TelegramUserSessionService {
     private final Map<Long, TelegramUserSession> sessions = new ConcurrentHashMap<>();
 
@@ -33,7 +34,7 @@ public class TelegramUserSessionService {
      * @param chatId  идентификатор чата
      * @param session новая сессия (не может быть null)
      */
-    public void createOrUpdateSession(long chatId, @NonNull TelegramUserSession session) {
+    public void createOrUpdateSession(long chatId, TelegramUserSession session) {
         sessions.put(chatId, session);
         log.debug(
                 "Сессия пользователя {} обновлена: {}",

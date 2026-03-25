@@ -1,7 +1,7 @@
 package ru.hofftech.load.service.loader;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
@@ -12,9 +12,9 @@ import ru.hofftech.shared.util.SupportUtil;
  * Реализует стратегию поиска "снизу вверх, слева направо".
  */
 @Slf4j
+@NullMarked
 public class LoadStrategyPositionFinder {
 
-    @NonNull
     private final LoadStrategySupportChecker loadStrategySupportChecker;
 
     /**
@@ -33,7 +33,7 @@ public class LoadStrategyPositionFinder {
      * @param parcel  посылка для размещения (не может быть null)
      * @return массив [x, y] с координатами или null, если место не найдено
      */
-    public int @Nullable [] findBestPosition(@NonNull Machine machine, @NonNull Parcel parcel) {
+    public int @Nullable [] findBestPosition(Machine machine, Parcel parcel) {
         int[] bestPosition = null;
 
         int maxY = Machine.DEFAULT_HEIGHT - parcel.getHeight();
@@ -73,7 +73,7 @@ public class LoadStrategyPositionFinder {
      * @param y       координата Y
      * @return true если размещение возможно
      */
-    private boolean canPlaceAt(@NonNull Machine machine, @NonNull Parcel parcel, int x, int y) {
+    private boolean canPlaceAt(Machine machine, Parcel parcel, int x, int y) {
         // Проверяем, не пересекается ли с другими посылками
         if (machine.isPlaceOccupied(parcel, x, y)) {
             return false;

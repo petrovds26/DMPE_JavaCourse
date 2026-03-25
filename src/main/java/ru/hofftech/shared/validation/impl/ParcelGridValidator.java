@@ -1,7 +1,7 @@
 package ru.hofftech.shared.validation.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.validation.Validator;
@@ -16,13 +16,13 @@ import java.util.List;
  * - Связность посылки
  */
 @Slf4j
+@NullMarked
 public class ParcelGridValidator implements Validator<Parcel> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public List<String> validate(@Nullable Parcel parcel) {
         List<String> errors = new ArrayList<>();
 
@@ -43,9 +43,9 @@ public class ParcelGridValidator implements Validator<Parcel> {
      * @param errors список ошибок для пополнения (не может быть null)
      * @param parcel посылка для проверки (не может быть null)
      */
-    private void validateSameWidth(@NonNull List<String> errors, @NonNull Parcel parcel) {
+    private void validateSameWidth(List<String> errors, Parcel parcel) {
         boolean[][] grid = parcel.grid();
-        if (grid == null || grid.length == 0) {
+        if (grid.length == 0) {
             errors.add("Посылка не содержит grid");
             return;
         }
@@ -66,7 +66,7 @@ public class ParcelGridValidator implements Validator<Parcel> {
      * @param errors список ошибок для пополнения (не может быть null)
      * @param parcel посылка для проверки (не может быть null)
      */
-    private void validateConnected(@NonNull List<String> errors, @NonNull Parcel parcel) {
+    private void validateConnected(List<String> errors, Parcel parcel) {
         boolean[][] grid = parcel.grid();
         int height = parcel.height();
         int width = parcel.width();
@@ -113,7 +113,7 @@ public class ParcelGridValidator implements Validator<Parcel> {
      * @param grid сетка посылки (не может быть null)
      * @return количество заполненных клеток
      */
-    private int countFilledCells(boolean @NonNull [] @NonNull [] grid) {
+    private int countFilledCells(boolean[][] grid) {
         int count = 0;
         for (boolean[] row : grid) {
             for (boolean cell : row) {
@@ -131,7 +131,7 @@ public class ParcelGridValidator implements Validator<Parcel> {
      * @param startX начальная координата X
      * @return количество клеток в компоненте
      */
-    private int countConnectedCells(boolean @NonNull [] @NonNull [] grid, int startY, int startX) {
+    private int countConnectedCells(boolean[][] grid, int startY, int startX) {
         int height = grid.length;
         int width = grid[0].length;
         boolean[][] visited = new boolean[height][width];
@@ -148,7 +148,7 @@ public class ParcelGridValidator implements Validator<Parcel> {
      * @param x       текущая координата X
      * @return количество посещённых клеток
      */
-    private int dfs(boolean @NonNull [] @NonNull [] grid, boolean @NonNull [] @NonNull [] visited, int y, int x) {
+    private int dfs(boolean[][] grid, boolean[][] visited, int y, int x) {
         if (y < 0 || y >= grid.length || x < 0 || x >= grid[0].length) {
             return 0;
         }

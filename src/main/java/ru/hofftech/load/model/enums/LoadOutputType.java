@@ -2,12 +2,13 @@ package ru.hofftech.load.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.enums.FileType;
 
 @Getter
 @RequiredArgsConstructor
+@NullMarked
 public enum LoadOutputType {
     TEXT(1, "Результат выполнения в RESULT для последующего вывода на экран"),
     TEXT_FILE(2, "Результат выполнения в txt файл"),
@@ -15,7 +16,6 @@ public enum LoadOutputType {
 
     private final int id;
 
-    @NonNull
     private final String description;
 
     public boolean needSaveFile() {

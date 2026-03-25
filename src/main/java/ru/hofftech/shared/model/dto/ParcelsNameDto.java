@@ -1,7 +1,7 @@
 package ru.hofftech.shared.model.dto;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
@@ -11,5 +11,6 @@ import java.util.List;
  *
  * @param parcelsName список наименований посылок (не может быть null)
  */
+@NullMarked
 @Builder
-public record ParcelsNameDto(@NonNull List<String> parcelsName) {}
+public record ParcelsNameDto(List<String> parcelsName) {}

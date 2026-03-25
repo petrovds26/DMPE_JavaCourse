@@ -1,7 +1,7 @@
 package ru.hofftech.controller;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -20,15 +20,14 @@ import java.util.List;
  * Отвечает за приём сообщений от Telegram API и диспетчеризацию команд.
  */
 @Slf4j
+@NullMarked
 public class TelegramController extends TelegramLongPollingBot {
 
     private static final String BOT_TOKEN = "7234493703:AAHdghQRLDQrUCMGr92rHz6k4Qlxhdcbsyc";
     private static final String BOT_USERNAME = "@PetrovDS26_SimpleTest_bot";
 
-    @NonNull
     private final List<TelegramCommand> commands;
 
-    @NonNull
     private final TelegramUserSessionService sessionService;
 
     /**
@@ -37,8 +36,7 @@ public class TelegramController extends TelegramLongPollingBot {
      * @param commands список доступных команд
      * @param sessionService сервис управления сессиями пользователей
      */
-    public TelegramController(
-            @NonNull List<TelegramCommand> commands, @NonNull TelegramUserSessionService sessionService) {
+    public TelegramController(List<TelegramCommand> commands, TelegramUserSessionService sessionService) {
         super(BOT_TOKEN);
         this.commands = commands;
         this.sessionService = sessionService;
@@ -56,7 +54,7 @@ public class TelegramController extends TelegramLongPollingBot {
      * {@inheritDoc}
      */
     @Override
-    public void onUpdateReceived(@NonNull Update update) {
+    public void onUpdateReceived(Update update) {
         try {
             // Диспетчеризация команды
             TelegramCommandResponse response = dispatch(update);
@@ -90,7 +88,7 @@ public class TelegramController extends TelegramLongPollingBot {
      * @return ответ команды или null, если команда не найдена
      */
     @Nullable
-    public TelegramCommandResponse dispatch(@NonNull Update update) {
+    public TelegramCommandResponse dispatch(Update update) {
         long chatId = getChatId(update);
         String text = getMessageText(update);
 
@@ -140,8 +138,7 @@ public class TelegramController extends TelegramLongPollingBot {
      * @param response ответ команды
      * @return готовое сообщение для отправки
      */
-    @NonNull
-    private SendMessage toSendMessage(long chatId, @NonNull TelegramCommandResponse response) {
+    private SendMessage toSendMessage(long chatId, TelegramCommandResponse response) {
         SendMessage message = new SendMessage();
         message.setChatId(chatId);
         message.setText(response.text());
@@ -157,7 +154,7 @@ public class TelegramController extends TelegramLongPollingBot {
      * @param update обновление от Telegram
      * @return идентификатор чата или 0, если не удалось определить
      */
-    private long getChatId(@NonNull Update update) {
+    private long getChatId(Update update) {
         if (update.hasMessage()) {
             return update.getMessage().getChatId();
         } else if (update.hasCallbackQuery()) {
@@ -173,7 +170,7 @@ public class TelegramController extends TelegramLongPollingBot {
      * @return команда или null, если не найдена
      */
     @Nullable
-    public TelegramCommand findCommand(@NonNull TelegramCommandType commandType) {
+    public TelegramCommand findCommand(TelegramCommandType commandType) {
         return commands.stream()
                 .filter(c -> c.getType().equals(commandType))
                 .findFirst()
@@ -185,7 +182,7 @@ public class TelegramController extends TelegramLongPollingBot {
      *
      * @param update обновление, вызвавшее ошибку
      */
-    private void sendErrorMessage(@NonNull Update update) {
+    private void sendErrorMessage(Update update) {
         long chatId = getChatId(update);
         if (chatId != 0) {
             sendMessage(SendMessage.builder()
@@ -200,7 +197,7 @@ public class TelegramController extends TelegramLongPollingBot {
      *
      * @param message сообщение для отправки
      */
-    private void sendMessage(@NonNull SendMessage message) {
+    private void sendMessage(SendMessage message) {
         try {
             execute(message);
         } catch (TelegramApiException e) {
@@ -215,7 +212,7 @@ public class TelegramController extends TelegramLongPollingBot {
      * @return текст сообщения или null, если его нет
      */
     @Nullable
-    private String getMessageText(@NonNull Update update) {
+    private String getMessageText(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             return update.getMessage().getText();
         } else if (update.hasCallbackQuery()) {

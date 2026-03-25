@@ -1,7 +1,7 @@
 package ru.hofftech.shared.model.core.telegram;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import ru.hofftech.shared.model.params.TelegramUserSession;
@@ -14,9 +14,10 @@ import ru.hofftech.shared.model.params.TelegramUserSession;
  * @param newSession новая сессия пользователя
  * @param clearSession нужно ли очистить сессию
  */
+@NullMarked
 @Builder
 public record TelegramCommandResponse(
-        @NonNull String text,
+        String text,
         @Nullable ReplyKeyboardMarkup keyboard,
         @Nullable TelegramUserSession newSession,
         boolean clearSession) {
@@ -27,8 +28,7 @@ public record TelegramCommandResponse(
      * @param text текст ответа
      * @return ответ команды
      */
-    @NonNull
-    public static TelegramCommandResponse text(@NonNull String text) {
+    public static TelegramCommandResponse text(String text) {
         return TelegramCommandResponse.builder().text(text).clearSession(false).build();
     }
 
@@ -39,8 +39,7 @@ public record TelegramCommandResponse(
      * @param session новая сессия
      * @return ответ команды
      */
-    @NonNull
-    public static TelegramCommandResponse startSession(@NonNull String text, @NonNull TelegramUserSession session) {
+    public static TelegramCommandResponse startSession(String text, TelegramUserSession session) {
         return TelegramCommandResponse.builder()
                 .text(text)
                 .newSession(session)
@@ -55,9 +54,7 @@ public record TelegramCommandResponse(
      * @param keyboard клавиатура
      * @return ответ команды
      */
-    @NonNull
-    public static TelegramCommandResponse endSessionWithKeyboard(
-            @NonNull String text, @NonNull ReplyKeyboardMarkup keyboard) {
+    public static TelegramCommandResponse endSessionWithKeyboard(String text, ReplyKeyboardMarkup keyboard) {
         return TelegramCommandResponse.builder()
                 .text(text)
                 .keyboard(keyboard)

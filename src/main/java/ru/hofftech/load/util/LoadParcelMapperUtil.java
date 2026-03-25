@@ -1,7 +1,7 @@
 package ru.hofftech.load.util;
 
 import lombok.experimental.UtilityClass;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.load.model.core.LoadResult;
 import ru.hofftech.load.model.core.LoadStrategyParcelInvalid;
@@ -10,12 +10,16 @@ import ru.hofftech.load.model.dto.LoadParcelOutputResultDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
 import ru.hofftech.shared.util.MapperUtil;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Утилитный класс для преобразования между сущностями и DTO в модуле загрузки.
  */
 @UtilityClass
+@NullMarked
 public class LoadParcelMapperUtil {
 
     /**
@@ -48,7 +52,6 @@ public class LoadParcelMapperUtil {
      * @param importParcelInvalids список с информацией об ошибках (может быть null)
      * @return список DTO (не может быть null)
      */
-    @NonNull
     public List<LoadParcelInvalidDto> invalidParcelsToDto(
             @Nullable List<LoadStrategyParcelInvalid> importParcelInvalids) {
         if (importParcelInvalids == null) {
@@ -56,7 +59,8 @@ public class LoadParcelMapperUtil {
         }
         return importParcelInvalids.stream()
                 .map(LoadParcelMapperUtil::invalidParcelToDto)
-                .toList();
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**

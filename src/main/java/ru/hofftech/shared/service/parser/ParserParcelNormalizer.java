@@ -1,7 +1,7 @@
 package ru.hofftech.shared.service.parser;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
@@ -10,6 +10,7 @@ import java.util.List;
  * Выполняет обрезку пробелов справа и выравнивание до одинаковой длины.
  */
 @Slf4j
+@NullMarked
 public class ParserParcelNormalizer {
 
     /**
@@ -20,8 +21,7 @@ public class ParserParcelNormalizer {
      * @param lines исходные строки (не может быть null)
      * @return нормализованные строки (не может быть null)
      */
-    @NonNull
-    public List<String> normalize(@NonNull List<String> lines) {
+    public List<String> normalize(List<String> lines) {
         log.debug("Нормализация посылки из {} строк", lines.size());
 
         // Шаг 1: обрезаем пробелы справа
@@ -41,8 +41,7 @@ public class ParserParcelNormalizer {
      * @param length требуемая длина
      * @return дополненная строка (не может быть null)
      */
-    @NonNull
-    private String padRight(@NonNull String text, int length) {
+    private String padRight(String text, int length) {
         if (text.length() >= length) {
             return text;
         }

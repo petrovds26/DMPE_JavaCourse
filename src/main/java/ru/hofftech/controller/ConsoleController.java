@@ -2,7 +2,7 @@ package ru.hofftech.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.slf4j.MDC;
 import ru.hofftech.shared.service.command.console.ConsoleCommand;
 
@@ -17,12 +17,12 @@ import java.util.stream.Collectors;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class ConsoleController {
 
     private static final String MDC_INPUT_KEY = "input";
     private static final String MDC_COMMAND_NAME_KEY = "commandName";
 
-    @NonNull
     private final List<ConsoleCommand> consoleCommands;
 
     /**
@@ -55,7 +55,7 @@ public class ConsoleController {
      * @param input строка ввода от пользователя
      * @return true если команда найдена и выполнена, false если команда не найдена
      */
-    private boolean processCommand(@NonNull String input) {
+    private boolean processCommand(String input) {
         try {
             MDC.put(MDC_INPUT_KEY, input);
 

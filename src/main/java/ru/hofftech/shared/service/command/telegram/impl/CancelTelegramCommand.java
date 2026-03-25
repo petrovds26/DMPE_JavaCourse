@@ -1,7 +1,7 @@
 package ru.hofftech.shared.service.command.telegram.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.hofftech.shared.model.core.telegram.TelegramCommandResponse;
@@ -14,6 +14,7 @@ import ru.hofftech.shared.util.TelegramKeyboardUtil;
  * Telegram команда для отмены текущей операции.
  * Очищает сессию пользователя и возвращает главное меню.
  */
+@NullMarked
 @Slf4j
 public class CancelTelegramCommand implements TelegramCommand {
 
@@ -21,7 +22,6 @@ public class CancelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public TelegramCommandType getType() {
         return TelegramCommandType.CANCEL;
     }
@@ -30,7 +30,7 @@ public class CancelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean isCommandStart(@NonNull String text) {
+    public boolean isCommandStart(String text) {
         return text.equals(getType().getCommand());
     }
 
@@ -38,7 +38,7 @@ public class CancelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean canHandle(@NonNull Update update, @Nullable TelegramUserSession session) {
+    public boolean canHandle(Update update, @Nullable TelegramUserSession session) {
         String text = getMessageText(update);
         return text != null && isCommandStart(text);
     }
@@ -47,8 +47,7 @@ public class CancelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
-    public TelegramCommandResponse execute(@NonNull Update update, @Nullable TelegramUserSession session) {
+    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session) {
         return TelegramCommandResponse.endSessionWithKeyboard(
                 "Операция отменена. Выберите команду:", TelegramKeyboardUtil.createCommandsKeyboard());
     }
@@ -60,7 +59,7 @@ public class CancelTelegramCommand implements TelegramCommand {
      * @return текст сообщения или null, если его нет
      */
     @Nullable
-    private String getMessageText(@NonNull Update update) {
+    private String getMessageText(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             return update.getMessage().getText();
         } else if (update.hasCallbackQuery()) {

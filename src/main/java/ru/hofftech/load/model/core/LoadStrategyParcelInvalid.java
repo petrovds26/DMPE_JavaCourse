@@ -1,7 +1,7 @@
 package ru.hofftech.load.model.core;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.load.model.enums.LoadStrategyParcelInvalidCauseType;
 import ru.hofftech.shared.model.core.Parcel;
 
@@ -14,5 +14,5 @@ import ru.hofftech.shared.model.core.Parcel;
  *
  */
 @Builder
-public record LoadStrategyParcelInvalid(
-        @NonNull Parcel parcel, @NonNull LoadStrategyParcelInvalidCauseType causeType, @NonNull String cause) {}
+@NullMarked
+public record LoadStrategyParcelInvalid(Parcel parcel, LoadStrategyParcelInvalidCauseType causeType, String cause) {}

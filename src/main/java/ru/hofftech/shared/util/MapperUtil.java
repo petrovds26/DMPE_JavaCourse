@@ -1,7 +1,7 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
@@ -13,13 +13,17 @@ import ru.hofftech.shared.service.parser.ParserParcelBuilder;
 import ru.hofftech.shared.service.parser.ParserParcelNormalizer;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Утилитный класс для преобразования между сущностями и DTO.
  * Содержит методы для конвертации Parcel, Machine, PlacedParcel
  * в соответствующие DTO и обратно.
  */
+@NullMarked
 @UtilityClass
 public class MapperUtil {
 
@@ -65,12 +69,14 @@ public class MapperUtil {
      * @param machines список машин (может быть null)
      * @return список DTO (не может быть null)
      */
-    @NonNull
     public List<MachineDto> machinesToDto(@Nullable List<Machine> machines) {
         if (machines == null) {
             return List.of();
         }
-        return machines.stream().map(MapperUtil::machineToDto).toList();
+        return machines.stream()
+                .map(MapperUtil::machineToDto)
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -127,12 +133,14 @@ public class MapperUtil {
      * @param dtos список DTO размещённых посылок (может быть null)
      * @return список сущностей (не может быть null)
      */
-    @NonNull
     public List<PlacedParcel> dtoToPlacedParcels(@Nullable List<PlacedParcelDto> dtos) {
         if (dtos == null) {
             return List.of();
         }
-        return dtos.stream().map(MapperUtil::dtoToPlacedParcel).toList();
+        return dtos.stream()
+                .map(MapperUtil::dtoToPlacedParcel)
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -186,12 +194,14 @@ public class MapperUtil {
      * @param dtos список DTO посылок (может быть null)
      * @return список сущностей (не может быть null)
      */
-    @NonNull
     public List<Parcel> dtoToParcels(@Nullable List<ParcelDto> dtos) {
         if (dtos == null) {
             return List.of();
         }
-        return dtos.stream().map(MapperUtil::dtoToParcel).toList();
+        return dtos.stream()
+                .map(MapperUtil::dtoToParcel)
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -202,8 +212,7 @@ public class MapperUtil {
      * @param placedParcels список размещённых посылок (не может быть null)
      * @return grid машины (не может быть null)
      */
-    private char @NonNull [] @NonNull [] createGridFromPlacedParcels(
-            int width, int height, @NonNull List<PlacedParcel> placedParcels) {
+    private char[][] createGridFromPlacedParcels(int width, int height, List<PlacedParcel> placedParcels) {
         char[][] grid = new char[height][width];
 
         // Заполняем пустотой
@@ -237,12 +246,14 @@ public class MapperUtil {
      * @param dtos список DTO машин (может быть null)
      * @return список сущностей (не может быть null)
      */
-    @NonNull
     public List<Machine> dtoToMachines(@Nullable List<MachineDto> dtos) {
         if (dtos == null) {
             return List.of();
         }
-        return dtos.stream().map(MapperUtil::dtoToMachine).toList();
+        return dtos.stream()
+                .map(MapperUtil::dtoToMachine)
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 
     /**
@@ -251,8 +262,10 @@ public class MapperUtil {
      * @param machine машина (не может быть null)
      * @return список DTO размещённых посылок (не может быть null)
      */
-    @NonNull
-    private List<PlacedParcelDto> convertPlacedParcels(@NonNull Machine machine) {
-        return machine.parcels().stream().map(MapperUtil::placedParcelToDto).toList();
+    private List<PlacedParcelDto> convertPlacedParcels(Machine machine) {
+        return machine.parcels().stream()
+                .map(MapperUtil::placedParcelToDto)
+                .filter(Objects::nonNull)
+                .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList));
     }
 }

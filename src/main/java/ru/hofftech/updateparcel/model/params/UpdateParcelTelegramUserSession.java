@@ -3,7 +3,7 @@ package ru.hofftech.updateparcel.model.params;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.With;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
 import ru.hofftech.shared.model.params.TelegramUserSession;
@@ -15,12 +15,12 @@ import ru.hofftech.updateparcel.enums.UpdateParcelTelegramStep;
 @Getter
 @Builder
 @With
+@NullMarked
 // Рекорд не может быть создан с интерфейсом
 @SuppressWarnings("ClassCanBeRecord")
 public class UpdateParcelTelegramUserSession implements TelegramUserSession {
     private final long chatId;
 
-    @NonNull
     private final UpdateParcelTelegramStep step;
 
     @Nullable
@@ -38,7 +38,6 @@ public class UpdateParcelTelegramUserSession implements TelegramUserSession {
      * @param chatId идентификатор чата
      * @return новая сессия
      */
-    @NonNull
     public static UpdateParcelTelegramUserSession start(long chatId) {
         return UpdateParcelTelegramUserSession.builder()
                 .chatId(chatId)

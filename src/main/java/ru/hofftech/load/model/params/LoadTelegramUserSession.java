@@ -3,7 +3,7 @@ package ru.hofftech.load.model.params;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.With;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.load.model.enums.LoadStrategyType;
 import ru.hofftech.load.model.enums.LoadTelegramStep;
@@ -23,10 +23,10 @@ import java.util.List;
 @With
 // Рекорд не может быть создан с интерфейсом
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class LoadTelegramUserSession implements TelegramUserSession {
     private final long chatId;
 
-    @NonNull
     private final LoadTelegramStep step;
 
     @Nullable
@@ -44,7 +44,6 @@ public class LoadTelegramUserSession implements TelegramUserSession {
      * @param chatId идентификатор чата
      * @return новая сессия
      */
-    @NonNull
     public static LoadTelegramUserSession start(long chatId) {
         return LoadTelegramUserSession.builder()
                 .chatId(chatId)

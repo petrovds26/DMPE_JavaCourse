@@ -2,7 +2,7 @@ package ru.hofftech.shared.model.core;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -16,9 +16,10 @@ import java.util.Objects;
  * Посылка представляет собой фигуру, составленную из клеток,
  * заполненных определённым символом.
  */
+@NullMarked
 @Builder
 public record Parcel(
-        boolean[][] grid, @Getter @NonNull String name, @Getter char symbol, @Getter int height, @Getter int width) {
+        boolean[][] grid, @Getter String name, @Getter char symbol, @Getter int height, @Getter int width) {
 
     /**
      * Возвращает строковое представление посылки в виде списка строк.
@@ -26,7 +27,6 @@ public record Parcel(
      *
      * @return список строк посылки
      */
-    @NonNull
     public List<String> getLines() {
         List<String> lines = new ArrayList<>();
         for (int i = 0; i < height; i++) {
@@ -51,7 +51,6 @@ public record Parcel(
      *
      * @return строковое представление посылки
      */
-    @NonNull
     public String getForm() {
         List<String> lines = new ArrayList<>(getLines());
         Collections.reverse(lines);
@@ -64,7 +63,6 @@ public record Parcel(
      * @return строковое представление посылки
      */
     @Override
-    @NonNull
     public String toString() {
         return String.join("\n", getForm());
     }

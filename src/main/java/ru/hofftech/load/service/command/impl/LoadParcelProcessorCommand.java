@@ -2,7 +2,7 @@ package ru.hofftech.load.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.load.model.core.LoadResult;
 import ru.hofftech.load.model.params.LoadProcessorCommandParams;
 import ru.hofftech.load.service.loader.strategy.LoadStrategy;
@@ -22,18 +22,17 @@ import java.util.List;
 @RequiredArgsConstructor
 // Рекорд не может быть создан с интерфейсом
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class LoadParcelProcessorCommand implements ProcessorCommand<LoadProcessorCommandParams> {
-    @NonNull
     private final LoadStrategy strategy;
 
-    @NonNull
     private final LoadPrepareOutputResult loadPrepareOutputResult;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ProcessorCommandResult execute(@NonNull LoadProcessorCommandParams loadParams) {
+    public ProcessorCommandResult execute(LoadProcessorCommandParams loadParams) {
         // Запуск расчета загрузки машин
         log.debug(
                 "Начало упаковки {} посылок по алгоритму: {}",

@@ -1,15 +1,16 @@
 package ru.hofftech.shared.model.core;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Информация о размещённой в машине посылке.
  * Содержит саму посылку и её координаты левого нижнего угла.
  */
+@NullMarked
 @Builder
 public record PlacedParcel(
-        @NonNull Parcel parcel, // Сама посылка
+        Parcel parcel, // Сама посылка
         int x, // Координата X (от 0)
         int y // Координата Y (от 0)
         ) {

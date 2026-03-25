@@ -1,6 +1,6 @@
 package ru.hofftech.shared.repository;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Parcel;
 
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import java.util.Optional;
  * Репозиторий для хранения посылок в памяти.
  * Реализован на основе HashMap, обеспечивает потокобезопасность через копирование коллекций.
  */
+@NullMarked
 public class ParcelRepository {
-    @NonNull
     private final Map<String, Parcel> parcels;
 
     /**
@@ -28,7 +28,7 @@ public class ParcelRepository {
      *
      * @param parcel посылка для добавления (не может быть null)
      */
-    public void insert(@NonNull Parcel parcel) {
+    public void insert(Parcel parcel) {
         if (!parcels.containsKey(parcel.name())) {
             parcels.put(parcel.name(), parcel);
         }
@@ -39,7 +39,7 @@ public class ParcelRepository {
      *
      * @param parcel посылка с обновлёнными данными (не может быть null)
      */
-    public void update(@NonNull Parcel parcel) {
+    public void update(Parcel parcel) {
         if (parcels.containsKey(parcel.name())) {
             parcels.put(parcel.name(), parcel);
         }
@@ -50,7 +50,7 @@ public class ParcelRepository {
      *
      * @param name название посылки (не может быть null)
      */
-    public void delete(@NonNull String name) {
+    public void delete(String name) {
         parcels.remove(name);
     }
 
@@ -60,8 +60,7 @@ public class ParcelRepository {
      * @param name название посылки (не может быть null)
      * @return Optional с найденной посылкой (не может быть null)
      */
-    @NonNull
-    public Optional<Parcel> find(@NonNull String name) {
+    public Optional<Parcel> find(String name) {
         if (parcels.containsKey(name)) {
             return Optional.of(parcels.get(name));
         }
@@ -73,7 +72,6 @@ public class ParcelRepository {
      *
      * @return список посылок (не может быть null)
      */
-    @NonNull
     public List<Parcel> findAll() {
         return List.copyOf(parcels.values());
     }

@@ -1,7 +1,7 @@
 package ru.hofftech.shared.model.dto;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * DTO для создания/обновления посылки.
@@ -11,5 +11,6 @@ import org.jspecify.annotations.NonNull;
  * @param form   строковое представление формы посылки (не может быть null)
  * @param symbol символ посылки (не может быть null)
  */
+@NullMarked
 @Builder
-public record ParcelFormDto(@NonNull String name, @NonNull String form, @NonNull String symbol) {}
+public record ParcelFormDto(String name, String form, String symbol) {}

@@ -3,7 +3,7 @@ package ru.hofftech.deleteparcel.model.params;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.With;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.deleteparcel.enums.DeleteParcelTelegramStep;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
@@ -17,10 +17,10 @@ import ru.hofftech.shared.model.params.TelegramUserSession;
 @With
 // Рекорд не может быть создан с интерфейсом
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class DeleteParcelTelegramUserSession implements TelegramUserSession {
     private final long chatId;
 
-    @NonNull
     private final DeleteParcelTelegramStep step;
 
     @Nullable
@@ -32,7 +32,6 @@ public class DeleteParcelTelegramUserSession implements TelegramUserSession {
      * @param chatId идентификатор чата
      * @return новая сессия
      */
-    @NonNull
     public static DeleteParcelTelegramUserSession start(long chatId) {
         return DeleteParcelTelegramUserSession.builder()
                 .chatId(chatId)

@@ -1,7 +1,7 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
@@ -13,6 +13,7 @@ import java.util.List;
  * Утилита для создания клавиатур Telegram.
  * Предоставляет методы для создания различных типов клавиатур.
  */
+@NullMarked
 @UtilityClass
 public class TelegramKeyboardUtil {
 
@@ -22,7 +23,6 @@ public class TelegramKeyboardUtil {
      *
      * @return клавиатура с командами (не может быть null)
      */
-    @NonNull
     public static ReplyKeyboardMarkup createCommandsKeyboard() {
         ReplyKeyboardMarkup keyboardMarkup = new ReplyKeyboardMarkup();
         keyboardMarkup.setResizeKeyboard(true);

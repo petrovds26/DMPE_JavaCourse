@@ -2,7 +2,7 @@ package ru.hofftech.unload.service.parser.source;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.service.parser.ParserMachineProcessor;
 import ru.hofftech.unload.model.enums.UnloadInputMachineType;
@@ -14,11 +14,11 @@ import java.util.stream.Collectors;
  * Сервис для управления парсерами посылок в зависимости от типа ввода.
  */
 @Slf4j
+@NullMarked
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
 public class UnloadParserMachineService {
 
-    @NonNull
     private final Map<UnloadInputMachineType, ParserMachineProcessor<String>> parsers;
 
     /**
@@ -28,7 +28,7 @@ public class UnloadParserMachineService {
      * @return парсер или null, если не найден
      */
     @Nullable
-    public ParserMachineProcessor<String> getParser(@NonNull UnloadInputMachineType type) {
+    public ParserMachineProcessor<String> getParser(UnloadInputMachineType type) {
         if (supports(type)) {
             return parsers.get(type);
         }
@@ -41,7 +41,7 @@ public class UnloadParserMachineService {
      * @param type тип ввода (не может быть null)
      * @return true если поддерживается
      */
-    private boolean supports(@NonNull UnloadInputMachineType type) {
+    private boolean supports(UnloadInputMachineType type) {
         return parsers.containsKey(type);
     }
 
@@ -50,7 +50,6 @@ public class UnloadParserMachineService {
      *
      * @return строка с описанием (не может быть null)
      */
-    @NonNull
     public String getAvailableTypesDescription() {
         return parsers.keySet().stream()
                 .map(type -> String.format("%d - %s", type.getId(), type.getDescription()))

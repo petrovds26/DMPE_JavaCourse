@@ -2,7 +2,7 @@ package ru.hofftech.unload.service.output.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
 import ru.hofftech.unload.model.core.UnloadResult;
@@ -15,6 +15,7 @@ import java.util.List;
  * Формат: посылки разделены пустыми строками
  */
 @Slf4j
+@NullMarked
 @RequiredArgsConstructor
 public class UnloadPrepareOutputResultTxtSimple implements UnloadPrepareOutputResult {
 
@@ -22,18 +23,17 @@ public class UnloadPrepareOutputResultTxtSimple implements UnloadPrepareOutputRe
      * {@inheritDoc}
      */
     @Override
-    public ProcessorCommandResult output(@NonNull UnloadResult result) {
+    public ProcessorCommandResult output(UnloadResult result) {
         String txt = formatParcelsToText(result.parcels());
 
-        return ProcessorCommandResult.builder().success(true).message(txt).build();
+        return ProcessorCommandResult.createSuccess(txt);
     }
 
     /**
      * Форматирует список посылок в текстовый формат
      * Посылки разделяются пустыми строками
      */
-    @NonNull
-    private String formatParcelsToText(@NonNull List<Parcel> parcels) {
+    private String formatParcelsToText(List<Parcel> parcels) {
         if (parcels.isEmpty()) {
             return "";
         }

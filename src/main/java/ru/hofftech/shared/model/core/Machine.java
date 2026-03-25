@@ -1,7 +1,7 @@
 package ru.hofftech.shared.model.core;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -20,10 +20,11 @@ import java.util.Objects;
  * @param height высота машины
  *
  */
+@NullMarked
 @Builder
 public record Machine(
         char[][] grid, // Текущее состояние для быстрой проверки
-        @NonNull List<PlacedParcel> parcels, // Список размещённых посылок с координатами
+        List<PlacedParcel> parcels, // Список размещённых посылок с координатами
         int width,
         int height) {
     public static final int DEFAULT_WIDTH = 6;
@@ -52,7 +53,6 @@ public record Machine(
      *
      * @return список строк, представляющих сетку машины (не может быть null)
      */
-    @NonNull
     public List<String> getLines() {
         List<String> lines = new ArrayList<>();
         for (int i = height - 1; i >= 0; i--) {
@@ -74,7 +74,7 @@ public record Machine(
      * @param startY координата Y левого нижнего угла
      * @return true если место занято или выходит за границы
      */
-    public boolean isPlaceOccupied(@NonNull Parcel parcel, int startX, int startY) {
+    public boolean isPlaceOccupied(Parcel parcel, int startX, int startY) {
         int parcelHeight = parcel.getHeight();
         int parcelWidth = parcel.getWidth();
 
@@ -105,8 +105,7 @@ public record Machine(
      * @return новая машина с размещённой посылкой (не может быть null)
      * @throws IllegalArgumentException если место занято или выходит за границы
      */
-    @NonNull
-    public Machine placeParcel(@NonNull Parcel parcel, int startX, int startY) {
+    public Machine placeParcel(Parcel parcel, int startX, int startY) {
         if (isPlaceOccupied(parcel, startX, startY)) {
             throw new IllegalArgumentException("Невозможно разместить посылку в указанной позиции");
         }
@@ -148,7 +147,7 @@ public record Machine(
      * @param parcel посылка для проверки (не может быть null)
      * @return true если посылка по размерам помещается в машину
      */
-    public boolean fitsInMachine(@NonNull Parcel parcel) {
+    public boolean fitsInMachine(Parcel parcel) {
         return parcel.getWidth() <= width() && parcel.getHeight() <= height();
     }
 
@@ -158,7 +157,6 @@ public record Machine(
      * @return строковое представление машины (не может быть null)
      */
     @Override
-    @NonNull
     public String toString() {
         return String.format("Machine{parcels=%d, size=%dx%d}", parcels.size(), width, height);
     }
@@ -204,7 +202,7 @@ public record Machine(
      * @param height высота сетки
      * @return пустая сетка (не может быть null)
      */
-    private static char @NonNull [] @NonNull [] createEmptyGrid(int width, int height) {
+    private static char[][] createEmptyGrid(int width, int height) {
         char[][] grid = new char[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -219,7 +217,7 @@ public record Machine(
      *
      * @return копия сетки (не может быть null)
      */
-    private char @NonNull [] @NonNull [] copyGrid() {
+    private char[][] copyGrid() {
         char[][] copy = new char[height][width];
         for (int i = 0; i < height; i++) {
             System.arraycopy(grid[i], 0, copy[i], 0, width);

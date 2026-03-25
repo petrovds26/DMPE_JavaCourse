@@ -2,7 +2,7 @@ package ru.hofftech.unload.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.ParserMachineProcessorResult;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
@@ -30,32 +30,26 @@ import java.util.List;
  *
  */
 @Slf4j
+@NullMarked
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
 public class UnloadConsoleCommand implements ConsoleCommand {
-    @NonNull
     private final ParserParams parserParams;
 
-    @NonNull
     private final InputFilePathValidator inputFilePathValidator;
 
-    @NonNull
     private final OutputFilePathValidator outputFilePathValidator;
 
-    @NonNull
     private final UnloadParserMachineService parserMachineService;
 
-    @NonNull
     private final UnloadOutputPrepareService outputPrepareService;
 
-    @NonNull
     private final FileSaveService fileSaveService;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getName() {
         return ConsoleCommandType.UNLOAD.toString();
     }
@@ -64,7 +58,6 @@ public class UnloadConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getDescription() {
         return "Разгрузка машин. Используйте --help для справки.";
     }
@@ -73,7 +66,7 @@ public class UnloadConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean matches(@NonNull String input) {
+    public boolean matches(String input) {
         return input.trim().startsWith(ConsoleCommandType.UNLOAD.toString());
     }
 
@@ -81,7 +74,7 @@ public class UnloadConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(@NonNull String input) {
+    public void execute(String input) {
 
         UnloadConsoleCommandParams params = new UnloadConsoleCommandParams();
         if (!parserParams.parserCommandLine(params, input)) {
@@ -156,7 +149,7 @@ public class UnloadConsoleCommand implements ConsoleCommand {
      * @return тип выходного формата или null, если не удалось определить
      */
     @Nullable
-    private UnloadOutputType defineOutputType(@NonNull UnloadConsoleCommandParams params) {
+    private UnloadOutputType defineOutputType(UnloadConsoleCommandParams params) {
         UnloadOutputType loadOutputType = UnloadOutputType.fromString(params.getOutputType());
         if (loadOutputType == null) {
             log.error("Ошибки валидации параметра Выходной файл. Тип формата не найден");
@@ -166,13 +159,13 @@ public class UnloadConsoleCommand implements ConsoleCommand {
         FileType fileType = loadOutputType.loadOutputType2FileType();
 
         if (fileType == null) {
-            if (params.getOutputFile() != null && !params.getOutputFile().isBlank()) {
+            if (!params.getOutputFile().isBlank()) {
                 log.error(
                         "Ошибки валидации параметра Выходной файл: Указан выходной файл, но сохранение не предусматривается");
                 return null;
             }
         } else {
-            if (params.getOutputFile() == null || params.getOutputFile().isBlank()) {
+            if (params.getOutputFile().isBlank()) {
                 log.error("Ошибки валидации параметра Выходной файл: Файл не указан");
                 return null;
             }
@@ -194,12 +187,7 @@ public class UnloadConsoleCommand implements ConsoleCommand {
      * @return тип входных данных или null, если не удалось определить
      */
     @Nullable
-    private UnloadInputMachineType defineInputParcelType(@NonNull UnloadConsoleCommandParams params) {
-        if (params.getInputFile() == null) {
-            log.error("Ошибки валидации. Не указан входной файл");
-            return null;
-        }
-
+    private UnloadInputMachineType defineInputParcelType(UnloadConsoleCommandParams params) {
         List<String> inputErrors = inputFilePathValidator.validate(params.getInputFile());
         if (!inputErrors.isEmpty()) {
             log.error("Ошибки валидации параметра Входной файл: {}", String.join("; ", inputErrors));

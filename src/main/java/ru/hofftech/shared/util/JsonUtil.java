@@ -2,12 +2,14 @@ package ru.hofftech.shared.util;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.experimental.UtilityClass;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.exception.JsonUtilException;
 
@@ -16,9 +18,9 @@ import ru.hofftech.shared.exception.JsonUtilException;
  * Предоставляет методы сериализации и десериализации объектов
  * с предварительно настроенным ObjectMapper.
  */
+@NullMarked
 @UtilityClass
 public class JsonUtil {
-    @NonNull
     private static final ObjectMapper objectMapper;
 
     static {
@@ -33,6 +35,23 @@ public class JsonUtil {
     }
 
     /**
+     * Десериализует JSON-строку в объект указанного типа с поддержкой дженериков.
+     *
+     * @param json     JSON-строка
+     * @param <T>      тип целевого объекта
+     * @return целевой объект
+     * @throws JsonUtilException если произошла ошибка десериализации
+     */
+    @NonNull
+    public static <T> T fromJson(String json, TypeReference<T> typeReference) {
+        try {
+            return objectMapper.readValue(json, typeReference);
+        } catch (JsonProcessingException e) {
+            throw new JsonUtilException("Ошибка при десериализации JSON", e);
+        }
+    }
+
+    /**
      * Десериализует JSON-строку в объект указанного класса.
      *
      * @param json     JSON-строка
@@ -42,7 +61,7 @@ public class JsonUtil {
      * @throws JsonUtilException если произошла ошибка десериализации
      */
     @NonNull
-    public static <T> T fromJson(@NonNull String json, @NonNull Class<T> classOfT) {
+    public static <T> T fromJson(String json, Class<T> classOfT) {
         try {
             return objectMapper.readValue(json, classOfT);
         } catch (JsonProcessingException e) {
@@ -57,7 +76,6 @@ public class JsonUtil {
      * @return JSON-строка (не может быть null)
      * @throws JsonUtilException если произошла ошибка сериализации
      */
-    @NonNull
     public static String toJson(@Nullable Object src) {
         try {
             return objectMapper.writeValueAsString(src);
@@ -73,7 +91,7 @@ public class JsonUtil {
      * @return массив байтов (не может быть null)
      * @throws JsonUtilException если произошла ошибка сериализации
      */
-    public static byte @NonNull [] writeValueAsBytes(@Nullable Object src) {
+    public static byte[] writeValueAsBytes(@Nullable Object src) {
         try {
             return objectMapper.writeValueAsBytes(src);
         } catch (JsonProcessingException e) {

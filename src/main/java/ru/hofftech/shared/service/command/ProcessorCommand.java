@@ -1,11 +1,12 @@
 package ru.hofftech.shared.service.command;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
 
 /**
  * Интерфейс для процессорных команд (бизнес-логика).
  */
+@NullMarked
 public interface ProcessorCommand<T> {
 
     /**
@@ -13,6 +14,5 @@ public interface ProcessorCommand<T> {
      *
      * @return результат выполнения
      */
-    @NonNull
     ProcessorCommandResult execute(T source);
 }

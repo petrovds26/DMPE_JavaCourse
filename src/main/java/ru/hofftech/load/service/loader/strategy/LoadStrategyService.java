@@ -2,7 +2,7 @@ package ru.hofftech.load.service.loader.strategy;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @RequiredArgsConstructor
+@NullMarked
 @SuppressWarnings("ClassCanBeRecord")
 public class LoadStrategyService {
-    @NonNull
     private final List<LoadStrategy> strategies;
 
     /**
@@ -38,7 +38,6 @@ public class LoadStrategyService {
      *
      * @return строка с описанием формата "ID - название" (не может быть null)
      */
-    @NonNull
     public String getAvailableStrategiesDescription() {
         return strategies.stream()
                 .map(strategy ->

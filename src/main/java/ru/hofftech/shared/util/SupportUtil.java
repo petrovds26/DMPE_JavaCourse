@@ -1,21 +1,21 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 
 /**
  * Утилита для получения отладочной информации о проверке опоры
  */
+@NullMarked
 @UtilityClass
 public class SupportUtil {
 
     /**
      * Возвращает информацию об опоре для отладки
      */
-    @NonNull
-    public String getSupportInfo(@NonNull Machine machine, @NonNull Parcel parcel, int x, int y) {
+    public String getSupportInfo(Machine machine, Parcel parcel, int x, int y) {
         if (y == 0) {
             return "на полу";
         }

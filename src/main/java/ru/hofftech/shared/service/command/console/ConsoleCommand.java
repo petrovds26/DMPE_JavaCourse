@@ -1,10 +1,11 @@
 package ru.hofftech.shared.service.command.console;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Интерфейс для всех консольных команд
  */
+@NullMarked
 public interface ConsoleCommand {
 
     /**
@@ -12,7 +13,6 @@ public interface ConsoleCommand {
      *
      * @return название команды
      */
-    @NonNull
     String getName();
 
     /**
@@ -20,7 +20,6 @@ public interface ConsoleCommand {
      *
      * @return описание команды
      */
-    @NonNull
     String getDescription();
 
     /**
@@ -29,12 +28,12 @@ public interface ConsoleCommand {
      * @param input строка ввода от пользователя
      * @return true, если команда может обработать этот ввод
      */
-    boolean matches(@NonNull String input);
+    boolean matches(String input);
 
     /**
      * Выполняет команду.
      *
      * @param input полная строка ввода от пользователя
      */
-    void execute(@NonNull String input);
+    void execute(String input);
 }

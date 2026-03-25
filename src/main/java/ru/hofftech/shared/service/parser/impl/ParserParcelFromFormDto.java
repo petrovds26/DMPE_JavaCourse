@@ -2,7 +2,7 @@ package ru.hofftech.shared.service.parser.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.core.ParserParcelProcessorResult;
@@ -22,18 +22,15 @@ import java.util.List;
  */
 @Slf4j
 @RequiredArgsConstructor
+@NullMarked
 @SuppressWarnings("ClassCanBeRecord")
 public class ParserParcelFromFormDto implements ParserParcelProcessor<List<ParcelFormDto>> {
-    @NonNull
     private final ParcelListStringValidator stringValidator;
 
-    @NonNull
     private final ParserParcelNormalizer normalizer;
 
-    @NonNull
     private final ParserParcelBuilder parserParcelBuilder;
 
-    @NonNull
     private final ParcelGridValidator gridValidator;
 
     /**
@@ -43,7 +40,7 @@ public class ParserParcelFromFormDto implements ParserParcelProcessor<List<Parce
      * @param parcelFormDtoList список DTO с данными посылок (не может быть null)
      * @return результат трансформации со всеми успешными и ошибочными элементами (не может быть null)
      */
-    public @NonNull ParserParcelProcessorResult transform(@NonNull List<ParcelFormDto> parcelFormDtoList) {
+    public ParserParcelProcessorResult transform(List<ParcelFormDto> parcelFormDtoList) {
         List<Parcel> successfulParcels = new ArrayList<>();
         List<String> allErrors = new ArrayList<>();
 
@@ -74,7 +71,7 @@ public class ParserParcelFromFormDto implements ParserParcelProcessor<List<Parce
      * @param name название для проверки (может быть null)
      * @return результат валидации (не может быть null)
      */
-    public @NonNull ParserParcelProcessorResult validateName(@Nullable String name) {
+    public ParserParcelProcessorResult validateName(@Nullable String name) {
         if (name == null || name.isBlank()) {
             return createDefaultErrorResult("Название посылки не указано");
         }
@@ -87,7 +84,7 @@ public class ParserParcelFromFormDto implements ParserParcelProcessor<List<Parce
      * @param symbol символ для проверки (может быть null)
      * @return результат валидации (не может быть null)
      */
-    public @NonNull ParserParcelProcessorResult validateSymbol(@Nullable String symbol) {
+    public ParserParcelProcessorResult validateSymbol(@Nullable String symbol) {
         if (symbol == null || symbol.length() != 1) {
             return createDefaultErrorResult("Символ должен быть одним символом");
         }
@@ -105,7 +102,7 @@ public class ParserParcelFromFormDto implements ParserParcelProcessor<List<Parce
      * @param parcelFormDto DTO с данными посылки (не может быть null)
      * @return результат трансформации для одного элемента (не может быть null)
      */
-    private @NonNull ParserParcelProcessorResult transformSingle(@NonNull ParcelFormDto parcelFormDto) {
+    private ParserParcelProcessorResult transformSingle(ParcelFormDto parcelFormDto) {
         // Шаг 1: Валидация названия
         ParserParcelProcessorResult resultValidateName = validateName(parcelFormDto.name());
         if (resultValidateName.hasErrors()) {

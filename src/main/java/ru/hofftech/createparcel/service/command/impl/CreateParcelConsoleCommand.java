@@ -2,7 +2,7 @@ package ru.hofftech.createparcel.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.createparcel.model.params.CreateParcelConsoleCommandParams;
 import ru.hofftech.shared.model.core.ParserParcelProcessorResult;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
@@ -23,21 +23,18 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class CreateParcelConsoleCommand implements ConsoleCommand {
-    @NonNull
     private final ParserParams parserParams;
 
-    @NonNull
     private final ParserParcelFromFormDto parserParcelProcessor;
 
-    @NonNull
     private final ParcelRepository parcelRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getName() {
         return ConsoleCommandType.CREATE_PARCEL.toString();
     }
@@ -46,7 +43,6 @@ public class CreateParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getDescription() {
         return "Создание посылок. Используйте --help для справки.";
     }
@@ -55,7 +51,7 @@ public class CreateParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean matches(@NonNull String input) {
+    public boolean matches(String input) {
         return input.trim().startsWith(ConsoleCommandType.CREATE_PARCEL + " ");
     }
 
@@ -63,15 +59,10 @@ public class CreateParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(@NonNull String input) {
+    public void execute(String input) {
 
         CreateParcelConsoleCommandParams params = new CreateParcelConsoleCommandParams();
         if (!parserParams.parserCommandLine(params, input)) {
-            return;
-        }
-
-        if (params.getForm() == null || params.getName() == null || params.getSymbol() == null) {
-            log.warn("Не указаны обязательные параметры.");
             return;
         }
 
@@ -81,9 +72,6 @@ public class CreateParcelConsoleCommand implements ConsoleCommand {
                 .symbol(params.getSymbol())
                 .build();
 
-        if (parcelFormDto == null) {
-            return;
-        }
         log.debug("Создание посылки: {} {} {}", parcelFormDto.name(), parcelFormDto.form(), parcelFormDto.symbol());
 
         ParserParcelProcessorResult processorResult = parserParcelProcessor.transform(List.of(parcelFormDto));

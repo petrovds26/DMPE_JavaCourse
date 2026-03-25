@@ -1,12 +1,14 @@
 package ru.hofftech.load.model.dto;
 
 import lombok.Builder;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.dto.MachineDto;
 
 import java.util.List;
 
 @Builder
+@NullMarked
 public record LoadParcelOutputResultDto(
         @Nullable
                 List<LoadParcelInvalidDto>

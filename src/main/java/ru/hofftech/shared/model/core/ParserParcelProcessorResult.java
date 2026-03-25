@@ -1,7 +1,7 @@
 package ru.hofftech.shared.model.core;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
@@ -12,12 +12,13 @@ import java.util.List;
  * @param errors описание ошибок (не может быть null, пустой список если ошибок нет)
  *
  */
+@NullMarked
 @Builder
 public record ParserParcelProcessorResult(
         // Посылки, которые удалось распарсить
-        @NonNull List<Parcel> parcels,
+        List<Parcel> parcels,
         // Описание ошибки при трансформации посылки
-        @NonNull List<String> errors) {
+        List<String> errors) {
 
     /**
      * Есть ли ошибки при распознавании посылок
@@ -33,7 +34,6 @@ public record ParserParcelProcessorResult(
      *
      * @return строка с ошибками, разделёнными переносом строки (не может быть null)
      */
-    @NonNull
     public String getErrorsAsString() {
         return String.join("\n", errors);
     }

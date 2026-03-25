@@ -1,7 +1,7 @@
 package ru.hofftech.shared.service.parser;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Parcel;
 
 import java.util.List;
@@ -10,6 +10,7 @@ import java.util.List;
  * Отвечает за создание Parcel из нормализованных строк.
  */
 @Slf4j
+@NullMarked
 public class ParserParcelBuilder {
 
     /**
@@ -19,8 +20,7 @@ public class ParserParcelBuilder {
      * @param normalizedLines нормализованные строки формы (не может быть null)
      * @return созданная посылка (не может быть null)
      */
-    @NonNull
-    public Parcel buildFromLines(@NonNull String name, @NonNull List<String> normalizedLines) {
+    public Parcel buildFromLines(String name, List<String> normalizedLines) {
         char symbol = findSymbol(normalizedLines.getFirst());
 
         return buildFromLines(name, normalizedLines, symbol);
@@ -34,8 +34,7 @@ public class ParserParcelBuilder {
      * @param symbol          символ посылки (не может быть null)
      * @return созданная посылка (не может быть null)
      */
-    @NonNull
-    public Parcel buildFromLines(@NonNull String name, @NonNull List<String> normalizedLines, @NonNull String symbol) {
+    public Parcel buildFromLines(String name, List<String> normalizedLines, String symbol) {
         return buildFromLines(name, normalizedLines, symbol.charAt(0));
     }
 
@@ -47,8 +46,7 @@ public class ParserParcelBuilder {
      * @param symbol          символ посылки
      * @return созданная посылка (не может быть null)
      */
-    @NonNull
-    private Parcel buildFromLines(@NonNull String name, @NonNull List<String> normalizedLines, char symbol) {
+    private Parcel buildFromLines(String name, List<String> normalizedLines, char symbol) {
         int height = normalizedLines.size();
         int width = normalizedLines.getFirst().length();
 
@@ -79,7 +77,7 @@ public class ParserParcelBuilder {
      * @param line строка для анализа (не может быть null)
      * @return первый непробельный символ или 'X' по умолчанию
      */
-    private char findSymbol(@NonNull String line) {
+    private char findSymbol(String line) {
         for (int i = 0; i < line.length(); i++) {
             char c = line.charAt(i);
             if (!Character.isWhitespace(c)) {

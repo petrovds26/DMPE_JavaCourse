@@ -1,7 +1,7 @@
 package ru.hofftech.unload.service.output.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
@@ -10,6 +10,7 @@ import ru.hofftech.unload.service.output.UnloadPrepareOutputResult;
 
 import java.util.List;
 
+@NullMarked
 @Slf4j
 public class UnloadPrepareOutputResultTxtFull implements UnloadPrepareOutputResult {
 
@@ -17,7 +18,7 @@ public class UnloadPrepareOutputResultTxtFull implements UnloadPrepareOutputResu
      * {@inheritDoc}
      */
     @Override
-    public ProcessorCommandResult output(@NonNull UnloadResult result) {
+    public ProcessorCommandResult output(UnloadResult result) {
         StringBuilder output = new StringBuilder();
 
         output.append("\n").append("=".repeat(60)).append("\n");
@@ -35,13 +36,10 @@ public class UnloadPrepareOutputResultTxtFull implements UnloadPrepareOutputResu
 
         output.append("=".repeat(60));
 
-        return ProcessorCommandResult.builder()
-                .success(true)
-                .message(output.toString())
-                .build();
+        return ProcessorCommandResult.createSuccess(output.toString());
     }
 
-    private void printStatistics(@NonNull StringBuilder output, @NonNull UnloadResult result) {
+    private void printStatistics(StringBuilder output, UnloadResult result) {
         output.append("\nСТАТИСТИКА:\n");
         output.append(String.format(
                 "Всего машин на входе: %d%n", result.inputMachines().size()));
@@ -49,7 +47,7 @@ public class UnloadPrepareOutputResultTxtFull implements UnloadPrepareOutputResu
                 "Успешно разгружено посылок: %d%n", result.parcels().size()));
     }
 
-    private void printMachines(@NonNull StringBuilder output, @NonNull UnloadResult result) {
+    private void printMachines(StringBuilder output, UnloadResult result) {
         if (result.inputMachines().isEmpty()) {
             return;
         }
@@ -72,7 +70,7 @@ public class UnloadPrepareOutputResultTxtFull implements UnloadPrepareOutputResu
         }
     }
 
-    private void printLoadedParcels(@NonNull StringBuilder output, @NonNull UnloadResult result) {
+    private void printLoadedParcels(StringBuilder output, UnloadResult result) {
         if (result.parcels().isEmpty()) {
             return;
         }
@@ -89,7 +87,7 @@ public class UnloadPrepareOutputResultTxtFull implements UnloadPrepareOutputResu
         }
     }
 
-    private @NonNull String renderMachine(@NonNull Machine machine) {
+    private String renderMachine(Machine machine) {
         StringBuilder sb = new StringBuilder();
         List<String> lines = machine.getLines();
         int width = machine.width();
@@ -108,7 +106,7 @@ public class UnloadPrepareOutputResultTxtFull implements UnloadPrepareOutputResu
         return sb.toString();
     }
 
-    private @NonNull String getMachineInfo(@NonNull Machine machine) {
+    private String getMachineInfo(Machine machine) {
         StringBuilder sb = new StringBuilder();
 
         // Считаем свободное место
@@ -138,7 +136,7 @@ public class UnloadPrepareOutputResultTxtFull implements UnloadPrepareOutputResu
      * @param parcel посылка
      * @return отформатированная строка (не может быть null)
      */
-    private @NonNull String formatParcelInfo(@NonNull Parcel parcel) {
+    private String formatParcelInfo(Parcel parcel) {
 
         // Заголовок с символом и габаритами
 

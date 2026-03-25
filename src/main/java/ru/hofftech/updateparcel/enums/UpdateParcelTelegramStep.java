@@ -2,12 +2,13 @@ package ru.hofftech.updateparcel.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Перечисление шагов обновления посылки в Telegram.
  */
 @Getter
+@NullMarked
 @RequiredArgsConstructor
 public enum UpdateParcelTelegramStep {
     ENTER_NAME(1, "Введите название посылки"),
@@ -17,6 +18,5 @@ public enum UpdateParcelTelegramStep {
 
     private final int id;
 
-    @NonNull
     private final String description;
 }

@@ -2,11 +2,12 @@ package ru.hofftech.unload.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.enums.FileType;
 
 @Getter
+@NullMarked
 @RequiredArgsConstructor
 public enum UnloadOutputType {
     TEXT(1, "Результат выполнения в RESULT для последующего вывода на экран"),
@@ -15,7 +16,6 @@ public enum UnloadOutputType {
 
     private final int id;
 
-    @NonNull
     private final String description;
 
     public boolean needSaveFile() {

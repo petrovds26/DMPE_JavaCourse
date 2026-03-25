@@ -2,7 +2,7 @@ package ru.hofftech.load.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.hofftech.load.model.enums.LoadTelegramStep;
@@ -31,25 +31,22 @@ import java.util.List;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class LoadParcelTelegramCommand implements TelegramCommand {
 
-    @NonNull
     private final ParserParcelProcessor<String> parserParcelProcessor;
 
-    @NonNull
     private final ParserMachineProcessor<String> parserMachineProcessor;
 
-    @NonNull
     private final LoadStrategyService strategyService;
 
-    @NonNull
     private final LoadPrepareOutputResult loadPrepareOutputResult;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isCommandStart(@NonNull String text) {
+    public boolean isCommandStart(String text) {
         return text.equals(getType().getCommand());
     }
 
@@ -57,7 +54,6 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public TelegramCommandType getType() {
         return TelegramCommandType.LOAD;
     }
@@ -66,7 +62,7 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean canHandle(@NonNull Update update, @Nullable TelegramUserSession session) {
+    public boolean canHandle(Update update, @Nullable TelegramUserSession session) {
         String text = getMessageText(update);
         if (text == null) return false;
 
@@ -82,8 +78,7 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
-    public TelegramCommandResponse execute(@NonNull Update update, @Nullable TelegramUserSession session) {
+    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session) {
         String text = getMessageText(update);
         long chatId = getChatId(update);
 
@@ -110,7 +105,6 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * @param chatId идентификатор чата
      * @return ответ с запросом названия посылки
      */
-    @NonNull
     private TelegramCommandResponse startLoad(long chatId) {
         LoadTelegramUserSession session = LoadTelegramUserSession.start(chatId);
         return TelegramCommandResponse.startSession(session.getStep().getDescription(), session);
@@ -123,8 +117,7 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * @param text введённый пользователем текст
      * @return ответ со следующим шагом или результат создания
      */
-    @NonNull
-    private TelegramCommandResponse continueLoad(@NonNull LoadTelegramUserSession session, @NonNull String text) {
+    private TelegramCommandResponse continueLoad(LoadTelegramUserSession session, String text) {
 
         return switch (session.getStep()) {
             case ENTER_PARCEL -> handleParcelInput(session, text);
@@ -141,8 +134,7 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * @param text введённое название
      * @return ответ с запросом символа
      */
-    @NonNull
-    private TelegramCommandResponse handleParcelInput(@NonNull LoadTelegramUserSession session, @NonNull String text) {
+    private TelegramCommandResponse handleParcelInput(LoadTelegramUserSession session, String text) {
 
         ParserParcelProcessorResult parcelResult = parserParcelProcessor.transform(text);
         if (parcelResult.hasErrors()) {
@@ -160,8 +152,7 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * @param text введённый символ
      * @return ответ с запросом формы
      */
-    @NonNull
-    private TelegramCommandResponse handleTruckInput(@NonNull LoadTelegramUserSession session, @NonNull String text) {
+    private TelegramCommandResponse handleTruckInput(LoadTelegramUserSession session, String text) {
         ParserMachineProcessorResult truckResult = parserMachineProcessor.transform(text);
         if (truckResult.hasErrors()) {
             return TelegramCommandResponse.text(truckResult.getErrorsAsString());
@@ -178,9 +169,7 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * @param text введённая форма
      * @return ответ с результатом создания
      */
-    @NonNull
-    private TelegramCommandResponse handleStrategyInput(
-            @NonNull LoadTelegramUserSession session, @NonNull String text) {
+    private TelegramCommandResponse handleStrategyInput(LoadTelegramUserSession session, String text) {
         if (session.getParcels() == null || session.getMachines() == null) {
             return TelegramCommandResponse.text("Не указаны обязательные параметры.");
         }
@@ -223,7 +212,7 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * @param update обновление от Telegram
      * @return идентификатор чата или 0
      */
-    private long getChatId(@NonNull Update update) {
+    private long getChatId(Update update) {
         if (update.hasMessage()) {
             return update.getMessage().getChatId();
         } else if (update.hasCallbackQuery()) {
@@ -239,7 +228,7 @@ public class LoadParcelTelegramCommand implements TelegramCommand {
      * @return текст сообщения или null
      */
     @Nullable
-    private String getMessageText(@NonNull Update update) {
+    private String getMessageText(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             return update.getMessage().getText();
         } else if (update.hasCallbackQuery()) {

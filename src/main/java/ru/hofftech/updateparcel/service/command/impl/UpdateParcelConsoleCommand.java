@@ -2,7 +2,7 @@ package ru.hofftech.updateparcel.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.ParserParcelProcessorResult;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
 import ru.hofftech.shared.model.dto.ParcelFormDto;
@@ -20,23 +20,20 @@ import java.util.List;
  * Формат команды: update_parcel --name <название> --form <форма> --symbol <символ>
  */
 @Slf4j
+@NullMarked
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
 public class UpdateParcelConsoleCommand implements ConsoleCommand {
-    @NonNull
     private final ParserParams parserParams;
 
-    @NonNull
     private final ParserParcelFromFormDto parserParcelProcessor;
 
-    @NonNull
     private final ParcelRepository parcelRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getName() {
         return ConsoleCommandType.UPDATE_PARCEL.toString();
     }
@@ -45,7 +42,6 @@ public class UpdateParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getDescription() {
         return "Обновление посылок. Используйте --help для справки.";
     }
@@ -54,7 +50,7 @@ public class UpdateParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean matches(@NonNull String input) {
+    public boolean matches(String input) {
         return input.trim().startsWith(ConsoleCommandType.UPDATE_PARCEL + " ");
     }
 
@@ -62,14 +58,9 @@ public class UpdateParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(@NonNull String input) {
+    public void execute(String input) {
         UpdateParcelConsoleCommandParams params = new UpdateParcelConsoleCommandParams();
         if (!parserParams.parserCommandLine(params, input)) {
-            return;
-        }
-
-        if (params.getForm() == null || params.getName() == null || params.getSymbol() == null) {
-            log.warn("Не указаны обязательные параметры.");
             return;
         }
 
@@ -78,10 +69,6 @@ public class UpdateParcelConsoleCommand implements ConsoleCommand {
                 .name(params.getName())
                 .symbol(params.getSymbol())
                 .build();
-
-        if (parcelFormDto == null) {
-            return;
-        }
 
         log.debug("Обновление посылки: {} {} {}", parcelFormDto.name(), parcelFormDto.form(), parcelFormDto.symbol());
 

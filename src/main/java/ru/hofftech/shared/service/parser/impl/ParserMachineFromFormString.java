@@ -2,7 +2,7 @@ package ru.hofftech.shared.service.parser.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.ParserMachineProcessorResult;
 import ru.hofftech.shared.service.parser.ParserMachineProcessor;
@@ -17,6 +17,7 @@ import java.util.regex.Pattern;
  */
 @Slf4j
 @RequiredArgsConstructor
+@NullMarked
 public class ParserMachineFromFormString implements ParserMachineProcessor<String> {
 
     private static final Pattern MACHINE_PATTERN = Pattern.compile("^(\\d+)x(\\d+)$");
@@ -24,7 +25,7 @@ public class ParserMachineFromFormString implements ParserMachineProcessor<Strin
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ParserMachineProcessorResult transform(@NonNull String inputFormString) {
+    public ParserMachineProcessorResult transform(String inputFormString) {
         List<Machine> machines = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 
@@ -61,8 +62,7 @@ public class ParserMachineFromFormString implements ParserMachineProcessor<Strin
      * @param machines   список успешно созданных машин (не может быть null)
      * @param errors     список ошибок (не может быть null)
      */
-    private void processMachineLine(
-            @NonNull String line, int lineNumber, @NonNull List<Machine> machines, @NonNull List<String> errors) {
+    private void processMachineLine(String line, int lineNumber, List<Machine> machines, List<String> errors) {
 
         var matcher = MACHINE_PATTERN.matcher(line);
 

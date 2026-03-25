@@ -1,7 +1,7 @@
 package ru.hofftech.load.model.core;
 
 import lombok.Builder;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
@@ -22,6 +22,7 @@ import java.util.List;
  * @version 1.0
  */
 @Builder
+@NullMarked
 public record LoadResult(
         @Nullable List<Parcel> inputParcels, // Посылки, поступившие на вход для обработки
         @Nullable
@@ -48,7 +49,7 @@ public record LoadResult(
      * @param machine машина для подсчёта (не может быть null)
      * @return количество посылок в машине
      */
-    private int countParcelsInMachine(@NonNull Machine machine) {
+    private int countParcelsInMachine(Machine machine) {
         return machine.parcels().size();
     }
 }

@@ -1,6 +1,6 @@
 package ru.hofftech.shared.validation;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
@@ -10,6 +10,7 @@ import java.util.List;
  *
  * @param <T> тип валидируемого объекта
  */
+@NullMarked
 public interface Validator<T> {
 
     /**
@@ -18,6 +19,5 @@ public interface Validator<T> {
      * @param object объект для валидации (может быть null)
      * @return список ошибок (пустой список, если ошибок нет) (не может быть null)
      */
-    @NonNull
     List<String> validate(@Nullable T object);
 }

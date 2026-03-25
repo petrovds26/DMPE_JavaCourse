@@ -2,7 +2,7 @@ package ru.hofftech.unload.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.core.PlacedParcel;
@@ -19,18 +19,18 @@ import java.util.List;
  *
  */
 @Slf4j
+@NullMarked
 @RequiredArgsConstructor
 // Рекорд не может быть создан с интерфейсом
 @SuppressWarnings("ClassCanBeRecord")
 public class UnloadProcessorCommand implements ProcessorCommand<List<Machine>> {
-    @NonNull
     private final UnloadPrepareOutputResult unloadPrepareOutputResult;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ProcessorCommandResult execute(@NonNull List<Machine> machines) {
+    public ProcessorCommandResult execute(List<Machine> machines) {
 
         // Запуск разгрузки машин
         log.debug("Начало разгрузки {} машин по посылкам", machines.size());

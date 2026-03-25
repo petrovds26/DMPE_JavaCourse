@@ -2,7 +2,7 @@ package ru.hofftech.load.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.load.model.enums.LoadInputParcelType;
 import ru.hofftech.load.model.enums.LoadOutputType;
@@ -37,37 +37,29 @@ import java.util.stream.Stream;
  */
 @Slf4j
 @RequiredArgsConstructor
+@NullMarked
 @SuppressWarnings("ClassCanBeRecord")
 public class LoadParcelConsoleCommand implements ConsoleCommand {
-    @NonNull
     private final ParserParams parserParams;
 
-    @NonNull
     private final InputFilePathValidator inputFilePathValidator;
 
-    @NonNull
     private final OutputFilePathValidator outputFilePathValidator;
 
-    @NonNull
     private final LoadStrategyService strategyService;
 
-    @NonNull
     private final LoadParcelParserService parserService;
 
-    @NonNull
     private final ParserMachineFromFormString parserMachineFromFormString;
 
-    @NonNull
     private final LoadOutputPrepareService outputPrepareService;
 
-    @NonNull
     private final FileSaveService fileSaveService;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getName() {
         return ConsoleCommandType.LOAD.toString();
     }
@@ -76,7 +68,6 @@ public class LoadParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getDescription() {
         return "Загрузка машин. Используйте --help для справки.";
     }
@@ -85,7 +76,7 @@ public class LoadParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean matches(@NonNull String input) {
+    public boolean matches(String input) {
         return input.trim().startsWith(ConsoleCommandType.LOAD.toString());
     }
 
@@ -93,7 +84,7 @@ public class LoadParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(@NonNull String input) {
+    public void execute(String input) {
 
         LoadConsoleCommandParams params = new LoadConsoleCommandParams();
         if (!parserParams.parserCommandLine(params, input)) {
@@ -196,7 +187,7 @@ public class LoadParcelConsoleCommand implements ConsoleCommand {
      * @return тип выходного формата или null, если не удалось определить
      */
     @Nullable
-    private LoadOutputType defineOutputType(@NonNull LoadConsoleCommandParams params) {
+    private LoadOutputType defineOutputType(LoadConsoleCommandParams params) {
         LoadOutputType loadOutputType = LoadOutputType.fromString(params.getOutputType());
         if (loadOutputType == null) {
             log.error("Ошибки валидации параметра Выходной файл. Тип формата не найден");
@@ -206,13 +197,13 @@ public class LoadParcelConsoleCommand implements ConsoleCommand {
         FileType fileType = loadOutputType.loadOutputType2FileType();
 
         if (fileType == null) {
-            if (params.getOutputFile() != null && !params.getOutputFile().isBlank()) {
+            if (!params.getOutputFile().isBlank()) {
                 log.error(
                         "Ошибки валидации параметра Выходной файл: Указан выходной файл, но сохранение не предусматривается");
                 return null;
             }
         } else {
-            if (params.getOutputFile() == null || params.getOutputFile().isBlank()) {
+            if (params.getOutputFile().isBlank()) {
                 log.error("Ошибки валидации параметра Выходной файл: Файл не указан");
                 return null;
             }
@@ -234,8 +225,8 @@ public class LoadParcelConsoleCommand implements ConsoleCommand {
      * @return тип входных данных или null, если не удалось определить
      */
     @Nullable
-    private LoadInputParcelType defineInputParcelType(@NonNull LoadConsoleCommandParams params) {
-        if (params.getInputParcelFile() == null || params.getInputParcelFile().isBlank()) {
+    private LoadInputParcelType defineInputParcelType(LoadConsoleCommandParams params) {
+        if (params.getInputParcelFile().isBlank()) {
             return LoadInputParcelType.TEXT;
         }
 

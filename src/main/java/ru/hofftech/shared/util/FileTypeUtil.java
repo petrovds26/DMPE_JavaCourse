@@ -1,6 +1,7 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.enums.FileType;
 
@@ -10,6 +11,7 @@ import java.util.Arrays;
  * Утилитный класс для работы с типами файлов.
  * Предоставляет методы для определения {@link FileType} по расширению или имени файла.
  */
+@NullMarked
 @UtilityClass
 public class FileTypeUtil {
     /**

@@ -2,7 +2,7 @@ package ru.hofftech.deleteparcel.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.hofftech.deleteparcel.enums.DeleteParcelTelegramStep;
@@ -21,16 +21,16 @@ import ru.hofftech.shared.util.TelegramKeyboardUtil;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class DeleteParcelTelegramCommand implements TelegramCommand {
 
-    @NonNull
     private final ParcelRepository parcelRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isCommandStart(@NonNull String text) {
+    public boolean isCommandStart(String text) {
         return text.equals(getType().getCommand());
     }
 
@@ -38,7 +38,6 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public TelegramCommandType getType() {
         return TelegramCommandType.DELETE_PARCEL;
     }
@@ -47,7 +46,7 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean canHandle(@NonNull Update update, @Nullable TelegramUserSession session) {
+    public boolean canHandle(Update update, @Nullable TelegramUserSession session) {
         String text = getMessageText(update);
         if (text == null) return false;
 
@@ -63,8 +62,7 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
-    public TelegramCommandResponse execute(@NonNull Update update, @Nullable TelegramUserSession session) {
+    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session) {
         String text = getMessageText(update);
         long chatId = getChatId(update);
 
@@ -91,7 +89,6 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
      * @param chatId идентификатор чата
      * @return ответ с запросом названия
      */
-    @NonNull
     private TelegramCommandResponse startDelete(long chatId) {
         DeleteParcelTelegramUserSession session = DeleteParcelTelegramUserSession.start(chatId);
         return TelegramCommandResponse.startSession(session.getStep().getDescription(), session);
@@ -104,9 +101,7 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
      * @param text название посылки
      * @return ответ с результатом удаления
      */
-    @NonNull
-    private TelegramCommandResponse continueDelete(
-            @NonNull DeleteParcelTelegramUserSession session, @NonNull String text) {
+    private TelegramCommandResponse continueDelete(DeleteParcelTelegramUserSession session, String text) {
 
         if (session.getStep() == DeleteParcelTelegramStep.ENTER_NAME) { // Ожидание названия
 
@@ -125,7 +120,7 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
      * @param update обновление от Telegram
      * @return идентификатор чата или 0
      */
-    private long getChatId(@NonNull Update update) {
+    private long getChatId(Update update) {
         if (update.hasMessage()) {
             return update.getMessage().getChatId();
         } else if (update.hasCallbackQuery()) {
@@ -141,7 +136,7 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
      * @return текст сообщения или null
      */
     @Nullable
-    private String getMessageText(@NonNull Update update) {
+    private String getMessageText(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             return update.getMessage().getText();
         } else if (update.hasCallbackQuery()) {

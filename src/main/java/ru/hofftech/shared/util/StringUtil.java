@@ -1,7 +1,7 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import java.util.List;
  * Утилита для работы со строками.
  *
  */
+@NullMarked
 @UtilityClass
 public class StringUtil {
 
@@ -19,8 +20,7 @@ public class StringUtil {
      * @param commandLine командная строка (не может быть null)
      * @return массив аргументов (не может быть null)
      */
-    @NonNull
-    public static String[] splitCommandLine(@NonNull String commandLine) {
+    public static String[] splitCommandLine(String commandLine) {
         List<String> args = new ArrayList<>();
         StringBuilder currentArg = new StringBuilder();
         boolean inQuotes = false;

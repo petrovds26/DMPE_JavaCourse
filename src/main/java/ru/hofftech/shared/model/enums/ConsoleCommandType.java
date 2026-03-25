@@ -1,11 +1,12 @@
 package ru.hofftech.shared.model.enums;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 
 /**
  * Типы консольных команд.
  * Определяет все доступные команды в консольном интерфейсе.
  */
+@NullMarked
 public enum ConsoleCommandType {
     EMPTY,
     LOAD,
@@ -22,7 +23,6 @@ public enum ConsoleCommandType {
      * @return название команды (не может быть null)
      */
     @Override
-    @NonNull
     public String toString() {
         return name().toLowerCase();
     }

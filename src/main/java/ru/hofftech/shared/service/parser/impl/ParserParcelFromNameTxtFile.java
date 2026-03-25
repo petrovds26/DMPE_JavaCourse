@@ -2,7 +2,7 @@ package ru.hofftech.shared.service.parser.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.core.ParserParcelProcessorResult;
 import ru.hofftech.shared.repository.ParcelRepository;
@@ -19,18 +19,18 @@ import java.util.List;
  * Файл содержит названия посылок, каждое на новой строке.
  */
 @Slf4j
+@NullMarked
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
 public class ParserParcelFromNameTxtFile implements ParserParcelProcessor<String> {
 
-    @NonNull
     public final ParcelRepository parcelRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ParserParcelProcessorResult transform(@NonNull String inputTxtFileName) {
+    public ParserParcelProcessorResult transform(String inputTxtFileName) {
         List<Parcel> parcels = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 

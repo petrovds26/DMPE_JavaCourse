@@ -5,7 +5,7 @@ import com.beust.jcommander.Parameters;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.enums.ConsoleCommandType;
 import ru.hofftech.shared.model.params.ConsoleCommandParams;
@@ -17,6 +17,7 @@ import ru.hofftech.shared.model.params.ConsoleCommandParams;
 @ToString
 @Parameters(commandDescription = "Чтение посылок")
 @RequiredArgsConstructor
+@NullMarked
 public class ReadParcelConsoleCommandParams implements ConsoleCommandParams {
 
     @Parameter(
@@ -37,7 +38,7 @@ public class ReadParcelConsoleCommandParams implements ConsoleCommandParams {
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ConsoleCommandType getCommandType() {
+    public ConsoleCommandType getCommandType() {
         return ConsoleCommandType.READ_PARCEL;
     }
 
@@ -47,5 +48,12 @@ public class ReadParcelConsoleCommandParams implements ConsoleCommandParams {
     @Override
     public boolean isHelp() {
         return help;
+    }
+
+    public String getName() {
+        if (name == null) {
+            return "";
+        }
+        return name;
     }
 }

@@ -3,7 +3,7 @@ package ru.hofftech.shared.service.parser;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.params.ConsoleCommandParams;
 import ru.hofftech.shared.util.StringUtil;
 
@@ -12,6 +12,7 @@ import ru.hofftech.shared.util.StringUtil;
  * Использует JCommander для разбора аргументов.
  */
 @Slf4j
+@NullMarked
 public class ParserParams {
 
     /**
@@ -21,7 +22,7 @@ public class ParserParams {
      * @param commandLine полная командная строка (не может быть null)
      * @return true если парсинг успешен, false при ошибке или запросе help
      */
-    public boolean parserCommandLine(@NonNull ConsoleCommandParams params, @NonNull String commandLine) {
+    public boolean parserCommandLine(ConsoleCommandParams params, String commandLine) {
         JCommander jCommander = JCommander.newBuilder().addObject(params).build();
         jCommander.setProgramName(params.getCommandType().toString());
 
@@ -53,7 +54,7 @@ public class ParserParams {
      *
      * @param jCommander объект JCommander (не может быть null)
      */
-    private void printHelp(@NonNull JCommander jCommander) {
+    private void printHelp(JCommander jCommander) {
         StringBuilder sb = new StringBuilder();
         jCommander.getUsageFormatter().usage(sb);
         log.info(sb.toString());

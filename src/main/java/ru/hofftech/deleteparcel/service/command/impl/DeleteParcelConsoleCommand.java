@@ -2,7 +2,7 @@ package ru.hofftech.deleteparcel.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.deleteparcel.model.params.DeleteParcelConsoleCommandParams;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
 import ru.hofftech.shared.model.enums.ConsoleCommandType;
@@ -16,18 +16,16 @@ import ru.hofftech.shared.service.parser.ParserParams;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class DeleteParcelConsoleCommand implements ConsoleCommand {
-    @NonNull
     private final ParserParams parserParams;
 
-    @NonNull
     private final ParcelRepository parcelRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getName() {
         return ConsoleCommandType.DELETE_PARCEL.toString();
     }
@@ -36,7 +34,6 @@ public class DeleteParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getDescription() {
         return "Удаление посылок. Используйте --help для справки.";
     }
@@ -45,7 +42,7 @@ public class DeleteParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean matches(@NonNull String input) {
+    public boolean matches(String input) {
         return input.trim().startsWith(ConsoleCommandType.DELETE_PARCEL + " ");
     }
 
@@ -53,7 +50,7 @@ public class DeleteParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(@NonNull String input) {
+    public void execute(String input) {
 
         DeleteParcelConsoleCommandParams params = new DeleteParcelConsoleCommandParams();
         if (!parserParams.parserCommandLine(params, input)) {
@@ -61,11 +58,6 @@ public class DeleteParcelConsoleCommand implements ConsoleCommand {
         }
 
         String name = params.getName();
-
-        if (name == null) {
-            log.warn("Не указано имя посылки");
-            return;
-        }
 
         log.debug("Удаление посылки: {}", name);
 

@@ -1,7 +1,7 @@
 package ru.hofftech.shared.util;
 
 import lombok.experimental.UtilityClass;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.model.core.Parcel;
 import ru.hofftech.shared.model.core.PlacedParcel;
@@ -9,6 +9,7 @@ import ru.hofftech.shared.model.core.PlacedParcel;
 /**
  * Утилита для форматированного вывода посылок.
  */
+@NullMarked
 @UtilityClass
 public class PrintStringUtil {
 
@@ -19,8 +20,7 @@ public class PrintStringUtil {
      * @param placed информация о размещении (может быть null)
      * @return отформатированная строка (не может быть null)
      */
-    @NonNull
-    public static String parcelRender(@NonNull Parcel parcel, @Nullable PlacedParcel placed) {
+    public static String parcelRender(Parcel parcel, @Nullable PlacedParcel placed) {
         StringBuilder sb = new StringBuilder();
 
         // Заголовок с символом и габаритами
@@ -50,8 +50,7 @@ public class PrintStringUtil {
      * @param parcel посылка (не может быть null)
      * @return отформатированная строка (не может быть null)
      */
-    @NonNull
-    public static String parcelRender(@NonNull Parcel parcel) {
+    public static String parcelRender(Parcel parcel) {
         return parcelRender(parcel, null);
     }
 }

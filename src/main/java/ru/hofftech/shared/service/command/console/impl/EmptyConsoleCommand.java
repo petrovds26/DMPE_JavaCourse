@@ -2,7 +2,7 @@ package ru.hofftech.shared.service.command.console.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.enums.ConsoleCommandType;
 import ru.hofftech.shared.service.command.console.ConsoleCommand;
 
@@ -11,6 +11,7 @@ import ru.hofftech.shared.service.command.console.ConsoleCommand;
  * Используется для игнорирования пустых строк в консоли.
  */
 @Slf4j
+@NullMarked
 @RequiredArgsConstructor
 public class EmptyConsoleCommand implements ConsoleCommand {
 
@@ -18,7 +19,6 @@ public class EmptyConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getName() {
         return ConsoleCommandType.EMPTY.toString();
     }
@@ -27,7 +27,6 @@ public class EmptyConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getDescription() {
         return "Для запуска передайте пустую строку";
     }
@@ -36,7 +35,7 @@ public class EmptyConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean matches(@NonNull String input) {
+    public boolean matches(String input) {
         return input.trim().isEmpty();
     }
 
@@ -44,7 +43,7 @@ public class EmptyConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(@NonNull String input) {
+    public void execute(String input) {
         log.info("Передана пустая команда");
     }
 }

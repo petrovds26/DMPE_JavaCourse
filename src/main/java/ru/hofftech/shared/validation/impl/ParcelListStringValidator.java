@@ -1,7 +1,7 @@
 package ru.hofftech.shared.validation.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.validation.Validator;
 
@@ -17,13 +17,13 @@ import java.util.stream.Collectors;
  * - Консистентность символов (все символы "не пробел" должны быть одинаковы)
  */
 @Slf4j
+@NullMarked
 public class ParcelListStringValidator implements Validator<List<String>> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public List<String> validate(@Nullable List<String> lines) {
         List<String> errors = new ArrayList<>();
 
@@ -44,10 +44,10 @@ public class ParcelListStringValidator implements Validator<List<String>> {
      * @param errors список ошибок для пополнения (не может быть null)
      * @param lines  строки для проверки (не может быть null)
      */
-    private void validateNotEmptyLines(@NonNull List<String> errors, @NonNull List<String> lines) {
+    private void validateNotEmptyLines(List<String> errors, List<String> lines) {
         for (int i = 0; i < lines.size(); i++) {
             String line = lines.get(i);
-            if (line == null || line.trim().isEmpty()) {
+            if (line.trim().isEmpty()) {
                 errors.add(String.format("Строка %d пустая", i + 1));
             }
         }
@@ -59,7 +59,7 @@ public class ParcelListStringValidator implements Validator<List<String>> {
      * @param errors список ошибок для пополнения (не может быть null)
      * @param lines  строки для проверки (не может быть null)
      */
-    private void validateConsistentSymbol(@NonNull List<String> errors, @NonNull List<String> lines) {
+    private void validateConsistentSymbol(List<String> errors, List<String> lines) {
         // Находим первый символ в посылке
         Character firstSymbol = findFirstSymbol(lines);
 
@@ -92,7 +92,7 @@ public class ParcelListStringValidator implements Validator<List<String>> {
      * @return первый найденный символ или null, если символов нет
      */
     @Nullable
-    private Character findFirstSymbol(@NonNull List<String> lines) {
+    private Character findFirstSymbol(List<String> lines) {
         for (String line : lines) {
             for (int i = 0; i < line.length(); i++) {
                 char c = line.charAt(i);

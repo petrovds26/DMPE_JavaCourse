@@ -1,7 +1,7 @@
 package ru.hofftech.load.service.output.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.load.model.core.LoadResult;
 import ru.hofftech.load.model.core.LoadStrategyParcelInvalid;
@@ -22,13 +22,14 @@ import java.util.stream.Collectors;
  * Формирует детальный отчёт со статистикой, схемами машин и информацией о проблемных посылках.
  */
 @Slf4j
+@NullMarked
 public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ProcessorCommandResult output(@NonNull LoadResult result) {
+    public ProcessorCommandResult output(LoadResult result) {
         StringBuilder output = new StringBuilder();
         // Ошибки обработки
         printErrors(output, result);
@@ -48,10 +49,7 @@ public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
 
         output.append("=".repeat(60));
 
-        return ProcessorCommandResult.builder()
-                .success(true)
-                .message(output.toString())
-                .build();
+        return ProcessorCommandResult.createSuccess(output.toString());
     }
 
     /**
@@ -60,7 +58,7 @@ public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
      * @param output StringBuilder для накопления вывода (не может быть null)
      * @param result результат обработки посылок (не может быть null)
      */
-    private void printStatistics(@NonNull StringBuilder output, @NonNull LoadResult result) {
+    private void printStatistics(StringBuilder output, LoadResult result) {
         List<LoadStrategyParcelInvalid> importParcelInvalids = result.loadStrategyParcelInvalids();
         List<Parcel> inputParcels = result.inputParcels();
         List<Machine> machines = result.machines();
@@ -100,7 +98,7 @@ public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
      * @param output StringBuilder для накопления вывода (не может быть null)
      * @param result результат обработки посылок (не может быть null)
      */
-    private void printMachines(@NonNull StringBuilder output, @NonNull LoadResult result) {
+    private void printMachines(StringBuilder output, LoadResult result) {
         List<Machine> machines = result.machines();
 
         if (machines == null || machines.isEmpty()) {
@@ -131,7 +129,7 @@ public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
      * @param output StringBuilder для накопления вывода (не может быть null)
      * @param result результат обработки посылок (не может быть null)
      */
-    private void printErrors(@NonNull StringBuilder output, @NonNull LoadResult result) {
+    private void printErrors(StringBuilder output, LoadResult result) {
         List<String> errors = result.errors();
         if (errors == null || errors.isEmpty()) {
             return;
@@ -150,7 +148,7 @@ public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
      * @param output StringBuilder для накопления вывода (не может быть null)
      * @param result результат обработки посылок (не может быть null)
      */
-    private void printInvalidParcels(@NonNull StringBuilder output, @NonNull LoadResult result) {
+    private void printInvalidParcels(StringBuilder output, LoadResult result) {
         List<LoadStrategyParcelInvalid> importParcelInvalids = result.loadStrategyParcelInvalids();
         if (importParcelInvalids == null || importParcelInvalids.isEmpty()) {
             return;
@@ -180,8 +178,7 @@ public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
      * @param machine машина для отображения (не может быть null)
      * @return строковое представление машины (не может быть null)
      */
-    @NonNull
-    private String renderMachine(@NonNull Machine machine) {
+    private String renderMachine(Machine machine) {
         StringBuilder sb = new StringBuilder();
         List<String> lines = machine.getLines();
         int width = machine.width();
@@ -206,8 +203,7 @@ public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
      * @param machine машина с посылками (не может быть null)
      * @return строковое представление информации о посылках (не может быть null)
      */
-    @NonNull
-    private String getParcelsInfo(@NonNull Machine machine) {
+    private String getParcelsInfo(Machine machine) {
         StringBuilder sb = new StringBuilder();
         List<PlacedParcel> parcels = machine.parcels();
 
@@ -228,8 +224,7 @@ public class LoadPrepareOutputResultText implements LoadPrepareOutputResult {
      * @param placed информация о размещении (может быть null)
      * @return отформатированная строка (не может быть null)
      */
-    @NonNull
-    private String formatParcelInfo(@NonNull Parcel parcel, @Nullable PlacedParcel placed) {
+    private String formatParcelInfo(Parcel parcel, @Nullable PlacedParcel placed) {
         StringBuilder sb = new StringBuilder();
 
         // Заголовок с символом и габаритами

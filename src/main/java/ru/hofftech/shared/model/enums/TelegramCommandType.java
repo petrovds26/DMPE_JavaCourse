@@ -2,7 +2,7 @@ package ru.hofftech.shared.model.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 /**
@@ -10,6 +10,7 @@ import org.jspecify.annotations.Nullable;
  * Определяет все доступные команды в Telegram интерфейсе.
  */
 @Getter
+@NullMarked
 @RequiredArgsConstructor
 public enum TelegramCommandType {
     LOAD("/load", "Загрузка посылки в машины"),
@@ -20,10 +21,8 @@ public enum TelegramCommandType {
     LIST_PARCELS("/list_parcel", "Список всех посылок"),
     CANCEL("/cancel", "Отменить текущую операцию");
 
-    @NonNull
     private final String command;
 
-    @NonNull
     private final String description;
 
     /**
@@ -32,7 +31,7 @@ public enum TelegramCommandType {
      * @param text текст команды (не может быть null)
      * @return тип команды или null, если не найдена
      */
-    public static @Nullable TelegramCommandType fromString(@NonNull String text) {
+    public static @Nullable TelegramCommandType fromString(String text) {
         for (TelegramCommandType cmd : values()) {
             if (cmd.command.equalsIgnoreCase(text.trim())) {
                 return cmd;

@@ -2,7 +2,7 @@ package ru.hofftech.shared.service.parser.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.ParserMachineProcessorResult;
 import ru.hofftech.shared.model.dto.MachinesDto;
@@ -21,6 +21,7 @@ import java.util.List;
  * Формат файла: {"parcelsName": ["название1", "название2", ...]}
  */
 @Slf4j
+@NullMarked
 @RequiredArgsConstructor
 public class ParserMachineJsonFile implements ParserMachineProcessor<String> {
 
@@ -28,7 +29,7 @@ public class ParserMachineJsonFile implements ParserMachineProcessor<String> {
      * {@inheritDoc}
      */
     @Override
-    public @NonNull ParserMachineProcessorResult transform(@NonNull String inputJsonFileName) {
+    public ParserMachineProcessorResult transform(String inputJsonFileName) {
         List<Machine> machines = new ArrayList<>();
         List<String> errors = new ArrayList<>();
 

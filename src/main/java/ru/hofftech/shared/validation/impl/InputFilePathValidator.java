@@ -1,6 +1,6 @@
 package ru.hofftech.shared.validation.impl;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.validation.Validator;
 
@@ -20,13 +20,13 @@ import java.util.List;
  *   <li>Путь не указывает на директорию</li>
  * </ul>
  */
+@NullMarked
 public class InputFilePathValidator implements Validator<String> {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public List<String> validate(@Nullable String filePath) {
         List<String> errors = new ArrayList<>();
 

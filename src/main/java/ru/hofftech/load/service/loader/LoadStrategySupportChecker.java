@@ -1,6 +1,6 @@
 package ru.hofftech.load.service.loader;
 
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.shared.model.core.Machine;
 import ru.hofftech.shared.model.core.Parcel;
 
@@ -8,6 +8,7 @@ import ru.hofftech.shared.model.core.Parcel;
  * Класс для проверки достаточности опоры под посылкой.
  * Требование: опора должна составлять более 50% площади основания посылки.
  */
+@NullMarked
 public class LoadStrategySupportChecker {
 
     /**
@@ -20,7 +21,7 @@ public class LoadStrategySupportChecker {
      * @param y       координата Y левого нижнего угла посылки
      * @return true если опоры достаточно (>50% клеток нижнего ряда имеют опору)
      */
-    public boolean hasEnoughSupport(@NonNull Machine machine, @NonNull Parcel parcel, int x, int y) {
+    public boolean hasEnoughSupport(Machine machine, Parcel parcel, int x, int y) {
         // Если посылка на полу - всегда достаточно опоры
         if (y == 0) {
             return true;

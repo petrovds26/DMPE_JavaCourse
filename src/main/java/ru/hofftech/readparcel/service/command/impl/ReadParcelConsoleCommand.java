@@ -2,7 +2,7 @@ package ru.hofftech.readparcel.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import ru.hofftech.readparcel.model.params.ReadParcelConsoleCommandParams;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
 import ru.hofftech.shared.model.enums.ConsoleCommandType;
@@ -16,18 +16,16 @@ import ru.hofftech.shared.service.parser.ParserParams;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class ReadParcelConsoleCommand implements ConsoleCommand {
-    @NonNull
     private final ParserParams parserParams;
 
-    @NonNull
     private final ParcelRepository parcelRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getName() {
         return ConsoleCommandType.READ_PARCEL.toString();
     }
@@ -36,7 +34,6 @@ public class ReadParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public String getDescription() {
         return "Чтение посылок. Используйте --help для справки.";
     }
@@ -45,7 +42,7 @@ public class ReadParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean matches(@NonNull String input) {
+    public boolean matches(String input) {
         return input.trim().startsWith(ConsoleCommandType.READ_PARCEL.toString());
     }
 
@@ -53,7 +50,7 @@ public class ReadParcelConsoleCommand implements ConsoleCommand {
      * {@inheritDoc}
      */
     @Override
-    public void execute(@NonNull String input) {
+    public void execute(String input) {
 
         ReadParcelConsoleCommandParams params = new ReadParcelConsoleCommandParams();
         if (!parserParams.parserCommandLine(params, input)) {

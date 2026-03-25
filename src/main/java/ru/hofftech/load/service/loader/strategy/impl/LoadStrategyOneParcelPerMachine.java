@@ -1,7 +1,7 @@
 package ru.hofftech.load.service.loader.strategy.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.load.model.core.LoadResult;
 import ru.hofftech.load.model.core.LoadStrategyParcelInvalid;
@@ -19,13 +19,14 @@ import java.util.List;
  * Посылка размещается в левом нижнем углу (0,0).
  */
 @Slf4j
+@NullMarked
 public class LoadStrategyOneParcelPerMachine implements LoadStrategy {
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public @NonNull LoadResult loadParcels(@NonNull List<Parcel> parcels, @NonNull List<Machine> machines) {
+    public LoadResult loadParcels(List<Parcel> parcels, List<Machine> machines) {
         List<LoadStrategyParcelInvalid> loadStrategyParcelInvalids = new ArrayList<>();
         List<Machine> resultMachines = new ArrayList<>(machines);
 
@@ -88,7 +89,7 @@ public class LoadStrategyOneParcelPerMachine implements LoadStrategy {
      * @return подходящая машина или null, если не найдена
      */
     @Nullable
-    private Machine findSuitableMachine(@NonNull List<Machine> machines, @NonNull Parcel parcel) {
+    private Machine findSuitableMachine(List<Machine> machines, Parcel parcel) {
         return machines.stream()
                 .filter(m -> m.parcels().isEmpty() && m.fitsInMachine(parcel))
                 .findFirst()
@@ -99,7 +100,6 @@ public class LoadStrategyOneParcelPerMachine implements LoadStrategy {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public LoadStrategyType getAlgorithmType() {
         return LoadStrategyType.ONE_PARCEL_PER_MACHINE;
     }
@@ -113,9 +113,8 @@ public class LoadStrategyOneParcelPerMachine implements LoadStrategy {
      * @param cause     текстовое описание причины (не может быть null)
      * @return объект с информацией об ошибке (не может быть null)
      */
-    @NonNull
     private LoadStrategyParcelInvalid invalidParcel(
-            @NonNull Parcel parcel, @NonNull LoadStrategyParcelInvalidCauseType causeType, @NonNull String cause) {
+            Parcel parcel, LoadStrategyParcelInvalidCauseType causeType, String cause) {
         LoadStrategyParcelInvalid loadStrategyParcelInvalid = LoadStrategyParcelInvalid.builder()
                 .parcel(parcel)
                 .causeType(causeType)

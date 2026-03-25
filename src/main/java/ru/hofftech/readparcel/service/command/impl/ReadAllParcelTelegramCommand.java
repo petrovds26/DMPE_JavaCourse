@@ -2,7 +2,7 @@ package ru.hofftech.readparcel.service.command.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
@@ -19,16 +19,16 @@ import ru.hofftech.shared.util.TelegramKeyboardUtil;
 @Slf4j
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
+@NullMarked
 public class ReadAllParcelTelegramCommand implements TelegramCommand {
 
-    @NonNull
     private final ParcelRepository parcelRepository;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public boolean isCommandStart(@NonNull String text) {
+    public boolean isCommandStart(String text) {
         return text.equals(getType().getCommand());
     }
 
@@ -36,7 +36,6 @@ public class ReadAllParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public TelegramCommandType getType() {
         return TelegramCommandType.LIST_PARCELS;
     }
@@ -45,7 +44,7 @@ public class ReadAllParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean canHandle(@NonNull Update update, @Nullable TelegramUserSession session) {
+    public boolean canHandle(Update update, @Nullable TelegramUserSession session) {
         String text = getMessageText(update);
         if (text == null) return false;
 
@@ -58,8 +57,7 @@ public class ReadAllParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
-    public TelegramCommandResponse execute(@NonNull Update update, @Nullable TelegramUserSession session) {
+    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session) {
         // Начало создания посылки
         if (session == null) {
             ReadParcelProcessorCommand processorCommand = new ReadParcelProcessorCommand(parcelRepository);
@@ -79,7 +77,7 @@ public class ReadAllParcelTelegramCommand implements TelegramCommand {
      * @return текст сообщения или null
      */
     @Nullable
-    private String getMessageText(@NonNull Update update) {
+    private String getMessageText(Update update) {
         if (update.hasMessage() && update.getMessage().hasText()) {
             return update.getMessage().getText();
         } else if (update.hasCallbackQuery()) {

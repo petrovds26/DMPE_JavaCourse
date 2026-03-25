@@ -1,7 +1,7 @@
 package ru.hofftech.shared.validation.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import ru.hofftech.shared.validation.Validator;
 
@@ -23,6 +23,7 @@ import java.util.List;
  *   <li>Возможность создания файла</li>
  * </ul>
  */
+@NullMarked
 @Slf4j
 public class OutputFilePathValidator implements Validator<String> {
 
@@ -30,7 +31,6 @@ public class OutputFilePathValidator implements Validator<String> {
      * {@inheritDoc}
      */
     @Override
-    @NonNull
     public List<String> validate(@Nullable String filePath) {
         List<String> errors = new ArrayList<>();
 
@@ -50,20 +50,19 @@ public class OutputFilePathValidator implements Validator<String> {
         return errors;
     }
 
-    private void validateParentDirectoryExists(@Nullable Path parentDir, @NonNull List<String> errors) {
+    private void validateParentDirectoryExists(@Nullable Path parentDir, List<String> errors) {
         if (parentDir != null && !Files.exists(parentDir)) {
             errors.add("Директория для сохранения не существует: " + parentDir);
         }
     }
 
-    private void validateParentDirectoryWritable(@Nullable Path parentDir, @NonNull List<String> errors) {
+    private void validateParentDirectoryWritable(@Nullable Path parentDir, List<String> errors) {
         if (parentDir != null && Files.exists(parentDir) && !Files.isWritable(parentDir)) {
             errors.add("Нет прав на запись в директорию: " + parentDir);
         }
     }
 
-    private void validateExistingFileWritable(
-            @NonNull Path path, @NonNull String filePath, @NonNull List<String> errors) {
+    private void validateExistingFileWritable(Path path, String filePath, List<String> errors) {
         if (!Files.exists(path)) {
             return;
         }
@@ -75,7 +74,7 @@ public class OutputFilePathValidator implements Validator<String> {
         }
     }
 
-    private void validateCanCreateFile(@NonNull Path path, @Nullable Path parentDir, @NonNull List<String> errors) {
+    private void validateCanCreateFile(Path path, @Nullable Path parentDir, List<String> errors) {
         if (Files.exists(path)) {
             return;
         }
