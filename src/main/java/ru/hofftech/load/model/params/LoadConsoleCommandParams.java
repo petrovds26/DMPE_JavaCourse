@@ -104,7 +104,6 @@ public class LoadConsoleCommandParams implements ConsoleCommandParams {
         return inputParcelText;
     }
 
-
     public String getOutputFile() {
         if (outputFile == null) {
             return "";
@@ -112,14 +111,12 @@ public class LoadConsoleCommandParams implements ConsoleCommandParams {
         return outputFile;
     }
 
-
     public String getOutputType() {
         if (outputType == null) {
             return "";
         }
         return outputType;
     }
-
 
     public Integer getStrategyId() {
         if (strategyId == null) {
