@@ -10,7 +10,6 @@ import ru.hofftech.shared.model.core.ProcessorCommandResult;
 import ru.hofftech.shared.model.core.telegram.TelegramCommandResponse;
 import ru.hofftech.shared.model.dto.ParcelFormDto;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
-import ru.hofftech.shared.model.params.TelegramUserSession;
 import ru.hofftech.shared.repository.ParcelRepository;
 import ru.hofftech.shared.service.command.telegram.TelegramCommand;
 import ru.hofftech.shared.service.parser.impl.ParserParcelFromFormDto;
@@ -28,7 +27,7 @@ import java.util.List;
 @NullMarked
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
-public class UpdateParcelTelegramCommand implements TelegramCommand {
+public class UpdateParcelTelegramCommand implements TelegramCommand<UpdateParcelTelegramUserSession> {
 
     private final ParcelRepository parcelRepository;
 
@@ -54,7 +53,7 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean canHandle(Update update, @Nullable TelegramUserSession session) {
+    public boolean canHandle(Update update, @Nullable UpdateParcelTelegramUserSession session) {
         String text = getMessageText(update);
         if (text == null) return false;
 
@@ -63,14 +62,14 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
         if (isCommandStart(text)) return true;
 
         // 2. Это продолжение сессии создания
-        return session instanceof UpdateParcelTelegramUserSession;
+        return session != null;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session) {
+    public TelegramCommandResponse execute(Update update, @Nullable UpdateParcelTelegramUserSession session) {
         String text = getMessageText(update);
         long chatId = getChatId(update);
 
@@ -84,11 +83,7 @@ public class UpdateParcelTelegramCommand implements TelegramCommand {
         }
 
         // Продолжение создания
-        if (session instanceof UpdateParcelTelegramUserSession updateSession) {
-            return continueUpd(updateSession, text);
-        }
-
-        return TelegramCommandResponse.text("Ошибка: неверное состояние сессии");
+        return continueUpd(session, text);
     }
 
     /**

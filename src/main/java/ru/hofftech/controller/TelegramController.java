@@ -26,7 +26,7 @@ public class TelegramController extends TelegramLongPollingBot {
     private static final String BOT_TOKEN = "7234493703:AAHdghQRLDQrUCMGr92rHz6k4Qlxhdcbsyc";
     private static final String BOT_USERNAME = "@PetrovDS26_SimpleTest_bot";
 
-    private final List<TelegramCommand> commands;
+    private final List<TelegramCommand<? extends TelegramUserSession>> commands;
 
     private final TelegramUserSessionService sessionService;
 
@@ -36,7 +36,7 @@ public class TelegramController extends TelegramLongPollingBot {
      * @param commands список доступных команд
      * @param sessionService сервис управления сессиями пользователей
      */
-    public TelegramController(List<TelegramCommand> commands, TelegramUserSessionService sessionService) {
+    public TelegramController(List<TelegramCommand<?>> commands, TelegramUserSessionService sessionService) {
         super(BOT_TOKEN);
         this.commands = commands;
         this.sessionService = sessionService;
@@ -101,34 +101,64 @@ public class TelegramController extends TelegramLongPollingBot {
 
         // Проверяем команду отмены
         if (text.equalsIgnoreCase(TelegramCommandType.CANCEL.getCommand())) {
-            TelegramCommand cancelCommand = findCommand(TelegramCommandType.CANCEL);
+            TelegramCommand<? extends TelegramUserSession> cancelCommand = findCommand(TelegramCommandType.CANCEL);
             if (cancelCommand == null) {
-                return TelegramCommandResponse.text("Неизвестная команда. Введите /help для справки.");
+                return TelegramCommandResponse.text("Не определена команда Отмена. Введите /help для справки.");
             }
-            return cancelCommand.execute(update, session);
+            return executeCommand(cancelCommand, update, session);
         }
 
         // Если есть сессия, ищем команду по ней
         if (session != null) {
             TelegramCommandType currentCommandType = session.getCurrentCommand();
             if (currentCommandType != null) {
-                TelegramCommand command = findCommand(currentCommandType);
-                if (command != null && command.canHandle(update, session)) {
-                    return command.execute(update, session);
+                TelegramCommand<? extends TelegramUserSession> command = findCommand(currentCommandType);
+                if (command == null) {
+                    return TelegramCommandResponse.text("Не определена команда в сессии. Введите /help для справки.");
                 }
+                return executeCommand(command, update, session);
             }
         }
 
         // Если нет сессии, ищем команду по тексту
         TelegramCommandType commandType = TelegramCommandType.fromString(text);
         if (commandType != null) {
-            TelegramCommand command = findCommand(commandType);
-            if (command != null) {
-                return command.execute(update, null);
+            TelegramCommand<? extends TelegramUserSession> command = findCommand(commandType);
+            if (command == null) {
+                return TelegramCommandResponse.text("Неизвестная команда. Введите /help для справки.");
             }
+            return executeCommand(command, update, session);
         }
 
         return TelegramCommandResponse.text("Неизвестная команда. Введите /help для справки.");
+    }
+
+    @Nullable
+    @SuppressWarnings("unchecked")
+    private <T extends TelegramUserSession> TelegramCommandResponse executeCommand(
+            TelegramCommand<? extends TelegramUserSession> command, Update update, @Nullable TelegramUserSession session) {
+        TelegramCommand<T> typedCommand = (TelegramCommand<T>) command;
+        T typedSession = (T) session;
+
+        if (typedCommand.canHandle(update, typedSession)) {
+            return typedCommand.execute(update, typedSession);
+        }
+        return null;
+    }
+
+    /**
+     * Находит команду по её типу.
+     *
+     * @param commandType тип команды
+     * @return команда или null, если не найдена
+     */
+    @Nullable
+    @SuppressWarnings("unchecked")
+    public <T extends TelegramUserSession> TelegramCommand<T> findCommand(TelegramCommandType commandType) {
+        return (TelegramCommand<T>) commands.stream()
+                .filter(c -> c.getType().equals(commandType))
+                .findFirst()
+                .orElse(null);
     }
 
     /**
@@ -161,20 +191,6 @@ public class TelegramController extends TelegramLongPollingBot {
             return update.getCallbackQuery().getMessage().getChatId();
         }
         return 0;
-    }
-
-    /**
-     * Находит команду по её типу.
-     *
-     * @param commandType тип команды
-     * @return команда или null, если не найдена
-     */
-    @Nullable
-    public TelegramCommand findCommand(TelegramCommandType commandType) {
-        return commands.stream()
-                .filter(c -> c.getType().equals(commandType))
-                .findFirst()
-                .orElse(null);
     }
 
     /**

@@ -10,7 +10,6 @@ import ru.hofftech.deleteparcel.model.params.DeleteParcelTelegramUserSession;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
 import ru.hofftech.shared.model.core.telegram.TelegramCommandResponse;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
-import ru.hofftech.shared.model.params.TelegramUserSession;
 import ru.hofftech.shared.repository.ParcelRepository;
 import ru.hofftech.shared.service.command.telegram.TelegramCommand;
 import ru.hofftech.shared.util.TelegramKeyboardUtil;
@@ -22,7 +21,7 @@ import ru.hofftech.shared.util.TelegramKeyboardUtil;
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
 @NullMarked
-public class DeleteParcelTelegramCommand implements TelegramCommand {
+public class DeleteParcelTelegramCommand implements TelegramCommand<DeleteParcelTelegramUserSession> {
 
     private final ParcelRepository parcelRepository;
 
@@ -46,7 +45,7 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean canHandle(Update update, @Nullable TelegramUserSession session) {
+    public boolean canHandle(Update update, @Nullable DeleteParcelTelegramUserSession session) {
         String text = getMessageText(update);
         if (text == null) return false;
 
@@ -55,14 +54,14 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
         if (isCommandStart(text)) return true;
 
         // 2. Это продолжение сессии создания
-        return session instanceof DeleteParcelTelegramUserSession;
+        return session != null;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session) {
+    public TelegramCommandResponse execute(Update update, @Nullable DeleteParcelTelegramUserSession session) {
         String text = getMessageText(update);
         long chatId = getChatId(update);
 
@@ -76,11 +75,7 @@ public class DeleteParcelTelegramCommand implements TelegramCommand {
         }
 
         // Продолжение создания
-        if (session instanceof DeleteParcelTelegramUserSession deleteSession) {
-            return continueDelete(deleteSession, text);
-        }
-
-        return TelegramCommandResponse.text("Ошибка: неверное состояние сессии");
+        return continueDelete(session, text);
     }
 
     /**

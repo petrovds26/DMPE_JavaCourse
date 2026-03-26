@@ -8,7 +8,7 @@ import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.hofftech.shared.model.core.ProcessorCommandResult;
 import ru.hofftech.shared.model.core.telegram.TelegramCommandResponse;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
-import ru.hofftech.shared.model.params.TelegramUserSession;
+import ru.hofftech.shared.model.params.TelegramUserSessionDefault;
 import ru.hofftech.shared.repository.ParcelRepository;
 import ru.hofftech.shared.service.command.telegram.TelegramCommand;
 import ru.hofftech.shared.util.TelegramKeyboardUtil;
@@ -20,7 +20,7 @@ import ru.hofftech.shared.util.TelegramKeyboardUtil;
 @RequiredArgsConstructor
 @SuppressWarnings("ClassCanBeRecord")
 @NullMarked
-public class ReadAllParcelTelegramCommand implements TelegramCommand {
+public class ReadAllParcelTelegramCommand implements TelegramCommand<TelegramUserSessionDefault> {
 
     private final ParcelRepository parcelRepository;
 
@@ -44,7 +44,7 @@ public class ReadAllParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean canHandle(Update update, @Nullable TelegramUserSession session) {
+    public boolean canHandle(Update update, @Nullable TelegramUserSessionDefault session) {
         String text = getMessageText(update);
         if (text == null) return false;
 
@@ -57,7 +57,7 @@ public class ReadAllParcelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session) {
+    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSessionDefault session) {
         // Начало создания посылки
         if (session == null) {
             ReadParcelProcessorCommand processorCommand = new ReadParcelProcessorCommand(parcelRepository);

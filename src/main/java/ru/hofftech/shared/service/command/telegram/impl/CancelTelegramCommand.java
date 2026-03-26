@@ -6,7 +6,7 @@ import org.jspecify.annotations.Nullable;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import ru.hofftech.shared.model.core.telegram.TelegramCommandResponse;
 import ru.hofftech.shared.model.enums.TelegramCommandType;
-import ru.hofftech.shared.model.params.TelegramUserSession;
+import ru.hofftech.shared.model.params.TelegramUserSessionDefault;
 import ru.hofftech.shared.service.command.telegram.TelegramCommand;
 import ru.hofftech.shared.util.TelegramKeyboardUtil;
 
@@ -16,7 +16,7 @@ import ru.hofftech.shared.util.TelegramKeyboardUtil;
  */
 @NullMarked
 @Slf4j
-public class CancelTelegramCommand implements TelegramCommand {
+public class CancelTelegramCommand implements TelegramCommand<TelegramUserSessionDefault> {
 
     /**
      * {@inheritDoc}
@@ -38,7 +38,7 @@ public class CancelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public boolean canHandle(Update update, @Nullable TelegramUserSession session) {
+    public boolean canHandle(Update update, @Nullable TelegramUserSessionDefault session) {
         String text = getMessageText(update);
         return text != null && isCommandStart(text);
     }
@@ -47,7 +47,7 @@ public class CancelTelegramCommand implements TelegramCommand {
      * {@inheritDoc}
      */
     @Override
-    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session) {
+    public TelegramCommandResponse execute(Update update, @Nullable TelegramUserSessionDefault session) {
         return TelegramCommandResponse.endSessionWithKeyboard(
                 "Операция отменена. Выберите команду:", TelegramKeyboardUtil.createCommandsKeyboard());
     }

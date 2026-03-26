@@ -11,7 +11,7 @@ import ru.hofftech.shared.model.params.TelegramUserSession;
  * Интерфейс для всех Telegram команд
  */
 @NullMarked
-public interface TelegramCommand {
+public interface TelegramCommand<T extends TelegramUserSession> {
 
     /**
      * Возвращает тип команды.
@@ -27,7 +27,7 @@ public interface TelegramCommand {
      * @param session текущая сессия пользователя
      * @return true если команда может обработать
      */
-    boolean canHandle(Update update, @Nullable TelegramUserSession session);
+    boolean canHandle(Update update, @Nullable T session);
 
     /**
      * Выполняет команду.
@@ -36,7 +36,7 @@ public interface TelegramCommand {
      * @param session текущая сессия пользователя
      * @return ответ для отправки пользователю
      */
-    TelegramCommandResponse execute(Update update, @Nullable TelegramUserSession session);
+    TelegramCommandResponse execute(Update update, @Nullable T session);
 
     /**
      * Проверяет, является ли текст началом команды.
