@@ -70,7 +70,7 @@ public class Main {
      *
      * @param args аргументы командной строки (не используются)
      */
-    public static void main(@NonNull String[] args) {
+    public static void main(String[] args) {
         log.info("Стартуем приложение...");
         Main.start();
     }
@@ -188,14 +188,14 @@ public class Main {
                 unloadConsoleCommand,
                 exitConsoleCommand));
 
-        List<TelegramCommand> telegramCommands = new ArrayList<>(List.of(
+        List<TelegramCommand<? extends TelegramUserSession>> telegramCommands = List.of(
                 createParcelTelegramCommand,
                 readParcelTelegramCommand,
                 readAllParcelTelegramCommand,
                 updateParcelTelegramCommand,
                 deleteParcelTelegramCommand,
                 loadParcelTelegramCommand,
-                cancelTelegramCommand));
+                cancelTelegramCommand);
 
         // Запускаем консольный интерфейс (в отдельном потоке)
         Thread consoleThread = new Thread(() -> new ConsoleController(consoleCommands).listen());
