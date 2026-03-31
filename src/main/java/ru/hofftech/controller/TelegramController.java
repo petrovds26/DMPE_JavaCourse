@@ -136,7 +136,9 @@ public class TelegramController extends TelegramLongPollingBot {
     @Nullable
     @SuppressWarnings("unchecked")
     private <T extends TelegramUserSession> TelegramCommandResponse executeCommand(
-            TelegramCommand<? extends TelegramUserSession> command, Update update, @Nullable TelegramUserSession session) {
+            TelegramCommand<? extends TelegramUserSession> command,
+            Update update,
+            @Nullable TelegramUserSession session) {
         TelegramCommand<T> typedCommand = (TelegramCommand<T>) command;
         T typedSession = (T) session;
 

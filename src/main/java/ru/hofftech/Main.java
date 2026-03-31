@@ -26,6 +26,7 @@ import ru.hofftech.load.service.parser.LoadParcelParserService;
 import ru.hofftech.readparcel.service.command.impl.ReadAllParcelTelegramCommand;
 import ru.hofftech.readparcel.service.command.impl.ReadParcelConsoleCommand;
 import ru.hofftech.readparcel.service.command.impl.ReadParcelTelegramCommand;
+import ru.hofftech.shared.model.params.TelegramUserSession;
 import ru.hofftech.shared.repository.ParcelRepository;
 import ru.hofftech.shared.service.FileSaveService;
 import ru.hofftech.shared.service.command.console.ConsoleCommand;
