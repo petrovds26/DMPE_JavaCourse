@@ -1,6 +1,7 @@
 package ru.hofftech.core.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.hofftech.core.service.BillingService;
 import ru.hofftech.core.util.ResponseWrapperUtil;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.newdto.BillingDto;
+import ru.hofftech.shared.model.dto.BillingDto;
+import ru.hofftech.shared.model.dto.PageDto;
 
 import java.time.LocalDate;
-import java.util.List;
 
 /**
  * Контроллер для работы с биллингом.
@@ -39,15 +40,20 @@ public class BillingController {
      * @param userId идентификатор пользователя
      * @param from   дата начала периода (опционально, формат dd.MM.yyyy)
      * @param to     дата окончания периода (опционально, формат dd.MM.yyyy)
+     * @param page   номер страницы для пагинации (опционально, начиная с 0).
+     *               По умолчанию 0 (первая страница).
+     * @param size   Размер страницы
      * @return ответ со списком записей биллинга
      */
     @GetMapping("/history")
-    @Operation(summary = "Получить историю биллинга для пользователя")
-    public ResponseEntity<Response<List<BillingDto>>> readBillingHistory(
+    @Operation(summary = "Получить историю биллинга для пользователя с пагинацией")
+    public ResponseEntity<Response<PageDto<BillingDto>>> readBillingHistory(
             @RequestParam @Valid String userId,
             @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate from,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate to) {
+            @RequestParam(required = false) @DateTimeFormat(pattern = "dd.MM.yyyy") LocalDate to,
+            @Parameter(description = "Номер страницы (начиная с 0)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Размер страницы") @RequestParam(defaultValue = "20") int size) {
 
-        return ResponseWrapperUtil.ok(billingService.requestBillingHistory(userId, from, to));
+        return ResponseWrapperUtil.ok(billingService.requestBillingHistory(userId, from, to, page, size));
     }
 }

@@ -12,11 +12,11 @@ import ru.hofftech.console.util.JsonUtil;
 import ru.hofftech.console.validation.impl.InputFilePathValidator;
 import ru.hofftech.console.validation.impl.OutputFilePathValidator;
 import ru.hofftech.shared.model.common.Response;
+import ru.hofftech.shared.model.dto.LoadResponseDto;
 import ru.hofftech.shared.model.dto.MachineDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.newdto.LoadResponseDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadResponseDto;
+import ru.hofftech.shared.model.dto.UnloadRequestDto;
+import ru.hofftech.shared.model.dto.UnloadResponseDto;
 import ru.hofftech.shared.util.PrintStringUtil;
 
 import java.util.List;

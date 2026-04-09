@@ -1,6 +1,8 @@
 package ru.hofftech.core.repository;
 
 import org.jspecify.annotations.NullMarked;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.hofftech.core.model.entity.ParcelEntity;
@@ -23,17 +25,10 @@ public interface ParcelRepository extends JpaRepository<ParcelEntity, Long> {
     Optional<ParcelEntity> findByName(String name);
 
     /**
-     * Проверяет существование посылки по названию.
+     * Находит все посылки с пагинацией.
      *
-     * @param name название посылки
-     * @return true если существует
+     * @param pageable параметры пагинации
+     * @return страница с посылками
      */
-    boolean existsByName(String name);
-
-    /**
-     * Удаляет посылку по названию.
-     *
-     * @param name название посылки
-     */
-    void deleteByName(String name);
+    Page<ParcelEntity> findAll(Pageable pageable);
 }

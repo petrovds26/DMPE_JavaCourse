@@ -10,7 +10,7 @@ import ru.hofftech.core.model.core.Parcel;
 import ru.hofftech.core.model.core.ParserParcelProcessorResult;
 import ru.hofftech.core.validation.impl.ParcelGridValidator;
 import ru.hofftech.core.validation.impl.ParcelListStringValidator;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -25,6 +25,8 @@ public class BillingCommand extends BaseCommand {
      * @param userId   идентификатор пользователя
      * @param fromDate дата начала периода (опционально, формат dd.MM.yyyy)
      * @param toDate   дата окончания периода (опционально, формат dd.MM.yyyy)
+     * @param page     номер страницы для пагинации (опционально, начиная с 0).
+     *                 По умолчанию 0 (первая страница).
      * @return отформатированная история биллинга
      */
     @Command(command = "", description = "Показать историю биллинга")
@@ -34,7 +36,13 @@ public class BillingCommand extends BaseCommand {
             @Option(longNames = "from", shortNames = 'f', description = "Дата начала (dd.MM.yyyy)") @Nullable
                     String fromDate,
             @Option(longNames = "to", shortNames = 't', description = "Дата окончания (dd.MM.yyyy)") @Nullable
-                    String toDate) {
-        return executeWithErrorHandling(() -> billingService.readBilling(userId, fromDate, toDate));
+                    String toDate,
+            @Option(
+                            longNames = "page",
+                            shortNames = 'p',
+                            description = "Номер страницы (начиная с 0)",
+                            defaultValue = "0")
+                    Integer page) {
+        return executeWithErrorHandling(() -> billingService.readBilling(userId, fromDate, toDate, page));
     }
 }

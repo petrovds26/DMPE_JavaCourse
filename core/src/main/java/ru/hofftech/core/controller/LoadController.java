@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.hofftech.core.service.LoadService;
 import ru.hofftech.core.util.ResponseWrapperUtil;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.newdto.LoadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.LoadResponseDto;
+import ru.hofftech.shared.model.dto.LoadRequestDto;
+import ru.hofftech.shared.model.dto.LoadResponseDto;
 
 /**
  * Контроллер для загрузки посылок в машины.

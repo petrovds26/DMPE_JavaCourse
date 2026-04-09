@@ -9,12 +9,12 @@ import ru.hofftech.core.model.core.Machine;
 import ru.hofftech.core.model.core.Parcel;
 import ru.hofftech.core.model.core.PlacedParcel;
 import ru.hofftech.core.model.entity.BillingEntity;
+import ru.hofftech.shared.model.dto.BillingDto;
 import ru.hofftech.shared.model.dto.CoordinateDto;
+import ru.hofftech.shared.model.dto.LoadParcelInvalidDto;
 import ru.hofftech.shared.model.dto.MachineDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
 import ru.hofftech.shared.model.dto.PlacedParcelDto;
-import ru.hofftech.shared.model.dto.newdto.BillingDto;
-import ru.hofftech.shared.model.dto.newdto.LoadParcelInvalidDto;
 
 import java.util.ArrayList;
 import java.util.List;

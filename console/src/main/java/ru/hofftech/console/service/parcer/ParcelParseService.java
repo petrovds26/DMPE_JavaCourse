@@ -6,7 +6,7 @@ import org.jspecify.annotations.NullMarked;
 import org.springframework.stereotype.Service;
 import ru.hofftech.console.model.enums.LoadInputParcelType;
 import ru.hofftech.console.service.parcer.parcelnamestrategy.ParcelNameParseStrategy;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 
 import java.util.List;
 

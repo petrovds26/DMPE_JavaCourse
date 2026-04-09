@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
 import ru.hofftech.telegram.exception.FeignException;
 import ru.hofftech.telegram.model.constant.InformationMessage;
 import ru.hofftech.telegram.model.enums.State;

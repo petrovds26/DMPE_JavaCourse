@@ -8,7 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.newdto.BillingDto;
+import ru.hofftech.shared.model.dto.BillingDto;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.util.PrintStringUtil;
 import ru.hofftech.telegram.exception.FeignException;
 import ru.hofftech.telegram.model.constant.InformationMessage;
@@ -18,7 +19,6 @@ import ru.hofftech.telegram.util.ActionContextUtil;
 import ru.hofftech.telegram.util.MessageUtil;
 import ru.hofftech.telegram.validation.InputParametersValidator;
 
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -117,12 +117,12 @@ public class ReadBillingScenarioFactory {
 
         log.info("Запрос истории биллинга: userId={}, fromDate={}, toDate={}", userId, fromDate, toDate);
 
-        Response<List<BillingDto>> response = coreService.readBilling(userId, fromDate, toDate);
+        Response<PageDto<BillingDto>> response = coreService.readBilling(userId, fromDate, toDate);
 
         if (response.isSuccess()) {
             return MessageUtil.createSendMessage(
                     ActionContextUtil.getChatId(context),
-                    PrintStringUtil.formatBillingHistory(response.getData()),
+                    PrintStringUtil.formatBillingHistory(response.getData().content()),
                     false);
         }
 

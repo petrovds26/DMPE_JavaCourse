@@ -1,4 +1,4 @@
-package ru.hofftech.shared.model.dto.newdto;
+package ru.hofftech.shared.model.dto;
 
 import lombok.Builder;
 import org.jspecify.annotations.NullMarked;

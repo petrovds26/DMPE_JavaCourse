@@ -10,7 +10,7 @@ import ru.hofftech.core.model.core.ParserParcelProcessorResult;
 import ru.hofftech.core.model.entity.ParcelEntity;
 import ru.hofftech.core.service.parcer.ParserParcelService;
 import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
 
 import java.util.List;
 

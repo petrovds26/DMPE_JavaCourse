@@ -5,9 +5,10 @@ import org.jspecify.annotations.NullMarked;
 import org.springframework.stereotype.Service;
 import ru.hofftech.console.exception.FeignException;
 import ru.hofftech.shared.model.common.Response;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 import ru.hofftech.shared.util.PrintStringUtil;
 
 import java.util.List;
@@ -112,12 +113,12 @@ public class ParcelService {
      * @return отформатированный список всех посылок
      * @throws FeignException если при вызове Core сервиса произошла ошибка
      */
-    public String readAllParcels() {
-        Response<List<ParcelDto>> response = coreService.readAllParcels();
+    public String readAllParcels(Integer page) {
+        Response<PageDto<ParcelDto>> response = coreService.readAllParcels(page);
 
         if (response.isSuccess()) {
             return "Список посылок:\n"
-                    + response.getData().stream()
+                    + response.getData().content().stream()
                             .map(PrintStringUtil::parcelRender)
                             .collect(Collectors.joining("\n"));
         }

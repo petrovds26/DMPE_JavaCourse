@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.hofftech.core.service.UnloadService;
 import ru.hofftech.core.util.ResponseWrapperUtil;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.newdto.UnloadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadResponseDto;
+import ru.hofftech.shared.model.dto.UnloadRequestDto;
+import ru.hofftech.shared.model.dto.UnloadResponseDto;
 
 /**
  * Контроллер для разгрузки машин.

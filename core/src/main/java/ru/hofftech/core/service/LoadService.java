@@ -17,11 +17,11 @@ import ru.hofftech.core.repository.ParcelRepository;
 import ru.hofftech.core.service.loader.strategy.LoadStrategy;
 import ru.hofftech.core.service.loader.strategy.LoadStrategyService;
 import ru.hofftech.core.service.parcer.ParserMachine;
-import ru.hofftech.shared.model.dto.newdto.LoadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.LoadResponseDto;
-import ru.hofftech.shared.model.dto.newdto.LoadStatisticDto;
-import ru.hofftech.shared.model.dto.newdto.MachineFormRequestDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.LoadRequestDto;
+import ru.hofftech.shared.model.dto.LoadResponseDto;
+import ru.hofftech.shared.model.dto.LoadStatisticDto;
+import ru.hofftech.shared.model.dto.MachineFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 import ru.hofftech.shared.model.enums.BillingOperationType;
 
 import java.math.BigDecimal;

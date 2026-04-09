@@ -8,14 +8,15 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import ru.hofftech.console.feign.CoreFeignClient;
 import ru.hofftech.shared.model.common.Response;
+import ru.hofftech.shared.model.dto.BillingDto;
+import ru.hofftech.shared.model.dto.LoadRequestDto;
+import ru.hofftech.shared.model.dto.LoadResponseDto;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.newdto.BillingDto;
-import ru.hofftech.shared.model.dto.newdto.LoadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.LoadResponseDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadResponseDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.UnloadRequestDto;
+import ru.hofftech.shared.model.dto.UnloadResponseDto;
 import ru.hofftech.shared.model.enums.ResponseCode;
 
 import java.util.List;
@@ -48,11 +49,11 @@ public class CoreService {
 
     /**
      * Получает список всех посылок.
-     *
+     * @param page     номер страницы для пагинации (опционально)
      * @return ответ сервера со списком DTO посылок
      */
-    public Response<List<ParcelDto>> readAllParcels() {
-        return executeRequest(coreFeignClient::readAllParcels);
+    public Response<PageDto<ParcelDto>> readAllParcels(Integer page) {
+        return executeRequest(() -> coreFeignClient.readAllParcels(page));
     }
 
     /**
@@ -111,11 +112,12 @@ public class CoreService {
      * @param userId      идентификатор пользователя
      * @param fromDateStr дата начала периода (опционально)
      * @param toDateStr   дата окончания периода (опционально)
+     * @param page        номер страницы для пагинации (опционально)
      * @return ответ сервера со списком записей биллинга
      */
-    public Response<List<BillingDto>> readBilling(
-            String userId, @Nullable String fromDateStr, @Nullable String toDateStr) {
-        return executeRequest(() -> coreFeignClient.readBilling(userId, fromDateStr, toDateStr));
+    public Response<PageDto<BillingDto>> readBilling(
+            String userId, @Nullable String fromDateStr, @Nullable String toDateStr, Integer page) {
+        return executeRequest(() -> coreFeignClient.readBilling(userId, fromDateStr, toDateStr, page));
     }
 
     /**

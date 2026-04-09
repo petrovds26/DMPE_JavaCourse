@@ -1,9 +1,8 @@
-package ru.hofftech.shared.model.dto.newdto;
+package ru.hofftech.shared.model.dto;
 
 import lombok.Builder;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import ru.hofftech.shared.model.dto.ParcelDto;
 
 import java.util.List;
 

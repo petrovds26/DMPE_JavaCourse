@@ -2,7 +2,7 @@ package ru.hofftech.console.service.parcer.parcelnamestrategy;
 
 import org.jspecify.annotations.NullMarked;
 import ru.hofftech.console.model.enums.LoadInputParcelType;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 
 import java.util.List;
 

@@ -8,12 +8,12 @@ import org.springframework.stereotype.Service;
 import ru.hofftech.console.exception.FeignException;
 import ru.hofftech.console.exception.ValidateException;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.newdto.BillingDto;
+import ru.hofftech.shared.model.dto.BillingDto;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.util.PrintStringUtil;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 /**
  * Сервис для работы с биллингом в консольном приложении.
@@ -36,18 +36,19 @@ public class BillingService {
      * @param userId      идентификатор пользователя
      * @param fromDateStr дата начала периода (опционально, формат dd.MM.yyyy)
      * @param toDateStr   дата окончания периода (опционально, формат dd.MM.yyyy)
+     * @param page        номер страницы для пагинации (опционально, начиная с 0).
      * @return отформатированная история биллинга
      * @throws ValidateException если формат даты не соответствует ожидаемому
      * @throws FeignException    если при вызове Core сервиса произошла ошибка
      */
-    public String readBilling(String userId, @Nullable String fromDateStr, @Nullable String toDateStr) {
+    public String readBilling(String userId, @Nullable String fromDateStr, @Nullable String toDateStr, Integer page) {
         validDate(fromDateStr);
         validDate(toDateStr);
 
-        Response<List<BillingDto>> response = coreService.readBilling(userId, fromDateStr, toDateStr);
+        Response<PageDto<BillingDto>> response = coreService.readBilling(userId, fromDateStr, toDateStr, page);
 
         if (response.isSuccess()) {
-            return PrintStringUtil.formatBillingHistory(response.getData());
+            return PrintStringUtil.formatBillingHistory(response.getData().content());
         }
 
         throw new FeignException(response);

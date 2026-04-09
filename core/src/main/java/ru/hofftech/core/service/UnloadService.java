@@ -10,9 +10,9 @@ import ru.hofftech.core.model.core.Machine;
 import ru.hofftech.core.model.core.Parcel;
 import ru.hofftech.core.model.core.PlacedParcel;
 import ru.hofftech.shared.model.dto.MachineDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadResponseDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadStatisticDto;
+import ru.hofftech.shared.model.dto.UnloadRequestDto;
+import ru.hofftech.shared.model.dto.UnloadResponseDto;
+import ru.hofftech.shared.model.dto.UnloadStatisticDto;
 import ru.hofftech.shared.model.enums.BillingOperationType;
 
 import java.math.BigDecimal;

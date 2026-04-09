@@ -1,11 +1,10 @@
-package ru.hofftech.shared.model.dto.newdto;
+package ru.hofftech.shared.model.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import org.jspecify.annotations.NullMarked;
-import ru.hofftech.shared.model.dto.MachineDto;
 
 import java.util.List;
 

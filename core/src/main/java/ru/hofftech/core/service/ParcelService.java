@@ -2,15 +2,21 @@ package ru.hofftech.core.service;
 
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.hofftech.core.exception.ParcelException;
 import ru.hofftech.core.mapper.ParcelEntityMapper;
 import ru.hofftech.core.model.core.Parcel;
 import ru.hofftech.core.model.entity.ParcelEntity;
 import ru.hofftech.core.repository.ParcelRepository;
+import ru.hofftech.core.util.PageDtoUtil;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -98,6 +104,21 @@ public class ParcelService {
         return parcelRepository.findAll().stream()
                 .map(parcelEntityMapper::toDto)
                 .toList();
+    }
+
+    /**
+     * Возвращает пагинированный список всех посылок.
+     *
+     * @param page номер страницы (начиная с 0)
+     * @param size размер страницы
+     * @return пагинированный список DTO посылок
+     */
+    public PageDto<ParcelDto> readAllPaginated(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDt"));
+        Page<ParcelEntity> parcelPage = parcelRepository.findAll(pageable);
+
+        Page<ParcelDto> dtoPage = parcelPage.map(parcelEntityMapper::toDto);
+        return PageDtoUtil.from(dtoPage);
     }
 
     /**

@@ -1,10 +1,9 @@
-package ru.hofftech.shared.model.dto.newdto;
+package ru.hofftech.shared.model.dto;
 
 import lombok.Builder;
 import lombok.With;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import ru.hofftech.shared.model.dto.MachineDto;
 
 import java.util.List;
 

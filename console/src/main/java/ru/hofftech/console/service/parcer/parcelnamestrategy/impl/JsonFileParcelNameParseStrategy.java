@@ -8,8 +8,8 @@ import ru.hofftech.console.model.enums.LoadInputParcelType;
 import ru.hofftech.console.service.parcer.parcelnamestrategy.ParcelNameParseStrategy;
 import ru.hofftech.console.service.parcer.transform.impl.TransformFileToStringList;
 import ru.hofftech.console.util.JsonUtil;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 import ru.hofftech.shared.model.dto.ParcelsNameDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
 
 import java.util.List;
 

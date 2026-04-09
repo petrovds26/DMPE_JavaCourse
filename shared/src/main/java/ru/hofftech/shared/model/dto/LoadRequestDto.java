@@ -1,4 +1,4 @@
-package ru.hofftech.shared.model.dto.newdto;
+package ru.hofftech.shared.model.dto;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;

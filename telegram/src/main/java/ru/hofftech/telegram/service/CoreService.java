@@ -7,12 +7,13 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import ru.hofftech.shared.model.common.Response;
+import ru.hofftech.shared.model.dto.BillingDto;
+import ru.hofftech.shared.model.dto.LoadRequestDto;
+import ru.hofftech.shared.model.dto.LoadResponseDto;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.newdto.BillingDto;
-import ru.hofftech.shared.model.dto.newdto.LoadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.LoadResponseDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 import ru.hofftech.shared.model.enums.ResponseCode;
 import ru.hofftech.telegram.feign.CoreFeignClient;
 
@@ -48,7 +49,7 @@ public class CoreService {
      *
      * @return ответ сервера со списком DTO посылок
      */
-    public Response<List<ParcelDto>> readAllParcels() {
+    public Response<PageDto<ParcelDto>> readAllParcels() {
         return executeRequest(coreFeignClient::readAllParcels);
     }
 
@@ -100,7 +101,7 @@ public class CoreService {
      * @param toDateStr дата окончания периода (опционально)
      * @return ответ сервера со списком записей биллинга
      */
-    public Response<List<BillingDto>> readBilling(
+    public Response<PageDto<BillingDto>> readBilling(
             String userId, @Nullable String fromDateStr, @Nullable String toDateStr) {
         return executeRequest(() -> coreFeignClient.readBilling(userId, fromDateStr, toDateStr));
     }

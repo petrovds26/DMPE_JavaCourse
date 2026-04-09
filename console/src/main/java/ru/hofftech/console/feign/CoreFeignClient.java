@@ -11,14 +11,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.hofftech.shared.model.common.Response;
+import ru.hofftech.shared.model.dto.BillingDto;
+import ru.hofftech.shared.model.dto.LoadRequestDto;
+import ru.hofftech.shared.model.dto.LoadResponseDto;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.newdto.BillingDto;
-import ru.hofftech.shared.model.dto.newdto.LoadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.LoadResponseDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.UnloadResponseDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.UnloadRequestDto;
+import ru.hofftech.shared.model.dto.UnloadResponseDto;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public interface CoreFeignClient {
      * @return ответ сервера со списком DTO посылок
      */
     @GetMapping("/core/v1/parcel/read")
-    Response<List<ParcelDto>> readAllParcels();
+    Response<PageDto<ParcelDto>> readAllParcels(@RequestParam("page") Integer page);
 
     /**
      * Получает посылку по названию.
@@ -100,11 +101,13 @@ public interface CoreFeignClient {
      * @param userId идентификатор пользователя
      * @param from   дата начала периода (опционально, формат dd.MM.yyyy)
      * @param to     дата окончания периода (опционально, формат dd.MM.yyyy)
+     * @param page   номер страницы для пагинации (опционально)
      * @return ответ сервера со списком записей биллинга
      */
     @GetMapping("/core/v1/billing/history")
-    Response<List<BillingDto>> readBilling(
+    Response<PageDto<BillingDto>> readBilling(
             @RequestParam("userId") String userId,
             @RequestParam(value = "from", required = false) @Nullable String from,
-            @RequestParam(value = "to", required = false) @Nullable String to);
+            @RequestParam(value = "to", required = false) @Nullable String to,
+            @RequestParam("page") Integer page);
 }

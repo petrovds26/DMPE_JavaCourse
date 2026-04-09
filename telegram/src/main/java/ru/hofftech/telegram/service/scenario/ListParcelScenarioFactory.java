@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import ru.hofftech.shared.model.common.Response;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
 import ru.hofftech.shared.util.PrintStringUtil;
 import ru.hofftech.telegram.exception.FeignException;
@@ -16,7 +17,6 @@ import ru.hofftech.telegram.service.CoreService;
 import ru.hofftech.telegram.util.ActionContextUtil;
 import ru.hofftech.telegram.util.MessageUtil;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -40,11 +40,11 @@ public class ListParcelScenarioFactory {
     @TelegramScenarioAction
     public SendMessage listParcel(ActionContext<?> context) {
         log.info("Чтение всех посылок");
-        Response<List<ParcelDto>> response = coreService.readAllParcels();
+        Response<PageDto<ParcelDto>> response = coreService.readAllParcels();
 
         if (response.isSuccess()) {
             String responseText = "Список посылок:\n"
-                    + response.getData().stream()
+                    + response.getData().content().stream()
                             .map(PrintStringUtil::parcelRender)
                             .collect(Collectors.joining("\n"));
             return MessageUtil.createSendMessage(ActionContextUtil.getChatId(context), responseText, false);

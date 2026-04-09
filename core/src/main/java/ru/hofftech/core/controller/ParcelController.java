@@ -1,6 +1,7 @@
 package ru.hofftech.core.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +15,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import ru.hofftech.core.service.ParcelService;
 import ru.hofftech.core.util.ResponseWrapperUtil;
 import ru.hofftech.shared.model.common.Response;
+import ru.hofftech.shared.model.dto.PageDto;
 import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelFormRequestDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 
 import java.util.List;
 
@@ -88,7 +91,7 @@ public class ParcelController {
      * @param name название посылки (опционально)
      * @return ответ со списком посылок
      */
-    @GetMapping(value = {"/read", "/read/{name}"})
+    @GetMapping(value = "/read/{name}")
     @Operation(summary = "Метод чтения посылок")
     public ResponseEntity<Response<List<ParcelDto>>> readParcel(@PathVariable(required = false) @Nullable String name) {
 
@@ -96,5 +99,21 @@ public class ParcelController {
             return ResponseWrapperUtil.ok(parcelService.readAll());
         }
         return ResponseWrapperUtil.ok(parcelService.readByName(name));
+    }
+
+    /**
+     * Возвращает пагинированный список всех посылок.
+     *
+     * @param page номер страницы (начиная с 0)
+     * @param size размер страницы
+     * @return пагинированный список посылок
+     */
+    @GetMapping(value = {"/read"})
+    @Operation(summary = "Метод получения списка посылок с пагинацией")
+    public ResponseEntity<Response<PageDto<ParcelDto>>> readParcelsPaginated(
+            @Parameter(description = "Номер страницы (начиная с 0)") @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Размер страницы") @RequestParam(defaultValue = "20") int size) {
+
+        return ResponseWrapperUtil.ok(parcelService.readAllPaginated(page, size));
     }
 }

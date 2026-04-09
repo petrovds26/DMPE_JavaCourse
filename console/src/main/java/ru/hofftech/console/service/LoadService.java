@@ -12,10 +12,10 @@ import ru.hofftech.console.service.parcer.transform.impl.TransformTextToStringLi
 import ru.hofftech.console.util.JsonUtil;
 import ru.hofftech.console.validation.impl.OutputFilePathValidator;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.newdto.LoadRequestDto;
-import ru.hofftech.shared.model.dto.newdto.LoadResponseDto;
-import ru.hofftech.shared.model.dto.newdto.MachineFormRequestDto;
-import ru.hofftech.shared.model.dto.newdto.ParcelNameRequestDto;
+import ru.hofftech.shared.model.dto.LoadRequestDto;
+import ru.hofftech.shared.model.dto.LoadResponseDto;
+import ru.hofftech.shared.model.dto.MachineFormRequestDto;
+import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 import ru.hofftech.shared.model.enums.LoadStrategyType;
 import ru.hofftech.shared.util.PrintStringUtil;
 

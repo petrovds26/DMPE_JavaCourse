@@ -84,10 +84,17 @@ public class ParcelCommand extends BaseCommand {
     /**
      * Показывает список всех посылок.
      *
+     * @param page     номер страницы для пагинации (опционально)
      * @return отформатированный список всех посылок
      */
     @Command(command = "readAll", description = "Посмотреть все посылки")
-    public String readAll() {
-        return executeWithErrorHandling(parcelService::readAllParcels);
+    public String readAll(
+            @Option(
+                            longNames = "page",
+                            shortNames = 'p',
+                            description = "Номер страницы (начиная с 0)",
+                            defaultValue = "0")
+                    Integer page) {
+        return executeWithErrorHandling(() -> parcelService.readAllParcels(page));
     }
 }
