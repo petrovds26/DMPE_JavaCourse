@@ -1,0 +1,25 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    ROOT: INFO
+
+spring:
+  application:
+    name: console
+  shell:
+    interactive:
+      enabled: true
+    history:
+      enabled: true
+      name: .shell_history
+    command:
+      version:
+        enabled: true
+      help:
+        enabled: true
+
+core:
+  api:
+    url: http://localhost:8080

@@ -1,0 +1,298 @@
+server:
+  port: 8082
+
+logging:
+  level:
+    ROOT: INFO
+    ru.hofftech.telegram: DEBUG
+    org.telegram.telegrambots: DEBUG
+
+spring:
+  application:
+    name: telegram
+
+core:
+  api:
+    url: http://localhost:8080
+
+drednote:
+  telegram:
+    token:
+    scenario:
+      values:
+        start:
+          type: external
+          source: INITIAL
+          target: INITIAL
+          request:
+            patterns: [ "/start" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "StartScenarioFactory#startDialog"
+        create-parcel:
+          type: external
+          source: INITIAL
+          target: CREATE_PARCEL_ENTER_NAME
+          request:
+            patterns: [ "/create_parcel" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "CreateParcelScenarioFactory#startCreateParcel"
+          graph:
+            - id: create-parcel-name
+              children:
+                - id: create-parcel-symbol
+                  children:
+                    - id: create-parcel-form
+          steps:
+            create-parcel-name:
+              type: external
+              source: CREATE_PARCEL_ENTER_NAME
+              target: CREATE_PARCEL_ENTER_SYMBOL
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "CreateParcelScenarioFactory#saveName"
+            create-parcel-symbol:
+              type: external
+              source: CREATE_PARCEL_ENTER_SYMBOL
+              target: CREATE_PARCEL_ENTER_FORM
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "CreateParcelScenarioFactory#saveSymbol"
+            create-parcel-form:
+              type: external
+              source: CREATE_PARCEL_ENTER_FORM
+              target: INITIAL
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "CreateParcelScenarioFactory#createParcel"
+        update-parcel:
+          type: external
+          source: INITIAL
+          target: UPDATE_PARCEL_ENTER_NAME
+          request:
+            patterns: [ "/update_parcel" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "UpdateParcelScenarioFactory#startUpdateParcel"
+          graph:
+            - id: update-parcel-name
+              children:
+                - id: update-parcel-symbol
+                  children:
+                    - id: update-parcel-form
+          steps:
+            update-parcel-name:
+              type: external
+              source: UPDATE_PARCEL_ENTER_NAME
+              target: UPDATE_PARCEL_ENTER_SYMBOL
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "UpdateParcelScenarioFactory#saveName"
+            update-parcel-symbol:
+              type: external
+              source: UPDATE_PARCEL_ENTER_SYMBOL
+              target: UPDATE_PARCEL_ENTER_FORM
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "UpdateParcelScenarioFactory#saveSymbol"
+            update-parcel-form:
+              type: external
+              source: UPDATE_PARCEL_ENTER_FORM
+              target: INITIAL
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "UpdateParcelScenarioFactory#updateParcel"
+        delete-parcel:
+          type: external
+          source: INITIAL
+          target: DELETE_PARCEL_ENTER_NAME
+          request:
+            patterns: [ "/delete_parcel" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "DeleteParcelScenarioFactory#startDeleteParcel"
+          graph:
+            - id: delete-parcel-name
+          steps:
+            delete-parcel-name:
+              type: external
+              source: DELETE_PARCEL_ENTER_NAME
+              target: INITIAL
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "DeleteParcelScenarioFactory#deleteParcel"
+        read-parcel:
+          type: external
+          source: INITIAL
+          target: READ_PARCEL_ENTER_NAME
+          request:
+            patterns: [ "/read_parcel" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "ReadParcelScenarioFactory#startReadParcel"
+          graph:
+            - id: read-parcel-name
+          steps:
+            read-parcel-name:
+              type: external
+              source: READ_PARCEL_ENTER_NAME
+              target: INITIAL
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "ReadParcelScenarioFactory#readParcel"
+        list-parcel:
+          type: external
+          source: INITIAL
+          target: INITIAL
+          request:
+            patterns: [ "/list_parcel" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "ListParcelScenarioFactory#listParcel"
+        read-billing:
+          type: external
+          source: INITIAL
+          target: READ_BILLING_ENTER_USER_ID
+          request:
+            patterns: [ "/read_billing" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "ReadBillingScenarioFactory#startReadBilling"
+          graph:
+            - id: read-billing-user-id
+              children:
+                - id: read-billing-from-date
+                  children:
+                    - id: read-billing-to-date
+          steps:
+            read-billing-user-id:
+              type: external
+              source: READ_BILLING_ENTER_USER_ID
+              target: READ_BILLING_ENTER_FROM_DATE
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "ReadBillingScenarioFactory#saveUserId"
+            read-billing-from-date:
+              type: external
+              source: READ_BILLING_ENTER_FROM_DATE
+              target: READ_BILLING_ENTER_TO_DATE
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "ReadBillingScenarioFactory#saveFromDate"
+            read-billing-to-date:
+              type: external
+              source: READ_BILLING_ENTER_TO_DATE
+              target: INITIAL
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "ReadBillingScenarioFactory#readBilling"
+        load:
+          type: external
+          source: INITIAL
+          target: LOAD_ENTER_USER_ID
+          request:
+            patterns: [ "/load" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "LoadScenarioFactory#startLoad"
+          graph:
+            - id: load-user-id
+              children:
+                - id: load-machines
+                  children:
+                    - id: load-parcels
+                      children:
+                        - id: load-strategy
+          steps:
+            load-user-id:
+              type: external
+              source: LOAD_ENTER_USER_ID
+              target: LOAD_ENTER_MACHINES
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "LoadScenarioFactory#saveUserId"
+            load-machines:
+              type: external
+              source: LOAD_ENTER_MACHINES
+              target: LOAD_ENTER_PARCELS
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "LoadScenarioFactory#saveMachines"
+            load-parcels:
+              type: external
+              source: LOAD_ENTER_PARCELS
+              target: LOAD_ENTER_STRATEGY
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "LoadScenarioFactory#saveParcels"
+            load-strategy:
+              type: external
+              source: LOAD_ENTER_STRATEGY
+              target: INITIAL
+              request:
+                patterns: [ "**" ]
+                requestTypes: [ MESSAGE ]
+                messageTypes: [ TEXT ]
+              action-references:
+                - "LoadScenarioFactory#load"
+        cancel:
+          type: external
+          source: INITIAL
+          target: INITIAL
+          request:
+            patterns: [ "/cancel" ]
+            requestTypes: [ MESSAGE ]
+            messageTypes: [ COMMAND ]
+          action-references:
+            - "CancelScenarioFactory#cancelDialog"
