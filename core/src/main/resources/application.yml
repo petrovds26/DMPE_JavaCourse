@@ -1,0 +1,55 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    ROOT: INFO
+
+urls:
+  version: v1
+  mainservice:
+    root: ${urls.app.core.root}
+  app:
+    core:
+      prefix: /core
+      root: ${urls.app.core.prefix}/${urls.version}
+
+spring:
+  application:
+    name: core
+  jpa:
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+  datasource:
+    url: jdbc:postgresql://localhost:8890/postgres?currentSchema=dmpe
+    username: dmpe_cd
+    password: 123456
+  flyway:
+    create-schemas: true
+    schemas: dmpe
+    user: dmpe_cd
+    password: 123456
+    url: jdbc:postgresql://localhost:8890/postgres?currentSchema=dmpe
+
+swagger:
+  url:
+    path: ${urls.mainservice.root}/
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: ${swagger.url.path}swagger/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: ${swagger.url.path}
+
+load:
+  price-segment: 50
+unload:
+  price-segment: 80
