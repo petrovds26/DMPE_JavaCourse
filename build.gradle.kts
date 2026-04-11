@@ -33,6 +33,7 @@ object Version {
     const val ASSERTJ = "3.24.2"
     const val MOCKITO = "5.19.0"
     const val TELEGRAM_BOT = "1.0.0.rc-1"
+    const val SHED_LOCK = "5.16.0"
 }
 
 subprojects {
@@ -177,6 +178,34 @@ project(":core") {
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-validation")
+        //Периодический запуск
+        implementation("net.javacrumbs.shedlock:shedlock-provider-jdbc-template:${Version.SHED_LOCK}")
+        implementation("net.javacrumbs.shedlock:shedlock-spring:${Version.SHED_LOCK}")
+        //Кафка
+        implementation("org.springframework.cloud:spring-cloud-starter-config")
+        implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+        implementation("org.springframework.kafka:spring-kafka")
+
+        // База данных
+        implementation("org.flywaydb:flyway-core")
+        implementation("org.flywaydb:flyway-database-postgresql")
+        runtimeOnly("org.postgresql:postgresql:${Version.POSTGRESQL}")
+    }
+}
+
+project(":billing") {
+    dependencies {
+        implementation(project(":shared"))
+
+        // Spring Boot стартеры
+        implementation("org.springframework.boot:spring-boot-starter-web")
+        implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+        implementation("org.springframework.boot:spring-boot-starter-validation")
+
+        //Кафка
+        implementation("org.springframework.cloud:spring-cloud-starter-config")
+        implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
+        implementation("org.springframework.kafka:spring-kafka")
 
         // База данных
         implementation("org.flywaydb:flyway-core")

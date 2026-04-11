@@ -2,6 +2,7 @@ package ru.hofftech.shared.model.dto;
 
 import lombok.Builder;
 import org.jspecify.annotations.NullMarked;
+import ru.hofftech.shared.model.enums.BillingOperationType;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ import java.time.LocalDateTime;
 @Builder
 public record BillingDto(
         String userId,
-        String operationType,
+        BillingOperationType operationType,
         Integer machineCount,
         Integer parcelCount,
         BigDecimal totalAmount,

@@ -11,6 +11,7 @@ import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.hofftech.core.exception.JsonUtilException;
 import ru.hofftech.core.exception.LoadException;
 import ru.hofftech.core.exception.ParcelException;
 import ru.hofftech.core.util.ResponseWrapperUtil;
@@ -45,6 +46,7 @@ public class ResponseControllerAdvice {
         MissingRequestHeaderException.class,
         ParcelException.class,
         LoadException.class,
+        JsonUtilException.class
     })
     public Response<Object> handle(RuntimeException exception) {
         log.error(ERROR, exception);

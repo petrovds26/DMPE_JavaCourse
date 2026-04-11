@@ -1,4 +1,4 @@
-package ru.hofftech.core.model.entity;
+package ru.hofftech.billing.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -59,6 +59,9 @@ public class BillingEntity {
 
     @NotNull
     private BigDecimal totalAmount;
+
+    @NotNull
+    private String externalId;
 
     @CreationTimestamp
     private LocalDateTime createdDt;

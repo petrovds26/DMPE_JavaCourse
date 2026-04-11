@@ -1,4 +1,4 @@
-package ru.hofftech.core.controller;
+package ru.hofftech.billing.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import ru.hofftech.core.service.BillingService;
-import ru.hofftech.core.util.ResponseWrapperUtil;
+import ru.hofftech.billing.service.BillingService;
+import ru.hofftech.billing.util.ResponseWrapperUtil;
 import ru.hofftech.shared.model.common.Response;
 import ru.hofftech.shared.model.dto.BillingDto;
 import ru.hofftech.shared.model.dto.PageDto;
@@ -35,14 +35,13 @@ public class BillingController {
     private final BillingService billingService;
 
     /**
-     * Получает историю биллинга для пользователя за указанный период.
+     * Получает историю биллинга для пользователя за указанный период с пагинацией.
      *
      * @param userId идентификатор пользователя
      * @param from   дата начала периода (опционально, формат dd.MM.yyyy)
      * @param to     дата окончания периода (опционально, формат dd.MM.yyyy)
-     * @param page   номер страницы для пагинации (опционально, начиная с 0).
-     *               По умолчанию 0 (первая страница).
-     * @param size   Размер страницы
+     * @param page   номер страницы для пагинации (начиная с 0), по умолчанию 0
+     * @param size   размер страницы, по умолчанию 20
      * @return ответ со списком записей биллинга
      */
     @GetMapping("/history")
