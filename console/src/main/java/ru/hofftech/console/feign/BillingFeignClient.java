@@ -3,25 +3,11 @@ package ru.hofftech.console.feign;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.hofftech.shared.model.common.Response;
 import ru.hofftech.shared.model.dto.BillingDto;
-import ru.hofftech.shared.model.dto.LoadRequestDto;
-import ru.hofftech.shared.model.dto.LoadResponseDto;
 import ru.hofftech.shared.model.dto.PageDto;
-import ru.hofftech.shared.model.dto.ParcelDto;
-import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
-import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
-import ru.hofftech.shared.model.dto.UnloadRequestDto;
-import ru.hofftech.shared.model.dto.UnloadResponseDto;
-
-import java.util.List;
 
 /**
  * Feign клиент для взаимодействия с Billing модулем.

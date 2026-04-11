@@ -1,7 +1,6 @@
 package ru.hofftech.console.feign;
 
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.BillingDto;
 import ru.hofftech.shared.model.dto.LoadRequestDto;
 import ru.hofftech.shared.model.dto.LoadResponseDto;
 import ru.hofftech.shared.model.dto.PageDto;
