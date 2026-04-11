@@ -12,7 +12,7 @@ import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 import ru.hofftech.telegram.exception.FeignException;
 import ru.hofftech.telegram.model.constant.InformationMessage;
 import ru.hofftech.telegram.model.enums.State;
-import ru.hofftech.telegram.service.CoreService;
+import ru.hofftech.telegram.service.ExternalService;
 import ru.hofftech.telegram.util.ActionContextUtil;
 import ru.hofftech.telegram.util.MessageUtil;
 import ru.hofftech.telegram.validation.InputParametersValidator;
@@ -29,7 +29,7 @@ import ru.hofftech.telegram.validation.InputParametersValidator;
 @SuppressWarnings("ClassCanBeRecord")
 public class DeleteParcelScenarioFactory {
     private final InputParametersValidator inputParametersValidator;
-    private final CoreService coreService;
+    private final ExternalService externalService;
 
     /**
      * Начинает процесс удаления посылки.
@@ -64,7 +64,7 @@ public class DeleteParcelScenarioFactory {
 
         log.info("Удаление посылки: name={}", name);
 
-        Response<String> response = coreService.deleteParcel(
+        Response<String> response = externalService.deleteParcel(
                 ParcelNameRequestDto.builder().name(name).build());
 
         if (response.isSuccess()) {

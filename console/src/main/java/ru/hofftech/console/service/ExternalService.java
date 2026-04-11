@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.springframework.stereotype.Service;
+import ru.hofftech.console.feign.BillingFeignClient;
 import ru.hofftech.console.feign.CoreFeignClient;
 import ru.hofftech.shared.model.common.Response;
 import ru.hofftech.shared.model.dto.BillingDto;
@@ -23,7 +24,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
- * Сервис для взаимодействия с Core модулем через Feign клиент.
+ * Сервис для взаимодействия с внешними сервисами через Feign клиент.
  * <p>
  * Предоставляет методы для выполнения операций с посылками,
  * загрузкой, разгрузкой и биллингом. Все методы обёрнуты
@@ -33,9 +34,10 @@ import java.util.concurrent.Callable;
 @Service
 @RequiredArgsConstructor
 @NullMarked
-public class CoreService {
+public class ExternalService {
 
     private final CoreFeignClient coreFeignClient;
+    private final BillingFeignClient billingFeignClient;
 
     /**
      * Создаёт новую посылку.
@@ -117,7 +119,7 @@ public class CoreService {
      */
     public Response<PageDto<BillingDto>> readBilling(
             String userId, @Nullable String fromDateStr, @Nullable String toDateStr, Integer page) {
-        return executeRequest(() -> coreFeignClient.readBilling(userId, fromDateStr, toDateStr, page));
+        return executeRequest(() -> billingFeignClient.readBilling(userId, fromDateStr, toDateStr, page));
     }
 
     /**

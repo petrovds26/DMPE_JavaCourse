@@ -36,7 +36,7 @@ public abstract class BaseCommand {
             log.error("Ошибка при работе алгоритмов: {}", e.getMessage());
             return String.format("Ошибка при работе алгоритмов: %s", e.getMessage());
         } catch (FeignException e) {
-            log.error("Ошибка при вызове Core сервиса", e);
+            log.error("Ошибка при вызове внешнего сервиса", e);
             return String.format("Ошибка сервера: %s", e.getMessage());
         } catch (Exception e) {
             log.error("Неожиданная ошибка", e);

@@ -12,7 +12,7 @@ import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
 import ru.hofftech.telegram.exception.FeignException;
 import ru.hofftech.telegram.model.constant.InformationMessage;
 import ru.hofftech.telegram.model.enums.State;
-import ru.hofftech.telegram.service.CoreService;
+import ru.hofftech.telegram.service.ExternalService;
 import ru.hofftech.telegram.util.ActionContextUtil;
 import ru.hofftech.telegram.util.MessageUtil;
 import ru.hofftech.telegram.validation.InputParametersValidator;
@@ -31,7 +31,7 @@ import java.util.Map;
 @SuppressWarnings("ClassCanBeRecord")
 public class UpdateParcelScenarioFactory {
     private final InputParametersValidator inputParametersValidator;
-    private final CoreService coreService;
+    private final ExternalService externalService;
 
     /**
      * Начинает процесс обновления посылки.
@@ -114,7 +114,7 @@ public class UpdateParcelScenarioFactory {
 
         log.info("Обновление посылки: name={}, symbol={}, form={}", name, symbol, form);
 
-        Response<String> response = coreService.updateParcel(ParcelFormRequestDto.builder()
+        Response<String> response = externalService.updateParcel(ParcelFormRequestDto.builder()
                 .name(name)
                 .form(form)
                 .symbol(symbol)

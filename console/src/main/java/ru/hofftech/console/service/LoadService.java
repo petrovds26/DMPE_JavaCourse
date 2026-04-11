@@ -32,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class LoadService {
-    private final CoreService coreService;
+    private final ExternalService externalService;
     private final ParcelParseService parcelParseService;
     private final TransformTextToStringList transformTextToStringList;
     private final OutputFilePathValidator outputFilePathValidator;
@@ -86,7 +86,7 @@ public class LoadService {
                 .loadStrategy(loadStrategyType)
                 .build();
 
-        Response<LoadResponseDto> response = coreService.loadParcel(loadRequestDto);
+        Response<LoadResponseDto> response = externalService.loadParcel(loadRequestDto);
 
         if (response.isSuccess()) {
 

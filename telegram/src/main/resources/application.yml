@@ -15,6 +15,10 @@ core:
   api:
     url: http://localhost:8080
 
+billing:
+  api:
+    url: http://localhost:8087
+
 drednote:
   telegram:
     token:

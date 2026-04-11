@@ -15,13 +15,14 @@ import ru.hofftech.shared.model.dto.ParcelDto;
 import ru.hofftech.shared.model.dto.ParcelFormRequestDto;
 import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 import ru.hofftech.shared.model.enums.ResponseCode;
+import ru.hofftech.telegram.feign.BillingFeignClient;
 import ru.hofftech.telegram.feign.CoreFeignClient;
 
 import java.util.List;
 import java.util.concurrent.Callable;
 
 /**
- * Сервис для взаимодействия с Core модулем через Feign клиент.
+ * Сервис для взаимодействия с внешними сервисами через Feign клиент.
  * <p>
  * Предоставляет методы для выполнения операций с посылками, загрузкой и биллингом.
  * Все методы обёрнуты в единый механизм обработки ошибок.
@@ -30,9 +31,10 @@ import java.util.concurrent.Callable;
 @Service
 @RequiredArgsConstructor
 @NullMarked
-public class CoreService {
+public class ExternalService {
 
     private final CoreFeignClient coreFeignClient;
+    private final BillingFeignClient billingFeignClient;
 
     /**
      * Создаёт новую посылку.
@@ -103,7 +105,7 @@ public class CoreService {
      */
     public Response<PageDto<BillingDto>> readBilling(
             String userId, @Nullable String fromDateStr, @Nullable String toDateStr) {
-        return executeRequest(() -> coreFeignClient.readBilling(userId, fromDateStr, toDateStr));
+        return executeRequest(() -> billingFeignClient.readBilling(userId, fromDateStr, toDateStr));
     }
 
     /**

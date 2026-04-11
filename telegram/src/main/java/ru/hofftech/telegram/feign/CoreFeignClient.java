@@ -66,13 +66,4 @@ public interface CoreFeignClient {
      */
     @PostMapping("/core/v1/load")
     Response<LoadResponseDto> loadParcel(@RequestBody LoadRequestDto loadRequestDto);
-
-    /**
-     * Запрос истории оплаты
-     */
-    @GetMapping("/core/v1/billing/history")
-    Response<PageDto<BillingDto>> readBilling(
-            @RequestParam("userId") String userId,
-            @RequestParam(value = "from", required = false) @Nullable String from,
-            @RequestParam(value = "to", required = false) @Nullable String to);
 }

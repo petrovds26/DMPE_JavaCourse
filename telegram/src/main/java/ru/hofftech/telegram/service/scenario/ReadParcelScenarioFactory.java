@@ -13,7 +13,7 @@ import ru.hofftech.shared.util.PrintStringUtil;
 import ru.hofftech.telegram.exception.FeignException;
 import ru.hofftech.telegram.model.constant.InformationMessage;
 import ru.hofftech.telegram.model.enums.State;
-import ru.hofftech.telegram.service.CoreService;
+import ru.hofftech.telegram.service.ExternalService;
 import ru.hofftech.telegram.util.ActionContextUtil;
 import ru.hofftech.telegram.util.MessageUtil;
 import ru.hofftech.telegram.validation.InputParametersValidator;
@@ -32,7 +32,7 @@ import java.util.List;
 @SuppressWarnings("ClassCanBeRecord")
 public class ReadParcelScenarioFactory {
     private final InputParametersValidator inputParametersValidator;
-    private final CoreService coreService;
+    private final ExternalService externalService;
 
     /**
      * Начинает процесс чтения посылки.
@@ -67,7 +67,7 @@ public class ReadParcelScenarioFactory {
 
         log.info("Чтение посылки: name={}", name);
 
-        Response<List<ParcelDto>> response = coreService.readParcelByName(name);
+        Response<List<ParcelDto>> response = externalService.readParcelByName(name);
 
         if (response.isSuccess()) {
             return MessageUtil.createSendMessage(

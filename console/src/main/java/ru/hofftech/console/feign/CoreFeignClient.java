@@ -94,20 +94,4 @@ public interface CoreFeignClient {
      */
     @PostMapping("/core/v1/unload")
     Response<UnloadResponseDto> unloadParcel(@RequestBody UnloadRequestDto loadRequestDto);
-
-    /**
-     * Получает историю биллинга для пользователя.
-     *
-     * @param userId идентификатор пользователя
-     * @param from   дата начала периода (опционально, формат dd.MM.yyyy)
-     * @param to     дата окончания периода (опционально, формат dd.MM.yyyy)
-     * @param page   номер страницы для пагинации (опционально)
-     * @return ответ сервера со списком записей биллинга
-     */
-    @GetMapping("/core/v1/billing/history")
-    Response<PageDto<BillingDto>> readBilling(
-            @RequestParam("userId") String userId,
-            @RequestParam(value = "from", required = false) @Nullable String from,
-            @RequestParam(value = "to", required = false) @Nullable String to,
-            @RequestParam("page") Integer page);
 }

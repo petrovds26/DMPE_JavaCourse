@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class ParcelService {
-    private final CoreService coreService;
+    private final ExternalService externalService;
 
     /**
      * Создаёт новую посылку.
@@ -36,7 +36,7 @@ public class ParcelService {
      * @throws FeignException если при вызове Core сервиса произошла ошибка
      */
     public String createParcel(String name, String form, String symbol) {
-        Response<String> response = coreService.createParcel(ParcelFormRequestDto.builder()
+        Response<String> response = externalService.createParcel(ParcelFormRequestDto.builder()
                 .name(name)
                 .form(form)
                 .symbol(symbol)
@@ -59,7 +59,7 @@ public class ParcelService {
      * @throws FeignException если при вызове Core сервиса произошла ошибка
      */
     public String updateParcel(String name, String form, String symbol) {
-        Response<String> response = coreService.updateParcel(ParcelFormRequestDto.builder()
+        Response<String> response = externalService.updateParcel(ParcelFormRequestDto.builder()
                 .name(name)
                 .form(form)
                 .symbol(symbol)
@@ -80,7 +80,7 @@ public class ParcelService {
      * @throws FeignException если при вызове Core сервиса произошла ошибка
      */
     public String deleteParcel(String name) {
-        Response<String> response = coreService.deleteParcel(
+        Response<String> response = externalService.deleteParcel(
                 ParcelNameRequestDto.builder().name(name).build());
 
         if (response.isSuccess()) {
@@ -98,7 +98,7 @@ public class ParcelService {
      * @throws FeignException если при вызове Core сервиса произошла ошибка
      */
     public String readParcel(String name) {
-        Response<List<ParcelDto>> response = coreService.readParcelByName(name);
+        Response<List<ParcelDto>> response = externalService.readParcelByName(name);
 
         if (response.isSuccess()) {
             return PrintStringUtil.parcelRender(response.getData().getFirst());
@@ -114,7 +114,7 @@ public class ParcelService {
      * @throws FeignException если при вызове Core сервиса произошла ошибка
      */
     public String readAllParcels(Integer page) {
-        Response<PageDto<ParcelDto>> response = coreService.readAllParcels(page);
+        Response<PageDto<ParcelDto>> response = externalService.readAllParcels(page);
 
         if (response.isSuccess()) {
             return "Список посылок:\n"

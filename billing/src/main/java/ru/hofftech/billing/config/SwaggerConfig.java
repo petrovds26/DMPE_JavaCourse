@@ -22,6 +22,6 @@ public class SwaggerConfig {
      */
     @Bean
     public OpenAPI customOpenAPI() {
-        return new OpenAPI().info(new Info().title("Core").description("API основного сервиса"));
+        return new OpenAPI().info(new Info().title("Billing").description("API сервиса Billing"));
     }
 }
