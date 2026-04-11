@@ -1,0 +1,11 @@
+spring:
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    username: dmpe_billing_cd
+    password: 123456
+  cloud:
+    config:
+      enabled: false
