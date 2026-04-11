@@ -71,6 +71,12 @@ spring:
             partitioned: true
             concurrency: 5
             batch-mode: false
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000
+    cache-names:
+      - billingHistory
 
 swagger:
   url:

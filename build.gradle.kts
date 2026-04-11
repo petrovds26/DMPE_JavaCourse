@@ -34,6 +34,7 @@ object Version {
     const val MOCKITO = "5.19.0"
     const val TELEGRAM_BOT = "1.0.0.rc-1"
     const val SHED_LOCK = "5.16.0"
+    const val CAFFEINE = "3.1.8"
 }
 
 subprojects {
@@ -201,11 +202,15 @@ project(":billing") {
         implementation("org.springframework.boot:spring-boot-starter-web")
         implementation("org.springframework.boot:spring-boot-starter-data-jpa")
         implementation("org.springframework.boot:spring-boot-starter-validation")
+        implementation("org.springframework.boot:spring-boot-starter-cache")
 
         //Кафка
         implementation("org.springframework.cloud:spring-cloud-starter-config")
         implementation("org.springframework.cloud:spring-cloud-starter-stream-kafka")
         implementation("org.springframework.kafka:spring-kafka")
+
+        // Caffeine Cache
+        implementation("com.github.ben-manes.caffeine:caffeine:${Version.CAFFEINE}")
 
         // База данных
         implementation("org.flywaydb:flyway-core")

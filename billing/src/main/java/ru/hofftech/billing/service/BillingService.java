@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -76,6 +78,7 @@ public class BillingService {
      * @param size   размер страницы
      * @return пагинированный список записей биллинга
      */
+    @Cacheable(value = "billingHistory", key = "#userId + '_' + #from + '_' + #to + '_' + #page + '_' + #size")
     public PageDto<BillingDto> requestBillingHistory(
             String userId, @Nullable LocalDate from, @Nullable LocalDate to, int page, int size) {
 
@@ -139,5 +142,17 @@ public class BillingService {
                 totalAmount,
                 machineCount,
                 parcelCount);
+
+        evictBillingHistoryCache(userId);
+    }
+
+    /**
+     * Инвалидирует кеш истории биллинга для пользователя.
+     *
+     * @param userId идентификатор пользователя
+     */
+    @CacheEvict(value = "billingHistory", key = "#userId + '_*'")
+    public void evictBillingHistoryCache(String userId) {
+        log.info("Кеш истории биллинга для userId={} очищен", userId);
     }
 }
