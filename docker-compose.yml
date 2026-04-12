@@ -1,11 +1,22 @@
 services:
   postgres:
     image: postgres:16.4
+    container_name: dmpe-postgres-core
     ports:
       - "8890:5432"
     environment:
       - POSTGRES_DB=dmpe
       - POSTGRES_USER=dmpe_cd
+      - POSTGRES_PASSWORD=123456
+
+  postgres-billing:
+    image: postgres:16.4
+    container_name: dmpe-postgres-billing
+    ports:
+      - "8891:5432"
+    environment:
+      - POSTGRES_DB=dmpe_billing
+      - POSTGRES_USER=dmpe_billing_cd
       - POSTGRES_PASSWORD=123456
 
   zookeeper:

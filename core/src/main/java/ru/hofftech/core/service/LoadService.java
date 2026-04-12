@@ -17,6 +17,7 @@ import ru.hofftech.core.repository.ParcelRepository;
 import ru.hofftech.core.service.loader.strategy.LoadStrategy;
 import ru.hofftech.core.service.loader.strategy.LoadStrategyService;
 import ru.hofftech.core.service.parcer.ParserMachine;
+import ru.hofftech.shared.model.dto.BillingDto;
 import ru.hofftech.shared.model.dto.LoadRequestDto;
 import ru.hofftech.shared.model.dto.LoadResponseDto;
 import ru.hofftech.shared.model.dto.LoadStatisticDto;
@@ -25,6 +26,7 @@ import ru.hofftech.shared.model.dto.ParcelNameRequestDto;
 import ru.hofftech.shared.model.enums.BillingOperationType;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +45,7 @@ public class LoadService {
     private final ParserMachine parserMachine;
     private final LoadStrategyService loadStrategyService;
     private final ParcelRepository parcelRepository;
-    private final BillingService billingService;
+    private final BillingOutboxService billingOutboxService;
     private final ParcelEntityMapper parcelEntityMapper;
     private final CoreMapper coreMapper;
 
@@ -103,8 +105,16 @@ public class LoadService {
         int totalFilledCells = result.getTotalFilledCells();
         BigDecimal totalAmount = BigDecimal.valueOf(totalFilledCells).multiply(priceSegment);
 
-        billingService.createBilling(
-                loadRequestDto.userId(), BillingOperationType.LOAD, totalUsedMachines, totalInputParcels, totalAmount);
+        BillingDto billingDto = BillingDto.builder()
+                .userId(loadRequestDto.userId())
+                .operationType(BillingOperationType.LOAD)
+                .machineCount(totalUsedMachines)
+                .parcelCount(totalInputParcels)
+                .totalAmount(totalAmount)
+                .createdDt(LocalDateTime.now())
+                .build();
+
+        billingOutboxService.saveEvent(billingDto);
 
         LoadStatisticDto loadStatisticDto = LoadStatisticDto.builder()
                 .errors(result.errors())

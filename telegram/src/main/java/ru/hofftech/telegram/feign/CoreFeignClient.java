@@ -1,7 +1,6 @@
 package ru.hofftech.telegram.feign;
 
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,9 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import ru.hofftech.shared.model.common.Response;
-import ru.hofftech.shared.model.dto.BillingDto;
 import ru.hofftech.shared.model.dto.LoadRequestDto;
 import ru.hofftech.shared.model.dto.LoadResponseDto;
 import ru.hofftech.shared.model.dto.PageDto;
@@ -66,13 +63,4 @@ public interface CoreFeignClient {
      */
     @PostMapping("/core/v1/load")
     Response<LoadResponseDto> loadParcel(@RequestBody LoadRequestDto loadRequestDto);
-
-    /**
-     * Запрос истории оплаты
-     */
-    @GetMapping("/core/v1/billing/history")
-    Response<PageDto<BillingDto>> readBilling(
-            @RequestParam("userId") String userId,
-            @RequestParam(value = "from", required = false) @Nullable String from,
-            @RequestParam(value = "to", required = false) @Nullable String to);
 }

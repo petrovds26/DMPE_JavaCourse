@@ -8,8 +8,6 @@ import ru.hofftech.core.model.core.LoadStrategyParcelInvalid;
 import ru.hofftech.core.model.core.Machine;
 import ru.hofftech.core.model.core.Parcel;
 import ru.hofftech.core.model.core.PlacedParcel;
-import ru.hofftech.core.model.entity.BillingEntity;
-import ru.hofftech.shared.model.dto.BillingDto;
 import ru.hofftech.shared.model.dto.CoordinateDto;
 import ru.hofftech.shared.model.dto.LoadParcelInvalidDto;
 import ru.hofftech.shared.model.dto.MachineDto;
@@ -262,29 +260,4 @@ public interface CoreMapper {
      */
     List<LoadParcelInvalidDto> loadStrategyParcelInvalidListToDto(
             List<LoadStrategyParcelInvalid> loadStrategyParcelInvalids);
-
-    /**
-     * Преобразует BillingEntity в BillingDto.
-     *
-     * @param billingEntity сущность биллинга
-     * @return DTO биллинга
-     */
-    default BillingDto billingEntityToBillingDto(BillingEntity billingEntity) {
-        return BillingDto.builder()
-                .userId(billingEntity.getUserId())
-                .operationType(billingEntity.getOperationType().getDescription())
-                .machineCount(billingEntity.getMachineCount())
-                .parcelCount(billingEntity.getParcelCount())
-                .totalAmount(billingEntity.getTotalAmount())
-                .createdDt(billingEntity.getCreatedDt())
-                .build();
-    }
-
-    /**
-     * Преобразует список BillingEntity в список BillingDto.
-     *
-     * @param billingEntityList список сущностей биллинга
-     * @return список DTO биллинга
-     */
-    List<BillingDto> billingEntityListToBillingDtoList(List<BillingEntity> billingEntityList);
 }

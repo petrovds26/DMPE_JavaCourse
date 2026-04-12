@@ -32,7 +32,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class UnloadService {
-    private final CoreService coreService;
+    private final ExternalService externalService;
     private final OutputFilePathValidator outputFilePathValidator;
     private final FileSaveService fileSaveService;
 
@@ -61,7 +61,7 @@ public class UnloadService {
         UnloadRequestDto unloadRequestDto =
                 UnloadRequestDto.builder().machines(machines).userId(userId).build();
 
-        Response<UnloadResponseDto> response = coreService.unloadParcel(unloadRequestDto);
+        Response<UnloadResponseDto> response = externalService.unloadParcel(unloadRequestDto);
 
         if (response.isSuccess()) {
 

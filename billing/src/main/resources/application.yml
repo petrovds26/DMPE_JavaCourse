@@ -1,0 +1,91 @@
+server:
+  port: 8087
+
+logging:
+  level:
+    ROOT: INFO
+
+urls:
+  version: v1
+  mainservice:
+    root: ${urls.app.core.root}
+  app:
+    core:
+      prefix: /billing
+      root: ${urls.app.core.prefix}/${urls.version}
+
+spring:
+  application:
+    name: billing
+  jpa:
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+  datasource:
+    url: jdbc:postgresql://localhost:8891/dmpe_billing?currentSchema=billing
+    username: dmpe_billing_cd
+    password: 123456
+  flyway:
+    create-schemas: true
+    schemas: billing
+    user: dmpe_billing_cd
+    password: 123456
+    url: jdbc:postgresql://localhost:8891/dmpe_billing?currentSchema=billing
+  cloud:
+    config:
+      enabled: false
+    function:
+      definition:
+    stream:
+      default:
+        contentType: application/json
+      kafka:
+        binder:
+          brokers: localhost:29092
+          auto-create-topics: true
+          enable-observation: true
+          configuration:
+            partitioner.ignore.partition: true
+        bindings:
+          billingInbox-in-0:
+            consumer:
+              start-offset: earliest
+              ack-mode: RECORD
+              enable-dlq: true
+              dlq-name:  dmpe.billing_dlq.0
+              dlqPartitions: 1
+              configuration:
+                max.poll.records: 10
+      bindings:
+        billingInbox-in-0:
+          destination: dmpe.billing.0
+          group: consumer_billing
+          contentType: application/json
+          consumer:
+            max-attempts: 1
+            partitioned: true
+            concurrency: 5
+            batch-mode: false
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=1000
+    cache-names:
+      - billingHistory
+
+swagger:
+  url:
+    path: ${urls.mainservice.root}/
+
+springdoc:
+  api-docs:
+    enabled: true
+    path: ${swagger.url.path}swagger/v3/api-docs
+  swagger-ui:
+    enabled: true
+    path: ${swagger.url.path}

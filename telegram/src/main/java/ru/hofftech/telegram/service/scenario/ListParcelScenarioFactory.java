@@ -13,7 +13,7 @@ import ru.hofftech.shared.model.dto.ParcelDto;
 import ru.hofftech.shared.util.PrintStringUtil;
 import ru.hofftech.telegram.exception.FeignException;
 import ru.hofftech.telegram.model.constant.InformationMessage;
-import ru.hofftech.telegram.service.CoreService;
+import ru.hofftech.telegram.service.ExternalService;
 import ru.hofftech.telegram.util.ActionContextUtil;
 import ru.hofftech.telegram.util.MessageUtil;
 
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @NullMarked
 @SuppressWarnings("ClassCanBeRecord")
 public class ListParcelScenarioFactory {
-    private final CoreService coreService;
+    private final ExternalService externalService;
 
     /**
      * Получает и отображает список всех посылок.
@@ -40,7 +40,7 @@ public class ListParcelScenarioFactory {
     @TelegramScenarioAction
     public SendMessage listParcel(ActionContext<?> context) {
         log.info("Чтение всех посылок");
-        Response<PageDto<ParcelDto>> response = coreService.readAllParcels();
+        Response<PageDto<ParcelDto>> response = externalService.readAllParcels();
 
         if (response.isSuccess()) {
             String responseText = "Список посылок:\n"

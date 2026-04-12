@@ -36,6 +36,27 @@ spring:
     user: dmpe_cd
     password: 123456
     url: jdbc:postgresql://localhost:8890/postgres?currentSchema=dmpe
+  cloud:
+    config:
+      enabled: false
+    function:
+      definition:
+    stream:
+      default:
+        contentType: application/json
+      kafka:
+        binder:
+          brokers: localhost:29092
+          auto-create-topics: true
+          enable-observation: true
+          configuration:
+            partitioner.ignore.partition: true
+      bindings:
+        billingOutbox-out-0:
+          destination: dmpe.billing.0
+          contentType: application/json
+          producer:
+            partition-count: 10
 
 swagger:
   url:
@@ -53,3 +74,9 @@ load:
   price-segment: 50
 unload:
   price-segment: 80
+
+scheduler:
+  billing-outbox:
+    interval: 0 */10 * * * *
+    name-scheduler: "BillingOutbox"
+    lock-interval-minutes: 5

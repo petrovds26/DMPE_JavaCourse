@@ -26,7 +26,7 @@ import java.time.format.DateTimeFormatter;
 @RequiredArgsConstructor
 @NullMarked
 public class BillingService {
-    private final CoreService coreService;
+    private final ExternalService externalService;
 
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
@@ -45,7 +45,7 @@ public class BillingService {
         validDate(fromDateStr);
         validDate(toDateStr);
 
-        Response<PageDto<BillingDto>> response = coreService.readBilling(userId, fromDateStr, toDateStr, page);
+        Response<PageDto<BillingDto>> response = externalService.readBilling(userId, fromDateStr, toDateStr, page);
 
         if (response.isSuccess()) {
             return PrintStringUtil.formatBillingHistory(response.getData().content());

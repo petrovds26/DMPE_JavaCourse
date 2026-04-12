@@ -9,6 +9,7 @@ import ru.hofftech.core.mapper.CoreMapper;
 import ru.hofftech.core.model.core.Machine;
 import ru.hofftech.core.model.core.Parcel;
 import ru.hofftech.core.model.core.PlacedParcel;
+import ru.hofftech.shared.model.dto.BillingDto;
 import ru.hofftech.shared.model.dto.MachineDto;
 import ru.hofftech.shared.model.dto.UnloadRequestDto;
 import ru.hofftech.shared.model.dto.UnloadResponseDto;
@@ -16,6 +17,7 @@ import ru.hofftech.shared.model.dto.UnloadStatisticDto;
 import ru.hofftech.shared.model.enums.BillingOperationType;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -30,7 +32,7 @@ import java.util.List;
 @Slf4j
 public class UnloadService {
     private final CoreMapper coreMapper;
-    private final BillingService billingService;
+    private final BillingOutboxService billingOutboxService;
 
     @Value("${unload.price-segment}")
     private BigDecimal priceSegment;
@@ -61,12 +63,16 @@ public class UnloadService {
                 parcels.stream().mapToInt(Parcel::getFilledCellsCount).sum();
         BigDecimal totalAmount = BigDecimal.valueOf(totalFilledCells).multiply(priceSegment);
 
-        billingService.createBilling(
-                unloadRequestDto.userId(),
-                BillingOperationType.UNLOAD,
-                totalUnloadMachines,
-                totalParcelsProcessed,
-                totalAmount);
+        BillingDto billingDto = BillingDto.builder()
+                .userId(unloadRequestDto.userId())
+                .operationType(BillingOperationType.UNLOAD)
+                .machineCount(totalUnloadMachines)
+                .parcelCount(totalParcelsProcessed)
+                .totalAmount(totalAmount)
+                .createdDt(LocalDateTime.now())
+                .build();
+
+        billingOutboxService.saveEvent(billingDto);
 
         UnloadStatisticDto unloadStatisticDto = UnloadStatisticDto.builder()
                 .totalSuccessUnloadParcels(totalParcelsProcessed)

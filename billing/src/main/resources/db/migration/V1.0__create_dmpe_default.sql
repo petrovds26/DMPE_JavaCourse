@@ -1,0 +1,21 @@
+CREATE OR REPLACE FUNCTION update_modified_dt_now()
+    RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NEW IS DISTINCT FROM OLD THEN
+        NEW.modified_dt = (now() AT TIME ZONE 'UTC')::TIMESTAMP;
+END IF;
+RETURN new;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION update_updated_dt_now()
+RETURNS TRIGGER AS
+$$
+BEGIN
+    IF NEW IS DISTINCT FROM OLD THEN
+        NEW.updated_dt = (now() AT TIME ZONE 'UTC')::TIMESTAMP;
+END IF;
+RETURN NEW;
+END;
+$$ LANGUAGE 'plpgsql';

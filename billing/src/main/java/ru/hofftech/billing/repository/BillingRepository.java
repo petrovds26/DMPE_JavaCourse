@@ -1,11 +1,11 @@
-package ru.hofftech.core.repository;
+package ru.hofftech.billing.repository;
 
 import org.jspecify.annotations.NullMarked;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import ru.hofftech.core.model.entity.BillingEntity;
+import ru.hofftech.billing.model.entity.BillingEntity;
 
 import java.time.LocalDateTime;
 
@@ -58,4 +58,12 @@ public interface BillingRepository extends JpaRepository<BillingEntity, Long> {
      */
     Page<BillingEntity> findByUserIdAndCreatedDtBeforeOrderByCreatedDtDesc(
             String userId, LocalDateTime to, Pageable pageable);
+
+    /**
+     * Проверяет существование записи биллинга по внешнему идентификатору.
+     *
+     * @param externalId внешний идентификатор
+     * @return true если запись существует
+     */
+    boolean existsByExternalId(String externalId);
 }
