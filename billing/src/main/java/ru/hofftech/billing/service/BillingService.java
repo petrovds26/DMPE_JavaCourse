@@ -176,8 +176,7 @@ public class BillingService {
             }
             log.info("Кеш истории биллинга для userId={} очищен. Удалено записей: {}", userId, removedCount);
         } else if (cache != null) {
-            cache.clear();
-            log.info("Кеш истории биллинга для userId={} полностью очищен", userId);
+            log.error("Кеш истории биллинга billingHistory не поддерживается и не очищен");
         }
     }
 }
