@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
-import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +42,7 @@ import java.time.LocalDate;
 public class BillingService {
     private final BillingRepository billingRepository;
     private final BillingMapper billingMapper;
+    private final CacheManager cacheManager;
 
     /**
      * Обрабатывает входящее сообщение из Kafka.
@@ -81,6 +84,14 @@ public class BillingService {
     @Cacheable(value = "billingHistory", key = "#userId + '_' + #from + '_' + #to + '_' + #page + '_' + #size")
     public PageDto<BillingDto> requestBillingHistory(
             String userId, @Nullable LocalDate from, @Nullable LocalDate to, int page, int size) {
+
+        log.info(
+                "Запрос истории биллинга для пользователя {}: период {} - {}, страница {}/{}",
+                userId,
+                from,
+                to,
+                page,
+                size);
 
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdDt"));
         Page<BillingEntity> billingPage;
@@ -151,8 +162,22 @@ public class BillingService {
      *
      * @param userId идентификатор пользователя
      */
-    @CacheEvict(value = "billingHistory", key = "#userId + '_*'")
     public void evictBillingHistoryCache(String userId) {
-        log.info("Кеш истории биллинга для userId={} очищен", userId);
+        Cache cache = cacheManager.getCache("billingHistory");
+        if (cache instanceof CaffeineCache caffeineCache) {
+            var nativeCache = caffeineCache.getNativeCache();
+            int removedCount = 0;
+
+            for (Object key : nativeCache.asMap().keySet()) {
+                if (key.toString().startsWith(userId)) {
+                    nativeCache.invalidate(key);
+                    removedCount++;
+                }
+            }
+            log.info("Кеш истории биллинга для userId={} очищен. Удалено записей: {}", userId, removedCount);
+        } else if (cache != null) {
+            cache.clear();
+            log.info("Кеш истории биллинга для userId={} полностью очищен", userId);
+        }
     }
 }
